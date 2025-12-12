@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     mode: 'subscription',
     payment_method_types: ['card'],
     line_items: [{ price: priceId, quantity: 1 }],
-    success_url: `${siteUrl}/dashboard?upgraded=1`,
+    success_url: `${siteUrl}/auth/callback?upgraded=1`,
     cancel_url: `${siteUrl}/pricing?cancelled=1`,
     customer_email: email,
     allow_promotion_codes: true,

@@ -12,6 +12,10 @@ export const metadata = {
   },
   description: 'Capture, organize, and announce product feedback in one place. Feedback boards, public roadmaps, announcements, and surveys.',
   keywords: ['customer feedback', 'product feedback', 'feedback boards', 'roadmap', 'announcements', 'surveys', 'product management'],
+  authors: [{ name: 'Feedkit' }],
+  creator: 'Feedkit',
+  publisher: 'Feedkit',
+  applicationName: 'Feedkit',
   openGraph: {
     type: 'website',
     url: 'https://feedkit.co',
@@ -26,6 +30,7 @@ export const metadata = {
     title: 'Feedkit — A better way to collect customer feedback',
     description: 'Capture, organize, and announce product feedback in one place.',
     images: ['/og.jpg'],
+    creator: '@feedkit',
   },
   alternates: {
     canonical: 'https://feedkit.co',
@@ -33,6 +38,15 @@ export const metadata = {
   robots: {
     index: true,
     follow: true,
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', type: 'image/x-icon' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
 }
 
@@ -44,7 +58,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
             <link rel="icon" type="image/x-icon" href="/favicon.ico" />
             <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-            <meta name="theme-color" content="#3b82f6" />
+            <meta name="theme-color" content="#2563EB" />
             <meta name="apple-mobile-web-app-capable" content="yes" />
             <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
           </head>

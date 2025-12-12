@@ -4,6 +4,7 @@ const nextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'logo.clearbit.com' },
       { protocol: 'https', hostname: 'unavatar.io' },
+      { protocol: 'https', hostname: 'cdn.simpleicons.org' },
     ],
   },
   experimental: {

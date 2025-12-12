@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
 import Link from 'next/link'
 import { BrandLogo } from '@/components/BrandLogo'
+import { getOrCreateProjectId } from '@/lib/projectId'
 
 export default function SignInPage() {
   const router = useRouter()
@@ -12,21 +13,43 @@ export default function SignInPage() {
   async function handleGoogleSignIn() {
     setLoading(true)
     try {
-      if (supabase) {
-        const { error } = await supabase.auth.signInWithOAuth({
-          provider: 'google',
-          options: {
-            redirectTo: (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000') + '/dashboard',
-          },
+      if (!supabase) {
+        // Supabase not configured - show detailed error
+        const hasUrl = !!process.env.NEXT_PUBLIC_SUPABASE_URL
+        const hasKey = !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+        console.error('Supabase configuration check:', {
+          hasUrl,
+          hasKey,
+          urlValue: process.env.NEXT_PUBLIC_SUPABASE_URL ? 'Set' : 'Missing',
+          keyValue: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'Set' : 'Missing',
         })
-        if (error) throw error
-      } else {
-        // Fallback: mock auth for development
-        localStorage.setItem('sayso_auth', JSON.stringify({ email: 'test@gmail.com', at: Date.now() }))
-        router.push('/dashboard')
+        alert(
+          `Google authentication is not configured.\n\n` +
+          `Missing: ${!hasUrl ? 'NEXT_PUBLIC_SUPABASE_URL' : ''} ${!hasKey ? 'NEXT_PUBLIC_SUPABASE_ANON_KEY' : ''}\n\n` +
+          `Please create a .env.local file with these variables and restart your dev server.`
+        )
+        setLoading(false)
+        return
       }
+
+      // Real Google OAuth flow - this will redirect to Google
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000') + '/auth/callback',
+        },
+      })
+      
+      if (error) {
+        console.error('OAuth error:', error)
+        setLoading(false)
+        alert('Failed to initiate Google sign-in. Please try again.')
+        throw error
+      }
+      // OAuth will redirect to Google, then back to /auth/callback
+      // Don't set loading to false here as we're redirecting
     } catch (err) {
-      console.error(err)
+      console.error('Sign in error:', err)
       setLoading(false)
     }
   }
@@ -34,11 +57,10 @@ export default function SignInPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100 flex items-center justify-center px-4 sm:px-6">
       <div className="w-full max-w-md bg-white border border-neutral-200 rounded-2xl p-6 sm:p-8 shadow-sm">
-        <Link href="/" className="inline-flex items-center gap-2 mb-6">
-          <BrandLogo size={28} />
-          <span className="font-semibold">Capre</span>
+        <Link href="/" className="inline-block mb-6">
+          <BrandLogo size={28} showText={true} />
         </Link>
-        <h1 className="text-2xl font-semibold mb-2">Sign in to Capre</h1>
+        <h1 className="text-2xl font-semibold mb-2">Sign in to Feedkit</h1>
         <p className="text-sm text-neutral-600 mb-6">Continue with your Google account for instant access.</p>
         
         <button

@@ -14,12 +14,12 @@ export default function PricingPage() {
           <div className="hidden md:flex items-center gap-6">
             <Link href="/#features" className="text-sm text-neutral-700 hover:text-black">Features</Link>
             <Link href="/pricing" className="text-sm text-neutral-700 hover:text-black font-medium">Pricing</Link>
-            <Link href="/dashboard/transcribe" className="text-sm px-4 py-2 rounded-lg bg-[#2563EB] text-white hover:bg-[#1d4ed8] transition">
+            <Link href="/dashboard" className="text-sm px-4 py-2 rounded-lg bg-[#2563EB] text-white hover:bg-[#1d4ed8] transition">
               Start for free
             </Link>
           </div>
           <div className="md:hidden">
-            <Link href="/dashboard/transcribe" className="text-sm px-3 py-2 rounded-lg bg-[#2563EB] text-white hover:bg-[#1d4ed8]">Start for free</Link>
+            <Link href="/dashboard" className="text-sm px-3 py-2 rounded-lg bg-[#2563EB] text-white hover:bg-[#1d4ed8]">Start for free</Link>
           </div>
         </div>
       </nav>
@@ -40,7 +40,7 @@ export default function PricingPage() {
               '25 total feedback submissions',
             ]}
             cta="Get started"
-            href="/dashboard/transcribe"
+            href="/dashboard"
           />
           <PricingCard
             name="Pro"
@@ -51,7 +51,7 @@ export default function PricingPage() {
               'Unlimited feedback submissions',
             ]}
             cta="Get started"
-            href="/dashboard/transcribe"
+            href="/dashboard"
             highlighted
           />
           <PricingCard

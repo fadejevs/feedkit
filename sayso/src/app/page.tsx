@@ -1,8 +1,14 @@
+"use client"
 import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
 import { AnimatedBackground } from '@/components/AnimatedBackground'
+import { IntegrationCard } from '@/components/IntegrationCard'
+import { FeedbackWidget } from '@/components/FeedbackWidget'
+import { Footer } from '@/components/Footer'
+import { useAuth } from '@/hooks/useAuth'
 
 export default function LandingPage() {
+  const { user } = useAuth()
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
       {/* Navigation */}
@@ -23,16 +29,16 @@ export default function LandingPage() {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-4xl mx-auto">
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-gray-900 leading-[1.1]">
-            Make more of<br />
-            what customers want
+            Build more of what<br />
+            customers want
           </h1>
           <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
             Capture, organize, and announce product feedback in one place.
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap mb-4">
             <Link 
-              href="/dashboard/transcribe" 
-              className="px-6 py-3 rounded-lg bg-[#4A7FC7] text-white font-medium hover:bg-[#3A6BA8] transition text-base inline-flex items-center gap-2"
+              href="/dashboard" 
+              className="px-6 py-3 rounded-lg bg-[#2563EB] text-white font-medium hover:bg-[#1D4ED8] transition text-base inline-flex items-center gap-2"
             >
               Start for free
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -113,7 +119,7 @@ export default function LandingPage() {
             description="Capture, plan and publish ideas on the web."
             cta="Sign up to try"
             href="/dashboard"
-            gradient="from-[#10B981] to-[#34D399]"
+            gradient="from-[#2563EB]/10 via-[#2563EB]/5 to-[#818CF8]/10"
             type="webapp"
           />
           <FlavorCard
@@ -122,7 +128,7 @@ export default function LandingPage() {
             description="Capture, plan and publish ideas on your own site."
             cta="Sign up to try"
             href="/dashboard"
-            gradient="from-[#4ECDC4] to-[#44A08D]"
+            gradient="from-[#F97316]/10 via-[#F97316]/5 to-[#FB923C]/10"
             type="widget"
           />
         </div>
@@ -187,7 +193,7 @@ export default function LandingPage() {
             icon={<InlineAdminIcon />} 
             title="Inline Admin" 
             description="Manage your entire board from within the same view"
-            color="#4A7FC7"
+            color="#2563EB"
           />
           <FeatureItem 
             icon={<SSOIcon />} 
@@ -211,7 +217,7 @@ export default function LandingPage() {
             icon={<ThemeIcon />} 
             title="Themes" 
             description="Update Feedkit with your own brand colours."
-            color="#4A7FC7"
+            color="#2563EB"
           />
           <FeatureItem 
             icon={<StatusIcon />} 
@@ -230,28 +236,28 @@ export default function LandingPage() {
             description="Customer feedback is the lifeblood of your product. Capture ideas from your customers and let the most voted and commented on ideas surface to the top."
             linkText="Learn about capturing Ideas"
             imageSide="right"
-            gradient="from-blue-100 via-green-100 to-blue-100"
+            gradient="from-[#2563EB]/10 via-[#818CF8]/5 to-[#2563EB]/10"
           />
           <ProductShowcase
             title="Build a public roadmap"
             description="Turn customer ideas into a stunning product roadmap and let users know what's up next."
             linkText="Learn about Roadmaps"
             imageSide="left"
-            gradient="from-pink-100 via-orange-100 to-pink-100"
+            gradient="from-[#F97316]/10 via-[#FB923C]/5 to-[#F97316]/10"
           />
           <ProductShowcase
             title="Prioritize and plan ahead"
             description="Fully customise Benefit and Cost scores according to your business priorities. Easily identify Quick Wins and Major Projects."
             linkText="Learn about Prioritization"
             imageSide="right"
-            gradient="from-blue-100 via-green-100 to-blue-100"
+            gradient="from-[#2563EB]/10 via-[#818CF8]/5 to-[#2563EB]/10"
           />
           <ProductShowcase
             title="Announcements"
             description="Keep your customers informed as you ship new features. Announcements is our version of Changelog. And we think you'll love it."
             linkText="Learn about Announcements"
             imageSide="left"
-            gradient="from-pink-100 via-orange-100 to-pink-100"
+            gradient="from-[#F97316]/10 via-[#FB923C]/5 to-[#F97316]/10"
           />
         </div>
       </section>
@@ -270,7 +276,7 @@ export default function LandingPage() {
           ))}
         </div>
         <div className="text-center">
-          <button className="px-6 py-2 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 text-[#4A7FC7] font-medium hover:from-blue-100 hover:to-indigo-100 transition">
+          <button className="px-6 py-2 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 text-[#2563EB] font-medium hover:from-blue-100 hover:to-indigo-100 transition">
             Show more
           </button>
         </div>
@@ -290,7 +296,7 @@ export default function LandingPage() {
               description="Perfect to start collecting feedback for your app"
               features={['25 total feedback submissions']}
               cta="Get started"
-              href="/dashboard/transcribe"
+              href="/dashboard"
             />
             <PricingCard
               name="Pro"
@@ -299,7 +305,7 @@ export default function LandingPage() {
               description="Suitable for production applications and websites of all sizes"
               features={['Unlimited feedback submissions']}
               cta="Get started"
-              href="/dashboard/transcribe"
+              href="/dashboard"
               highlighted
             />
             <PricingCard
@@ -323,8 +329,8 @@ export default function LandingPage() {
           </h2>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <Link 
-              href="/dashboard/transcribe" 
-              className="px-6 py-3 rounded-lg bg-[#4A7FC7] text-white font-medium hover:bg-[#3A6BA8] transition text-base"
+              href="/dashboard" 
+              className="px-6 py-3 rounded-lg bg-[#2563EB] text-white font-medium hover:bg-[#1D4ED8] transition text-base"
             >
               Get Started
             </Link>
@@ -339,76 +345,27 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-4 text-sm">Product</h3>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li><Link href="#" className="hover:text-gray-900 transition">Ideas</Link></li>
-                <li><Link href="#" className="hover:text-gray-900 transition">Roadmap</Link></li>
-                <li><Link href="#" className="hover:text-gray-900 transition">Announcements</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-4 text-sm">About</h3>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li><Link href="#" className="hover:text-gray-900 transition">Privacy Policy</Link></li>
-                <li><Link href="#" className="hover:text-gray-900 transition">Terms of use</Link></li>
-                <li><Link href="#" className="hover:text-gray-900 transition">Blog</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-4 text-sm">Competitor Comparisons</h3>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li><Link href="#" className="hover:text-gray-900 transition">Canny vs Feedkit</Link></li>
-                <li><Link href="#" className="hover:text-gray-900 transition">Beamer vs Feedkit</Link></li>
-                <li><Link href="#" className="hover:text-gray-900 transition">Hello Next vs Feedkit</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-4 text-sm">Support</h3>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li><Link href="#" className="hover:text-gray-900 transition">Our Roadmap</Link></li>
-                <li><Link href="#" className="hover:text-gray-900 transition">Help</Link></li>
-                <li><Link href="#" className="hover:text-gray-900 transition">GDPR</Link></li>
-                <li><Link href="#" className="hover:text-gray-900 transition">Tech Docs</Link></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-200 pt-8 text-center text-sm text-gray-600">
-            © 2025 Feedkit – Independent & Bootstrapped.
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
-      {/* Floating Chat Widget */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <button className="w-14 h-14 bg-[#4A7FC7] rounded-lg shadow-lg hover:bg-[#3A6BA8] transition flex items-center justify-center">
-          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-          </svg>
-        </button>
-      </div>
     </div>
   )
 }
 
 function FeatureCard({ title, active }: { title: string; active?: boolean }) {
-  const accentColors = ['#4A7FC7', '#818CF8', '#F97316', '#FB923C']
+  const accentColors = ['#2563EB', '#818CF8', '#F97316', '#FB923C']
   const accentColor = accentColors[title.length % accentColors.length]
   
   return (
     <div className={`bg-white border rounded-lg p-4 sm:p-6 transition cursor-pointer text-center ${
       active 
-        ? 'border-[#4A7FC7] border-2 shadow-sm' 
+        ? 'border-[#2563EB] border-2 shadow-sm' 
         : 'border-gray-200 hover:border-opacity-60 hover:shadow-sm'
     }`} style={!active ? { 
       borderColor: `${accentColor}40`,
       transition: 'all 0.3s ease'
     } : {}}>
       <h3 className={`font-semibold text-sm sm:text-base ${
-        active ? 'text-[#4A7FC7]' : 'text-gray-900'
+        active ? 'text-[#2563EB]' : 'text-gray-900'
       }`}>{title}</h3>
     </div>
   )
@@ -447,8 +404,8 @@ function IdeaCard({ votes, title, description, author, date, tags, badges }: {
     <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition">
       <div className="flex gap-4">
         <div className="flex flex-col items-center">
-          <div className="w-12 h-12 border-2 border-[#4A7FC7] rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-50 transition">
-            <svg className="w-5 h-5 text-[#4A7FC7]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-12 h-12 border-2 border-[#2563EB] rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-50 transition">
+            <svg className="w-5 h-5 text-[#2563EB]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
             </svg>
           </div>
@@ -460,12 +417,12 @@ function IdeaCard({ votes, title, description, author, date, tags, badges }: {
           <div className="flex items-center gap-4 text-xs text-gray-500 mb-2">
             <span>{author} • {date}</span>
             {tags.map((tag, i) => (
-              <span key={i} className="text-[#4A7FC7]">#{tag}</span>
+              <span key={i} className="text-[#2563EB]">#{tag}</span>
             ))}
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             {badges.map((badge, i) => (
-              <span key={i} className="px-2 py-1 border border-[#4A7FC7] rounded text-xs text-[#4A7FC7]">
+              <span key={i} className="px-2 py-1 border border-[#2563EB] rounded text-xs text-[#2563EB]">
                 {badge}
               </span>
             ))}
@@ -491,7 +448,7 @@ function FlavorCard({ title, subtitle, description, cta, href, gradient, type }:
         <div className={`bg-gradient-to-r ${gradient} p-4`}>
           <div className="bg-white rounded-lg p-6">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-6 h-6 bg-[#4A7FC7] rounded text-white flex items-center justify-center text-xs font-bold">A</div>
+              <div className="w-6 h-6 bg-[#2563EB] rounded text-white flex items-center justify-center text-xs font-bold">A</div>
               <span className="text-sm font-medium text-gray-900">Acme</span>
               <div className="flex items-center gap-2 ml-auto text-xs text-gray-600">
                 <span>Ideas</span>
@@ -552,7 +509,7 @@ function FlavorCard({ title, subtitle, description, cta, href, gradient, type }:
         <h3 className="text-xl font-bold mb-1 text-gray-900">{title}</h3>
         <p className="text-sm text-gray-600 mb-1 font-medium">{subtitle}</p>
         <p className="text-gray-600 mb-4 text-sm">{description}</p>
-        <Link href={href} className="text-[#4A7FC7] font-medium hover:text-[#059669] text-sm inline-flex items-center gap-1">
+        <Link href={href} className="text-[#2563EB] font-medium hover:text-[#059669] text-sm inline-flex items-center gap-1">
           {cta}
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -564,7 +521,7 @@ function FlavorCard({ title, subtitle, description, cta, href, gradient, type }:
 }
 
 function TestimonialCard({ quote, author, role, avatar }: { quote: string; author: string; role: string; avatar: string }) {
-  const accentColors = ['#4A7FC7', '#818CF8', '#F97316', '#FB923C']
+  const accentColors = ['#2563EB', '#818CF8', '#F97316', '#FB923C']
   const accentColor = accentColors[author.length % accentColors.length]
   
   return (
@@ -670,7 +627,7 @@ function ProductShowcase({ title, description, linkText, imageSide, gradient }: 
       <div className={imageSide === 'left' ? 'md:order-2' : ''}>
         <h3 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-900">{title}</h3>
         <p className="text-lg text-gray-600 mb-6 leading-relaxed">{description}</p>
-              <Link href="#" className="text-[#4A7FC7] font-medium hover:text-[#3A6BA8] inline-flex items-center gap-1 transition">
+              <Link href="#" className="text-[#2563EB] font-medium hover:text-[#1D4ED8] inline-flex items-center gap-1 transition">
                 {linkText}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -687,17 +644,6 @@ function ProductShowcase({ title, description, linkText, imageSide, gradient }: 
   )
 }
 
-function IntegrationCard({ name, description }: { name: string; description: string }) {
-  return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4 hover:border-gray-300 hover:shadow-sm transition cursor-pointer">
-      <div className="w-10 h-10 bg-gray-100 rounded-lg mb-3 flex items-center justify-center">
-        <span className="text-gray-500 text-xs font-semibold">{name.charAt(0)}</span>
-      </div>
-      <h4 className="font-medium text-sm text-gray-900 mb-1">{name}</h4>
-      {description && <p className="text-xs text-gray-500 leading-relaxed">{description}</p>}
-    </div>
-  )
-}
 
 function PricingCard({
   name,
@@ -722,7 +668,7 @@ function PricingCard({
     <div
       className={`rounded-xl p-6 sm:p-8 border-2 ${
         highlighted
-          ? 'bg-[#4A7FC7] text-white border-[#4A7FC7] shadow-lg'
+          ? 'bg-[#2563EB] text-white border-[#2563EB] shadow-lg'
           : 'bg-white border-gray-200'
       }`}
     >
@@ -735,8 +681,8 @@ function PricingCard({
         href={href}
         className={`block text-center py-3 rounded-lg font-medium transition mb-6 ${
           highlighted
-            ? 'bg-white text-[#4A7FC7] hover:bg-gray-50'
-            : 'bg-[#4A7FC7] text-white hover:bg-[#3A6BA8]'
+            ? 'bg-white text-[#2563EB] hover:bg-gray-50'
+            : 'bg-[#2563EB] text-white hover:bg-[#1D4ED8]'
         }`}
       >
         {cta}
@@ -745,7 +691,7 @@ function PricingCard({
         {features.map((f, i) => (
           <li key={i} className="flex items-start gap-2 text-sm">
             <svg
-              className={`w-5 h-5 flex-shrink-0 mt-0.5 ${highlighted ? 'text-blue-200' : 'text-[#4A7FC7]'}`}
+              className={`w-5 h-5 flex-shrink-0 mt-0.5 ${highlighted ? 'text-blue-200' : 'text-[#2563EB]'}`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

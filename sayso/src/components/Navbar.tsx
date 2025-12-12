@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
+import { BrandLogo } from '@/components/BrandLogo'
 
 export function Navbar() {
   const router = useRouter()
@@ -47,14 +48,12 @@ export function Navbar() {
   }
 
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <nav className="bg-white border-b border-gray-200 sticky top-0 z-[100]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo - handwritten style */}
-          <Link href="/" className="flex items-center">
-            <span className="text-2xl font-bold text-[#4A7FC7] tracking-tight">
-              feedkit
-            </span>
+          {/* Logo */}
+          <Link href="/">
+            <BrandLogo size={32} showText={true} />
           </Link>
 
           {/* Desktop Navigation */}
@@ -89,33 +88,16 @@ export function Navbar() {
               </div>
             ) : user ? (
               <>
-                {subLoading ? (
-                  <div className="hidden sm:flex items-center justify-center w-24">
-                    <svg className="animate-spin h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                  </div>
-                ) : !isSubscribed ? (
-                  <button
-                    onClick={handleUpgrade}
-                    disabled={upgrading}
-                    className="hidden sm:block px-4 py-2 rounded-lg bg-[#4A7FC7] text-white hover:bg-[#3A6BA8] transition text-sm font-medium disabled:opacity-50"
-                  >
-                    {upgrading ? 'Loading...' : 'Upgrade'}
-                  </button>
-                ) : null}
-
                 {/* User Menu */}
                 <div className="relative">
                   <button
                     onClick={() => setMenuOpen(!menuOpen)}
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition"
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition relative z-[100]"
                   >
                     {user.avatar ? (
                       <img src={user.avatar} alt={user.name || user.email} className="w-8 h-8 rounded-full" />
                     ) : (
-                      <div className="w-8 h-8 rounded-full bg-[#4A7FC7] text-white flex items-center justify-center text-sm font-medium">
+                      <div className="w-8 h-8 rounded-full bg-[#2563EB] text-white flex items-center justify-center text-sm font-medium">
                         {(user.name || user.email).charAt(0).toUpperCase()}
                       </div>
                     )}
@@ -127,32 +109,32 @@ export function Navbar() {
 
                   {menuOpen && (
                     <>
-                      <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-                      <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-20">
+                      <div 
+                        className="fixed inset-0 z-[110]" 
+                        onClick={() => setMenuOpen(false)}
+                        style={{ pointerEvents: 'auto' }}
+                      />
+                      <div 
+                        className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-[120]"
+                        style={{ pointerEvents: 'auto' }}
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <div className="px-4 py-2 border-b border-gray-100">
                           <p className="text-sm font-medium text-gray-900">{user.name || user.email.split('@')[0]}</p>
                           <p className="text-xs text-gray-500">{user.email}</p>
                           {isSubscribed && (
-                            <span className="inline-block mt-1 px-2 py-0.5 bg-blue-100 text-[#4A7FC7] text-xs rounded-full font-medium">
+                            <span className="inline-block mt-1 px-2 py-0.5 bg-blue-100 text-[#2563EB] text-xs rounded-full font-medium">
                               Pro
                             </span>
                           )}
                         </div>
                         
                         <Link
-                          href="/dashboard"
+                          href={user.projectId ? `/app/${user.projectId}` : '/dashboard'}
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
                           onClick={() => setMenuOpen(false)}
                         >
                           Dashboard
-                        </Link>
-                        
-                        <Link
-                          href="/dashboard/transcribe"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
-                          onClick={() => setMenuOpen(false)}
-                        >
-                          New Transcript
                         </Link>
 
                         {isSubscribed ? (
@@ -172,7 +154,7 @@ export function Navbar() {
                               handleUpgrade()
                             }}
                             disabled={upgrading}
-                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition text-[#4A7FC7] font-medium"
+                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition text-[#2563EB] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             Upgrade to Pro
                           </button>
@@ -204,8 +186,8 @@ export function Navbar() {
                   Log In
                 </Link>
                 <Link
-                  href="/dashboard/transcribe"
-                  className="px-4 py-2 rounded-lg bg-[#4A7FC7] text-white hover:bg-[#3A6BA8] transition text-sm font-medium"
+                  href="/dashboard"
+                  className="px-4 py-2 rounded-lg bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition text-sm font-medium"
                 >
                   Start for free
                 </Link>

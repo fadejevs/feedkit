@@ -3,54 +3,61 @@ import React from 'react'
 type BrandLogoProps = {
   size?: number
   className?: string
+  showText?: boolean
 }
 
-export function BrandLogo({ size = 32, className }: BrandLogoProps) {
+export function BrandLogo({ size = 32, className, showText = false }: BrandLogoProps) {
+  // Match the exact font height - text-2xl font-bold has a visual height around 20-22px
+  // We'll use 20px to match the x-height/cap-height of the font
+  const shapeSize = showText ? 20 : size
+  const circleRadius = shapeSize / 2
+  const triangleSize = shapeSize
+  
+  // Position shapes side by side with 0 gap between them
+  const svgWidth = shapeSize + shapeSize // No gap between shapes
+  const svgHeight = shapeSize
+  
+  // Circle positioned on the left
+  const circleX = circleRadius
+  const circleY = circleRadius
+  
+  // Triangle positioned immediately to the right of the circle (0 gap)
+  const triangleCenterX = shapeSize + shapeSize / 2
+  const triangleTopY = shapeSize / 2 - triangleSize / 2
+  const triangleLeftX = triangleCenterX - triangleSize / 2
+  const triangleRightX = triangleCenterX + triangleSize / 2
+  const triangleBottomY = shapeSize / 2 + triangleSize / 2
+  
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 64 64"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      aria-hidden="true"
-    >
-      <defs>
-        <linearGradient id="capre_bg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#3b82f6" />
-          <stop offset="100%" stopColor="#1d4ed8" />
-        </linearGradient>
-        <linearGradient id="capre_accent" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#60a5fa" />
-          <stop offset="100%" stopColor="#3b82f6" />
-        </linearGradient>
-      </defs>
+    <div className={`flex items-center gap-1 ${className || ''}`}>
+      <svg
+        width={svgWidth}
+        height={svgHeight}
+        viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        {/* Blue circle on the left */}
+        <circle
+          cx={circleX}
+          cy={circleY}
+          r={circleRadius}
+          fill="#2563EB"
+        />
+        
+        {/* Orange triangle immediately to the right of the circle */}
+        <polygon
+          points={`${triangleCenterX},${triangleTopY} ${triangleLeftX},${triangleBottomY} ${triangleRightX},${triangleBottomY}`}
+          fill="#F97316"
+        />
+      </svg>
       
-      {/* Outer container with softer radius */}
-      <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#capre_bg)" />
-      
-      {/* Abstract sound wave / quote mark hybrid - unique to Capre */}
-      {/* Top curve - like an opening quote or sound wave */}
-      <path
-        d="M 18 24 Q 18 18 24 18 L 28 18 Q 32 18 32 22 L 32 28 Q 32 32 28 32 L 26 32 Q 24 32 24 30 L 24 26"
-        fill="white"
-        opacity="0.95"
-      />
-      
-      {/* Bottom curve - mirrored, creates unique rhythm */}
-      <path
-        d="M 46 40 Q 46 46 40 46 L 36 46 Q 32 46 32 42 L 32 36 Q 32 32 36 32 L 38 32 Q 40 32 40 34 L 40 38"
-        fill="white"
-        opacity="0.95"
-      />
-      
-      {/* Center connecting element - creates flow and movement */}
-      <circle cx="32" cy="32" r="3" fill="url(#capre_accent)" opacity="0.9" />
-      
-      {/* Accent dots for rhythm (like audio visualization) */}
-      <circle cx="20" cy="32" r="2" fill="white" opacity="0.6" />
-      <circle cx="44" cy="32" r="2" fill="white" opacity="0.6" />
-    </svg>
+      {showText && (
+        <span className="text-2xl font-bold text-black tracking-tight">
+          feedkit
+        </span>
+      )}
+    </div>
   )
 }
 
