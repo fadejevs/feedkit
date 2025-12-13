@@ -47,7 +47,17 @@ export async function POST(req: NextRequest) {
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session
-        await handleCheckoutSessionCompleted(session)
+        try {
+          await handleCheckoutSessionCompleted(session)
+        } catch (error: any) {
+          console.error('❌ Error in handleCheckoutSessionCompleted:', error)
+          // Return 200 to prevent Stripe from retrying if it's a data issue
+          // Return 500 if it's a server error that should be retried
+          if (error.message?.includes('User not found') || error.message?.includes('No customer email')) {
+            return NextResponse.json({ received: true, error: error.message }, { status: 200 })
+          }
+          throw error
+        }
         break
       }
 
@@ -81,13 +91,15 @@ export async function POST(req: NextRequest) {
 async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) {
   const supabase = createServiceRoleClient()
   
-  const customerEmail = session.customer_email
-  const customerId = session.customer as string
+  // Get email from customer_email or customer_details.email
+  const customerEmail = session.customer_email || session.customer_details?.email
+  const customerId = session.customer as string | null
   const subscriptionId = session.subscription as string
   const isLifetimeDeal = session.mode === 'payment' || session.metadata?.type === 'lifetime_deal'
 
   if (!customerEmail) {
     console.error('❌ No customer email in checkout session')
+    console.error('Session data:', JSON.stringify(session, null, 2))
     return
   }
 
@@ -130,7 +142,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
       .from('subscriptions')
       .upsert({
         user_id: user.id,
-        stripe_customer_id: customerId,
+        stripe_customer_id: customerId || null, // Can be null for one-time payments
         stripe_subscription_id: null, // No subscription for lifetime deals
         stripe_price_id: priceId,
         status: 'lifetime', // Special status for lifetime deals
