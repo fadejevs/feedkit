@@ -17,7 +17,7 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
-  const positionClasses = {
+  const positionClasses: Record<NonNullable<FeedbackWidgetProps['position']>, string> = {
     'bottom-right': 'bottom-6 right-6',
     'bottom-left': 'bottom-6 left-6',
     'top-right': 'top-6 right-6',
@@ -127,8 +127,10 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
     }, 300)
   }
 
+  const positionClass = positionClasses[position] || positionClasses['bottom-right']
+  
   return (
-    <div className={`fixed ${positionClasses[position]} z-50`}>
+    <div className={`fixed ${positionClass} z-50`}>
       {isOpen ? (
         <div className="bg-white rounded-2xl shadow-2xl w-[400px] max-w-[calc(100vw-2rem)] border border-gray-100 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
           {/* Header */}
