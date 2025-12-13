@@ -56,10 +56,10 @@ export async function POST(req: NextRequest) {
     model: 'whisper-1',
     response_format: 'verbose_json',
     timestamp_granularities: ['segment'],
-  } as any)
+  } as any) as any
 
   type Segment = { start: number; end: number; text: string }
-  const segments: Segment[] = (transcription.segments || []).map((s: any) => ({
+  const segments: Segment[] = ((transcription as any).segments || []).map((s: any) => ({
     start: s.start,
     end: s.end,
     text: (s.text || '').trim(),
