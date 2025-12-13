@@ -39,6 +39,11 @@ export function useSubscription(): SubscriptionStatus {
     }
 
     async function checkSubscription() {
+      if (!supabase) {
+        setSubscriptionStatus({ isSubscribed: false, status: null, loading: false })
+        return
+      }
+      
       const startTime = Date.now()
       
       try {
