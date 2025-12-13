@@ -65,7 +65,7 @@ export function useSubscription(): SubscriptionStatus {
           return
         }
 
-        const isActive = data?.status === 'active' || data?.status === 'trialing'
+        const isActive = data?.status === 'active' || data?.status === 'trialing' || data?.status === 'lifetime'
         const result = {
           isSubscribed: isActive,
           status: data?.status || null,

@@ -84,6 +84,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
   const customerEmail = session.customer_email
   const customerId = session.customer as string
   const subscriptionId = session.subscription as string
+  const isLifetimeDeal = session.mode === 'payment' || session.metadata?.type === 'lifetime_deal'
 
   if (!customerEmail) {
     console.error('❌ No customer email in checkout session')
@@ -91,6 +92,9 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
   }
 
   console.log('🔍 Looking up user for email:', customerEmail)
+  if (isLifetimeDeal) {
+    console.log('💰 Processing lifetime deal purchase')
+  }
 
   // Get user by email
   const { data: userData, error: userError } = await supabase.auth.admin.listUsers()
@@ -109,32 +113,71 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
 
   console.log('✅ Found user:', user.id, customerEmail)
 
-  // Fetch full subscription details from Stripe
   if (!stripe) return
-  
-  const subscription = await stripe.subscriptions.retrieve(subscriptionId)
 
-  // Insert or update subscription in Supabase
-  const { error: subError } = await supabase
-    .from('subscriptions')
-    .upsert({
-      user_id: user.id,
-      stripe_customer_id: customerId,
-      stripe_subscription_id: subscriptionId,
-      stripe_price_id: subscription.items.data[0]?.price.id || null,
-      status: subscription.status,
-      current_period_start: subscription.billing_cycle_anchor ? new Date(subscription.billing_cycle_anchor * 1000).toISOString() : null,
-      current_period_end: subscription.trial_end ? new Date(subscription.trial_end * 1000).toISOString() : null,
-      cancel_at_period_end: subscription.cancel_at_period_end || false,
-      updated_at: new Date().toISOString(),
-    }, {
-      onConflict: 'user_id',
-    })
+  if (isLifetimeDeal) {
+    // Handle lifetime deal (one-time payment)
+    const paymentIntentId = session.payment_intent as string
+    let priceId = null
+    
+    if (session.line_items) {
+      const lineItems = await stripe.checkout.sessions.listLineItems(session.id)
+      priceId = lineItems.data[0]?.price?.id || null
+    }
 
-  if (subError) {
-    console.error('❌ Error upserting subscription:', subError)
+    // Insert or update subscription with lifetime status
+    const { error: subError } = await supabase
+      .from('subscriptions')
+      .upsert({
+        user_id: user.id,
+        stripe_customer_id: customerId,
+        stripe_subscription_id: null, // No subscription for lifetime deals
+        stripe_price_id: priceId,
+        status: 'lifetime', // Special status for lifetime deals
+        current_period_start: new Date().toISOString(),
+        current_period_end: null, // Lifetime = no end date
+        cancel_at_period_end: false,
+        updated_at: new Date().toISOString(),
+      }, {
+        onConflict: 'user_id',
+      })
+
+    if (subError) {
+      console.error('❌ Error upserting lifetime subscription:', subError)
+    } else {
+      console.log('✅ Lifetime deal saved to Supabase for user:', user.id)
+    }
   } else {
-    console.log('✅ Subscription saved to Supabase for user:', user.id)
+    // Handle subscription payment
+    if (!subscriptionId) {
+      console.error('❌ No subscription ID in checkout session')
+      return
+    }
+
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId)
+
+    // Insert or update subscription in Supabase
+    const { error: subError } = await supabase
+      .from('subscriptions')
+      .upsert({
+        user_id: user.id,
+        stripe_customer_id: customerId,
+        stripe_subscription_id: subscriptionId,
+        stripe_price_id: subscription.items.data[0]?.price.id || null,
+        status: subscription.status,
+        current_period_start: subscription.billing_cycle_anchor ? new Date(subscription.billing_cycle_anchor * 1000).toISOString() : null,
+        current_period_end: (subscription as any).current_period_end ? new Date((subscription as any).current_period_end * 1000).toISOString() : null,
+        cancel_at_period_end: subscription.cancel_at_period_end || false,
+        updated_at: new Date().toISOString(),
+      }, {
+        onConflict: 'user_id',
+      })
+
+    if (subError) {
+      console.error('❌ Error upserting subscription:', subError)
+    } else {
+      console.log('✅ Subscription saved to Supabase for user:', user.id)
+    }
   }
 }
 
@@ -163,7 +206,7 @@ async function handleSubscriptionUpdate(subscription: Stripe.Subscription) {
       stripe_price_id: subscription.items.data[0]?.price.id || null,
       status: subscription.status,
       current_period_start: subscription.billing_cycle_anchor ? new Date(subscription.billing_cycle_anchor * 1000).toISOString() : null,
-      current_period_end: subscription.trial_end ? new Date(subscription.trial_end * 1000).toISOString() : null,
+      current_period_end: (subscription as any).current_period_end ? new Date((subscription as any).current_period_end * 1000).toISOString() : null,
       cancel_at_period_end: subscription.cancel_at_period_end || false,
       updated_at: new Date().toISOString(),
     })

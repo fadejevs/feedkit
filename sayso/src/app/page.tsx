@@ -19,7 +19,7 @@ function LandingPageContent() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative z-10 w-full pt-16 pb-4 sm:pt-24 sm:pb-6 overflow-hidden min-h-[550px] sm:min-h-[650px]">
+      <section id="home" className="relative z-10 w-full pt-16 pb-4 sm:pt-24 sm:pb-6 overflow-hidden min-h-[550px] sm:min-h-[650px]">
         {/* Animated Background - covers entire hero section */}
         <div className="absolute inset-0 w-full h-full">
           <AnimatedBackground />
@@ -111,7 +111,7 @@ function LandingPageContent() {
 
 
       {/* Two Flavors Section */}
-      <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+      <section id="product" className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         <div className="text-center mb-12">
           <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-gray-900 leading-tight">
             Feedkit comes in two flavors.
@@ -182,7 +182,7 @@ function LandingPageContent() {
       </section> */}
 
       {/* Features Grid Section */}
-      <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+      <section id="features" className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         {/* Background gradient with complementary colors */}
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-blue-100 via-indigo-50 to-orange-50 rounded-full -translate-y-1/2 translate-x-1/2 opacity-20 blur-3xl" />
         
@@ -266,7 +266,7 @@ function LandingPageContent() {
       </section>
 
       {/* Integrations Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+      <section id="integrations" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         <div className="text-center mb-12">
           <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-gray-900 leading-tight">Integrations</h2>
           <p className="text-lg text-gray-600">
@@ -1045,6 +1045,35 @@ function ProductShowcase({ title, description, linkText, imageSide, gradient }: 
 
 
 function LifetimeDealCard() {
+  const [isProcessing, setIsProcessing] = useState(false)
+
+  const handleLifetimePurchase = async () => {
+    setIsProcessing(true)
+    try {
+      const response = await fetch('/api/stripe/checkout-lifetime', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: undefined }), // Will be collected in Stripe checkout
+      })
+      
+      const data = await response.json()
+      
+      if (data.error) {
+        alert(data.error)
+        setIsProcessing(false)
+        return
+      }
+      
+      if (data.url) {
+        window.location.href = data.url
+      }
+    } catch (error) {
+      console.error('Failed to create checkout session:', error)
+      alert('Failed to start checkout. Please try again.')
+      setIsProcessing(false)
+    }
+  }
+
   return (
     <div className="relative rounded-xl p-6 sm:p-8 border-2 border-[#2563EB] bg-gradient-to-br from-[#2563EB] via-[#1D4ED8] to-[#1E40AF] text-white shadow-xl transform hover:scale-[1.02] transition-all duration-300">
       {/* Ribbon Badge */}
@@ -1068,12 +1097,23 @@ function LifetimeDealCard() {
         Get lifetime access to all Pro features with a one-time payment. Perfect for long-term projects.
       </p>
       
-      <Link
-        href="/dashboard"
-        className="block text-center py-3 rounded-lg font-medium transition mb-6 bg-white text-[#2563EB] hover:bg-gray-50 shadow-md"
+      <button
+        onClick={handleLifetimePurchase}
+        disabled={isProcessing}
+        className="w-full text-center py-3 rounded-lg font-medium transition mb-6 bg-white text-[#2563EB] hover:bg-gray-50 shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        Claim Lifetime Deal
-      </Link>
+        {isProcessing ? (
+          <span className="flex items-center justify-center gap-2">
+            <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Processing...
+          </span>
+        ) : (
+          'Claim Lifetime Deal'
+        )}
+      </button>
       
       <ul className="space-y-3">
         {[

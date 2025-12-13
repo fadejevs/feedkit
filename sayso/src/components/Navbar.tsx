@@ -58,22 +58,17 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            <div className="relative group">
-              <Link href="#" className="text-sm text-gray-700 hover:text-gray-900 transition flex items-center gap-1">
-                Product
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </Link>
-            </div>
-            <Link href="#" className="text-sm text-gray-700 hover:text-gray-900 transition">
+            <Link href="/#product" className="text-sm text-gray-700 hover:text-gray-900 transition">
+              Product
+            </Link>
+            <Link href="/#product" className="text-sm text-gray-700 hover:text-gray-900 transition">
               Widget
             </Link>
             <Link href="/#pricing" className="text-sm text-gray-700 hover:text-gray-900 transition">
               Pricing
             </Link>
-            <Link href="#" className="text-sm text-gray-700 hover:text-gray-900 transition">
-              What's new
+            <Link href="/#features" className="text-sm text-gray-700 hover:text-gray-900 transition">
+              Features
             </Link>
           </div>
 
@@ -209,17 +204,17 @@ export function Navbar() {
         {/* Mobile menu */}
         {menuOpen && !user && (
           <div className="md:hidden border-t border-gray-200 py-4">
-            <Link href="#" className="block px-4 py-2 text-sm text-gray-600 hover:text-gray-900">
+            <Link href="/#product" className="block px-4 py-2 text-sm text-gray-600 hover:text-gray-900" onClick={() => setMenuOpen(false)}>
               Product
             </Link>
-            <Link href="#" className="block px-4 py-2 text-sm text-gray-600 hover:text-gray-900">
+            <Link href="/#product" className="block px-4 py-2 text-sm text-gray-600 hover:text-gray-900" onClick={() => setMenuOpen(false)}>
               Widget
             </Link>
-            <Link href="/pricing" className="block px-4 py-2 text-sm text-gray-600 hover:text-gray-900">
+            <Link href="/#pricing" className="block px-4 py-2 text-sm text-gray-600 hover:text-gray-900" onClick={() => setMenuOpen(false)}>
               Pricing
             </Link>
-            <Link href="#" className="block px-4 py-2 text-sm text-gray-600 hover:text-gray-900">
-              What's new
+            <Link href="/#features" className="block px-4 py-2 text-sm text-gray-600 hover:text-gray-900" onClick={() => setMenuOpen(false)}>
+              Features
             </Link>
           </div>
         )}
