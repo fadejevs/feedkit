@@ -86,12 +86,12 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
           type: selectedType,
           message: feedback,
           imageUrl: imagePreview || undefined,
-          userEmail: undefined, // Could be added later with auth
+          userEmail: undefined,
           device: device,
           page: typeof window !== 'undefined' ? window.location.href : '',
           createdAt: Date.now(),
           archived: false,
-          projectId: projectId || '714363294e1e3c', // Use provided projectId or default
+          projectId: projectId || '714363294e1e3c',
         }
 
         const existing = localStorage.getItem('feedkit_feedback')
@@ -116,52 +116,66 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
     }
   }
 
+  const handleClose = () => {
+    setIsOpen(false)
+    setTimeout(() => {
+      setSelectedType(null)
+      setFeedback('')
+      setSelectedImage(null)
+      setImagePreview(null)
+      setSubmitted(false)
+    }, 300)
+  }
+
   return (
     <div className={`fixed ${positionClasses[position]} z-50`}>
       {isOpen ? (
-        <div className="bg-white rounded-lg shadow-2xl w-[380px] max-w-[calc(100vw-2rem)] border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-2xl w-[400px] max-w-[calc(100vw-2rem)] border border-gray-100 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
           {/* Header */}
-          <div className="bg-gradient-to-r from-[#2563EB] to-[#818CF8] p-4 flex items-center justify-between">
+          <div className="bg-gradient-to-r from-[#2563EB] via-[#3B82F6] to-[#2563EB] p-5 flex items-center justify-between">
             <div className="flex items-center gap-3">
               {selectedType === 'issue' && (
-                <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-red-500/20 backdrop-blur-sm rounded-xl flex items-center justify-center ring-2 ring-red-500/30">
                   <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                   </svg>
                 </div>
               )}
               {selectedType === 'idea' && (
-                <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-orange-500/20 backdrop-blur-sm rounded-xl flex items-center justify-center ring-2 ring-orange-500/30">
                   <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14a1 1 0 00-1 1v1a1 1 0 102 0v-1a1 1 0 00-1-1z" />
                   </svg>
                 </div>
               )}
               {selectedType === 'other' && (
-                <div className="w-8 h-8 bg-gray-400 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-gray-500/20 backdrop-blur-sm rounded-xl flex items-center justify-center ring-2 ring-gray-500/30">
                   <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
                   </svg>
                 </div>
               )}
               <div>
-                <h3 className="text-white font-semibold text-sm">
-                  {selectedType ? (selectedType === 'issue' ? 'Report an issue' : selectedType === 'idea' ? 'Share an idea' : 'Other feedback') : "What's on your mind?"}
+                <h3 className="text-white font-semibold text-base leading-tight">
+                  {selectedType ? (
+                    selectedType === 'issue' ? 'Report an issue' : 
+                    selectedType === 'idea' ? 'Share an idea' : 
+                    'Other feedback'
+                  ) : "What's on your mind?"}
                 </h3>
+                {selectedType && (
+                  <p className="text-white/80 text-xs mt-0.5">
+                    {selectedType === 'issue' ? 'Help us fix something' : 
+                     selectedType === 'idea' ? 'Tell us what you'd like to see' : 
+                     'Share your thoughts'}
+                  </p>
+                )}
               </div>
             </div>
             <button
-              onClick={() => {
-                setIsOpen(false)
-                setTimeout(() => {
-                  setSelectedType(null)
-                  setFeedback('')
-                  setSelectedImage(null)
-                  setImagePreview(null)
-                  setSubmitted(false)
-                }, 300)
-              }}
-              className="text-white hover:bg-white/20 rounded-lg p-1 transition"
+              onClick={handleClose}
+              className="text-white/90 hover:text-white hover:bg-white/20 rounded-lg p-1.5 transition-all duration-200"
+              aria-label="Close"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -170,91 +184,96 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
           </div>
 
           {/* Content */}
-          <div className="p-4">
+          <div className="p-5">
             {!selectedType ? (
               // Type selection
               <div>
-                <p className="text-gray-700 text-sm mb-4">Choose a feedback type:</p>
+                <p className="text-gray-700 text-sm font-medium mb-4">Choose a feedback type:</p>
                 <div className="grid grid-cols-3 gap-3">
                   <button
                     onClick={() => setSelectedType('issue')}
-                    className="flex flex-col items-center gap-2 p-4 border-2 border-gray-200 rounded-lg hover:border-[#2563EB] hover:bg-blue-50 transition cursor-pointer"
+                    className="group flex flex-col items-center gap-3 p-4 border-2 border-gray-200 rounded-xl hover:border-red-300 hover:bg-red-50/50 transition-all duration-200 cursor-pointer active:scale-95"
                   >
-                    <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                      <svg className="w-6 h-6 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                    <div className="w-14 h-14 bg-gradient-to-br from-red-100 to-red-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-200 shadow-sm">
+                      <svg className="w-7 h-7 text-red-600" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                       </svg>
                     </div>
-                    <span className="text-xs font-medium text-gray-700">Issue</span>
+                    <span className="text-xs font-semibold text-gray-700 group-hover:text-red-700 transition-colors">Issue</span>
                   </button>
                   <button
                     onClick={() => setSelectedType('idea')}
-                    className="flex flex-col items-center gap-2 p-4 border-2 border-gray-200 rounded-lg hover:border-[#2563EB] hover:bg-blue-50 transition cursor-pointer"
+                    className="group flex flex-col items-center gap-3 p-4 border-2 border-gray-200 rounded-xl hover:border-orange-300 hover:bg-orange-50/50 transition-all duration-200 cursor-pointer active:scale-95"
                   >
-                    <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                      <svg className="w-6 h-6 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                    <div className="w-14 h-14 bg-gradient-to-br from-orange-100 to-orange-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-200 shadow-sm">
+                      <svg className="w-7 h-7 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14a1 1 0 00-1 1v1a1 1 0 102 0v-1a1 1 0 00-1-1z" />
                       </svg>
                     </div>
-                    <span className="text-xs font-medium text-gray-700">Idea</span>
+                    <span className="text-xs font-semibold text-gray-700 group-hover:text-orange-700 transition-colors">Idea</span>
                   </button>
                   <button
                     onClick={() => setSelectedType('other')}
-                    className="flex flex-col items-center gap-2 p-4 border-2 border-gray-200 rounded-lg hover:border-[#2563EB] hover:bg-blue-50 transition cursor-pointer"
+                    className="group flex flex-col items-center gap-3 p-4 border-2 border-gray-200 rounded-xl hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 cursor-pointer active:scale-95"
                   >
-                    <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                      <svg className="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                    <div className="w-14 h-14 bg-gradient-to-br from-gray-100 to-gray-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-200 shadow-sm">
+                      <svg className="w-7 h-7 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
                       </svg>
                     </div>
-                    <span className="text-xs font-medium text-gray-700">Other</span>
+                    <span className="text-xs font-semibold text-gray-700 group-hover:text-gray-900 transition-colors">Other</span>
                   </button>
                 </div>
               </div>
             ) : submitted ? (
               // Success message
-              <div className="text-center py-8">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <div className="text-center py-10">
+                <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-50 rounded-2xl flex items-center justify-center mx-auto mb-5 animate-in zoom-in duration-300">
+                  <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-2">Thank you!</h4>
-                <p className="text-sm text-gray-600">Your feedback has been submitted.</p>
+                <h4 className="text-xl font-bold text-gray-900 mb-2">Thank you!</h4>
+                <p className="text-sm text-gray-600">Your feedback has been submitted successfully.</p>
               </div>
             ) : (
               // Feedback form
-              <div>
-                <div className="mb-4">
+              <div className="space-y-4">
+                <div>
                   <textarea
                     value={feedback}
                     onChange={(e) => setFeedback(e.target.value)}
-                    placeholder="I noticed that..."
-                    className="w-full h-32 px-4 py-3 border-2 border-[#2563EB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:ring-offset-0 resize-none text-sm"
+                    placeholder="Tell us more about your feedback..."
+                    className="w-full h-36 px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] resize-none text-sm text-gray-900 placeholder:text-gray-400 transition-all duration-200"
                     autoFocus
                   />
+                  <p className="text-xs text-gray-500 mt-2">{feedback.length} characters</p>
                 </div>
                 
                 {/* Image Preview */}
                 {imagePreview && (
-                  <div className="mb-4 relative">
-                    <img 
-                      src={imagePreview} 
-                      alt="Preview" 
-                      className="w-full h-32 object-cover rounded-lg border border-gray-200"
-                    />
+                  <div className="relative group">
+                    <div className="relative overflow-hidden rounded-xl border-2 border-gray-200">
+                      <img 
+                        src={imagePreview} 
+                        alt="Preview" 
+                        className="w-full h-40 object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
                     <button
                       onClick={removeImage}
-                      className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white rounded-full p-1 transition"
+                      className="absolute top-3 right-3 bg-black/70 hover:bg-black/90 text-white rounded-full p-2 transition-all duration-200 shadow-lg backdrop-blur-sm"
+                      aria-label="Remove image"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
                   </div>
                 )}
 
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center justify-between gap-3 pt-2">
                   <div className="flex items-center gap-2">
                     <input
                       type="file"
@@ -265,16 +284,17 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
                     />
                     <label
                       htmlFor="image-upload"
-                      className="flex items-center justify-center w-10 h-10 border-2 border-gray-300 rounded-lg hover:border-[#2563EB] hover:bg-blue-50 transition cursor-pointer"
+                      className="flex items-center justify-center w-11 h-11 border-2 border-gray-200 rounded-xl hover:border-[#2563EB] hover:bg-blue-50 transition-all duration-200 cursor-pointer active:scale-95"
+                      aria-label="Upload image"
                     >
                       <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
                     </label>
                     <button
                       onClick={() => setSelectedType(null)}
-                      className="text-gray-600 hover:text-gray-900 transition text-sm font-medium flex items-center gap-1"
+                      className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium flex items-center gap-1.5 px-3 py-2 rounded-lg hover:bg-gray-50"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -285,9 +305,19 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
                   <button
                     onClick={handleSubmit}
                     disabled={!feedback.trim() || isSubmitting}
-                    className="px-6 py-2 bg-[#2563EB] text-white rounded-lg font-medium hover:bg-[#1D4ED8] transition disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                    className="px-6 py-2.5 bg-[#2563EB] text-white rounded-xl font-semibold hover:bg-[#1D4ED8] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#2563EB] text-sm shadow-sm hover:shadow-md active:scale-95"
                   >
-                    {isSubmitting ? 'Sending...' : 'Send feedback'}
+                    {isSubmitting ? (
+                      <span className="flex items-center gap-2">
+                        <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                        </svg>
+                        Sending...
+                      </span>
+                    ) : (
+                      'Send feedback'
+                    )}
                   </button>
                 </div>
               </div>
@@ -295,20 +325,21 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
           </div>
 
           {/* Footer */}
-          <div className="px-4 pb-3 text-center">
-            <p className="text-xs text-gray-400">Widget by Feedkit</p>
-          </div>
+          {!submitted && (
+            <div className="px-5 pb-4 text-center border-t border-gray-100 pt-3">
+              <p className="text-xs text-gray-400">Powered by Feedkit</p>
+            </div>
+          )}
         </div>
       ) : (
-        // Floating button - Circle with upward triangle
+        // Floating button
         <button
           onClick={() => setIsOpen(true)}
-          className="w-14 h-14 bg-[#F97316] rounded-full shadow-lg hover:bg-[#FB923C] transition flex items-center justify-center group"
+          className="w-14 h-14 bg-gradient-to-br from-[#F97316] to-[#FB923C] rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group hover:scale-110 active:scale-95"
           aria-label="Open feedback widget"
         >
-          {/* Upward-pointing triangle */}
           <svg 
-            className="w-8 h-8 text-white group-hover:scale-110 transition-transform" 
+            className="w-7 h-7 text-white group-hover:scale-110 transition-transform duration-300" 
             fill="currentColor" 
             viewBox="0 0 24 24"
           >
@@ -319,4 +350,3 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
     </div>
   )
 }
-
