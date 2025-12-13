@@ -22,6 +22,9 @@ function AuthCallbackContent() {
           const upgraded = searchParams?.get('upgraded') === '1'
           const lifetime = searchParams?.get('lifetime') === '1'
           
+          // Check if user signed in with intent to purchase lifetime deal
+          const intent = searchParams?.get('intent')
+          
           if (upgraded || lifetime) {
             setStatus('success')
             if (lifetime) {
@@ -33,6 +36,35 @@ function AuthCallbackContent() {
             setTimeout(() => {
               router.replace(`/app/${projectId}`)
             }, 2000)
+          } else if (intent === 'lifetime') {
+            // User signed in with intent to purchase lifetime deal
+            // Redirect to checkout
+            setMessage('Redirecting to checkout...')
+            try {
+              const response = await fetch('/api/stripe/checkout-lifetime', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email }),
+              })
+              
+              const data = await response.json()
+              
+              if (data.error) {
+                alert(data.error)
+                router.replace(`/app/${projectId}`)
+                return
+              }
+              
+              if (data.url) {
+                window.location.href = data.url
+              } else {
+                router.replace(`/app/${projectId}`)
+              }
+            } catch (error) {
+              console.error('Failed to create checkout session:', error)
+              alert('Failed to start checkout. Please try again.')
+              router.replace(`/app/${projectId}`)
+            }
           } else {
             // Regular auth callback, just redirect
             router.replace(`/app/${projectId}`)

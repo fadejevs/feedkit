@@ -1049,9 +1049,9 @@ function LifetimeDealCard() {
   const [isProcessing, setIsProcessing] = useState(false)
 
   const handleLifetimePurchase = async () => {
-    // If user is not signed in, redirect to sign in
+    // If user is not signed in, redirect to sign in with intent to purchase
     if (!user) {
-      window.location.href = '/sign-in'
+      window.location.href = '/sign-in?intent=lifetime'
       return
     }
 

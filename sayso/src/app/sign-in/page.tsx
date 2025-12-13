@@ -1,13 +1,15 @@
 "use client"
-import { useRouter } from 'next/navigation'
+import { Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
 import Link from 'next/link'
 import { BrandLogo } from '@/components/BrandLogo'
 import { getOrCreateProjectId } from '@/lib/projectId'
 
-export default function SignInPage() {
+function SignInContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [loading, setLoading] = useState(false)
 
   async function handleGoogleSignIn() {
@@ -32,11 +34,15 @@ export default function SignInPage() {
         return
       }
 
+      // Get intent from query params (e.g., 'lifetime' for lifetime deal purchase)
+      const intent = searchParams?.get('intent')
+      const callbackUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000') + '/auth/callback' + (intent ? `?intent=${intent}` : '')
+
       // Real Google OAuth flow - this will redirect to Google
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000') + '/auth/callback',
+          redirectTo: callbackUrl,
         },
       })
       
@@ -80,6 +86,21 @@ export default function SignInPage() {
         <p className="text-xs text-neutral-600 mt-6 text-center">By continuing you agree to our <a href="#" className="underline">Terms</a> and <a href="#" className="underline">Privacy</a>.</p>
       </div>
     </div>
+  )
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2563EB] mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    }>
+      <SignInContent />
+    </Suspense>
   )
 }
 
