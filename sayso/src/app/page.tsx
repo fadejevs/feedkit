@@ -62,6 +62,8 @@ export default function LandingPage() {
         </div>
       </section>
 
+
+
       {/* Feature Cards */}
       <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mx-auto">
@@ -104,6 +106,121 @@ export default function LandingPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <hr className="border-gray-200" />
       </div>
+
+            {/* Meet the Widget Section */}
+            <section className="bg-white py-16 sm:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Meet the widget */}
+          <div className="text-center mb-16 sm:mb-20">
+            <div className="relative inline-block mb-8">
+              <svg className="absolute -left-8 top-1/2 -translate-y-1/2 w-6 h-6 text-[#F97316]" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clipRule="evenodd" />
+              </svg>
+              <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-3">Meet the widget</h2>
+            </div>
+            <p className="text-lg sm:text-xl text-gray-600 mb-12">
+              It's friendly, fast and lightweight.
+            </p>
+            
+            {/* Widget Mockup */}
+            <div className="relative max-w-md mx-auto">
+              {/* Decorative background shape */}
+              <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-[#F97316] rounded-full opacity-20 blur-3xl -z-10"></div>
+              
+              {/* Widget Preview */}
+              <div className="bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden relative z-10">
+                <div className="bg-gradient-to-r from-[#4A7FC7] to-[#818CF8] p-4 flex items-center justify-between">
+                  <h3 className="text-white font-semibold text-sm">What's on your mind?</h3>
+                  <button className="text-white hover:bg-white/20 rounded-lg p-1 transition">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+                <div className="p-6">
+                  <p className="text-gray-700 text-sm mb-4">Choose a feedback type:</p>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="flex flex-col items-center gap-2 p-4 border-2 border-gray-200 rounded-lg">
+                      <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                        <svg className="w-6 h-6 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <span className="text-xs font-medium text-gray-700">Issue</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-2 p-4 border-2 border-gray-200 rounded-lg">
+                      <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                        <svg className="w-6 h-6 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14a1 1 0 00-1 1v1a1 1 0 102 0v-1a1 1 0 00-1-1z" />
+                        </svg>
+                      </div>
+                      <span className="text-xs font-medium text-gray-700">Idea</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-2 p-4 border-2 border-gray-200 rounded-lg">
+                      <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                        <svg className="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                        </svg>
+                      </div>
+                      <span className="text-xs font-medium text-gray-700">Other</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="px-4 pb-3 text-center border-t border-gray-100">
+                  <p className="text-xs text-gray-400">Widget by Feedkit</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Easy to Integrate */}
+          <div className="bg-gradient-to-br from-[#4A7FC7] to-[#3A6BA8] rounded-2xl p-8 sm:p-12 text-white">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-3">Easy to Integrate</h2>
+              <p className="text-lg text-blue-100 max-w-2xl mx-auto">
+                Less than 5 lines of code. Choose a button and we'll make it collect feedback.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              {/* HTML Code */}
+              <div className="bg-[#1e3a5f] rounded-lg p-6 overflow-x-auto">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <span className="ml-2 text-sm text-gray-400">HTML</span>
+                </div>
+                <pre className="text-sm text-gray-300 font-mono">
+                  <code>{`<script src="https://feedkit.co/widget.js?pid=..." defer></script>
+<button data-feedkit>
+  Give Feedback
+</button>`}</code>
+                </pre>
+              </div>
+
+              {/* React Code */}
+              <div className="bg-[#1e3a5f] rounded-lg p-6 overflow-x-auto">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <span className="ml-2 text-sm text-gray-400">React</span>
+                </div>
+                <pre className="text-sm text-gray-300 font-mono">
+                  <code>{`import { FeedbackWidget } from 'feedkit'
+
+<FeedbackWidget
+  projectId="..."
+  position="bottom-right"
+/>`}</code>
+                </pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
 
       {/* Two Flavors Section */}
       <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40" height="20" viewBox="0 0 40 20" xmlns="http://www.w3.org/2000/svg">
+  <!-- Blue circle on the left -->
+  <circle cx="10" cy="10" r="10" fill="#4A7FC7"/>
+  
+  <!-- Orange triangle immediately to the right of the circle -->
+  <polygon points="20,0 10,20 30,20" fill="#F97316"/>
+</svg>

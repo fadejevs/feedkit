@@ -53,7 +53,7 @@ export function BrandLogo({ size = 32, className, showText = false }: BrandLogoP
       </svg>
       
       {showText && (
-        <span className="text-2xl font-bold text-black tracking-tight">
+        <span className="text-2xl font-bold text-black tracking-tighter">
           feedkit
         </span>
       )}
