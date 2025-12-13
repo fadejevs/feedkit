@@ -1,4 +1,5 @@
 "use client"
+import { Suspense } from 'react'
 import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
 import { AnimatedBackground } from '@/components/AnimatedBackground'
@@ -7,7 +8,7 @@ import { FeedbackWidget } from '@/components/FeedbackWidget'
 import { Footer } from '@/components/Footer'
 import { useAuth } from '@/hooks/useAuth'
 
-export default function LandingPage() {
+function LandingPageContent() {
   const { user } = useAuth()
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
@@ -820,6 +821,21 @@ function PricingCard({
         ))}
       </ul>
     </div>
+  )
+}
+
+export default function LandingPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2563EB] mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    }>
+      <LandingPageContent />
+    </Suspense>
   )
 }
 
