@@ -39,7 +39,7 @@ export function useSubscription(): SubscriptionStatus {
     }
 
     async function checkSubscription() {
-      if (!supabase) {
+      if (!supabase || !user) {
         setSubscriptionStatus({ isSubscribed: false, status: null, loading: false })
         return
       }
