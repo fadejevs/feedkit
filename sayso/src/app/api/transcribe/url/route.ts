@@ -47,8 +47,8 @@ export async function POST(req: NextRequest) {
   
   const resolved = await resolveMediaDirectUrl(url)
   if (resolved) {
-    resolvedUrl = resolved.url
-    resolvedContentType = resolved.contentType
+    resolvedUrl = resolved
+    // contentType will be determined from the response headers
   }
   
   if (!resolvedUrl) {
@@ -106,9 +106,9 @@ export async function POST(req: NextRequest) {
   }
   if (sourceLanguage && sourceLanguage !== 'auto') whisperReq.language = sourceLanguage
 
-  const transcription = await openai.audio.transcriptions.create(whisperReq)
+  const transcription = await openai.audio.transcriptions.create(whisperReq) as any
   type Segment = { start: number; end: number; text: string }
-  const segments: Segment[] = (transcription.segments || []).map((s: any) => ({
+  const segments: Segment[] = ((transcription as any).segments || []).map((s: any) => ({
     start: s.start,
     end: s.end,
     text: (s.text || '').trim(),
@@ -163,7 +163,7 @@ export async function POST(req: NextRequest) {
     paragraphs: finalParagraphs,
     srt: toSrt(finalParagraphs),
     summary,
-    sourceLanguage: sourceLanguage === 'auto' ? transcription.language : sourceLanguage,
+    sourceLanguage: sourceLanguage === 'auto' ? (transcription as any).language : sourceLanguage,
     targetLanguage,
   })
 }
