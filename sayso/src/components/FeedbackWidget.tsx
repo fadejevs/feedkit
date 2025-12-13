@@ -17,11 +17,16 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
-  const positionClasses: Record<NonNullable<FeedbackWidgetProps['position']>, string> = {
+  const positionClasses = {
     'bottom-right': 'bottom-6 right-6',
     'bottom-left': 'bottom-6 left-6',
     'top-right': 'top-6 right-6',
     'top-left': 'top-6 left-6',
+  }
+
+  const getPositionClass = () => {
+    const pos = position || 'bottom-right'
+    return positionClasses[pos as keyof typeof positionClasses] || positionClasses['bottom-right']
   }
 
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -127,10 +132,8 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
     }, 300)
   }
 
-  const positionClass = positionClasses[position] || positionClasses['bottom-right']
-  
   return (
-    <div className={`fixed ${positionClass} z-50`}>
+    <div className={`fixed ${getPositionClass()} z-50`}>
       {isOpen ? (
         <div className="bg-white rounded-2xl shadow-2xl w-[400px] max-w-[calc(100vw-2rem)] border border-gray-100 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
           {/* Header */}
@@ -168,7 +171,7 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
                 {selectedType && (
                   <p className="text-white/80 text-xs mt-0.5">
                     {selectedType === 'issue' ? 'Help us fix something' : 
-                     selectedType === 'idea' ? 'Tell us what you'd like to see' : 
+                     selectedType === 'idea' ? "Tell us what you'd like to see" : 
                      'Share your thoughts'}
                   </p>
                 )}
