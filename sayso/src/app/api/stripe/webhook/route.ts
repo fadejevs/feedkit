@@ -116,11 +116,26 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
     return
   }
 
-  const user = userData?.users?.find((u: any) => u.email === customerEmail)
+  let user = userData?.users?.find((u: any) => u.email === customerEmail)
 
+  // If user doesn't exist, create one (for guest checkout scenario)
   if (!user) {
-    console.error('❌ User not found for email:', customerEmail)
-    return
+    console.log('👤 User not found, creating new account for:', customerEmail)
+    const { data: newUser, error: createError } = await supabase.auth.admin.createUser({
+      email: customerEmail,
+      email_confirm: true, // Auto-confirm email since they paid
+      user_metadata: {
+        created_via: 'lifetime_deal_purchase',
+      },
+    })
+
+    if (createError) {
+      console.error('❌ Error creating user:', createError)
+      return
+    }
+
+    user = newUser.user
+    console.log('✅ Created new user account:', user.id, customerEmail)
   }
 
   console.log('✅ Found user:', user.id, customerEmail)

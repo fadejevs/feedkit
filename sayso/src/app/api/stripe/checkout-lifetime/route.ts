@@ -24,10 +24,12 @@ export async function POST(req: NextRequest) {
       }],
       success_url: `${siteUrl}/auth/callback?lifetime=1&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/#pricing?cancelled=1`,
-      customer_email: email,
+      customer_email: email || undefined, // Pre-fill email if provided, otherwise let Stripe collect it
+      customer_creation: 'if_required', // Create customer in Stripe if needed
       allow_promotion_codes: true,
       metadata: {
         type: 'lifetime_deal',
+        ...(email && { user_email: email }), // Store email in metadata for webhook
       },
     })
     

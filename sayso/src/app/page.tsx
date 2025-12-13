@@ -1045,15 +1045,23 @@ function ProductShowcase({ title, description, linkText, imageSide, gradient }: 
 
 
 function LifetimeDealCard() {
+  const { user } = useAuth()
   const [isProcessing, setIsProcessing] = useState(false)
+  const [showSignInPrompt, setShowSignInPrompt] = useState(false)
 
   const handleLifetimePurchase = async () => {
+    // If user is not signed in, prompt them to sign in first
+    if (!user) {
+      setShowSignInPrompt(true)
+      return
+    }
+
     setIsProcessing(true)
     try {
       const response = await fetch('/api/stripe/checkout-lifetime', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: undefined }), // Will be collected in Stripe checkout
+        body: JSON.stringify({ email: user.email }), // Use signed-in user's email
       })
       
       const data = await response.json()
@@ -1114,6 +1122,43 @@ function LifetimeDealCard() {
           'Claim Lifetime Deal'
         )}
       </button>
+
+      {/* Sign In Prompt Modal */}
+      {showSignInPrompt && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowSignInPrompt(false)}>
+          <div className="bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-bold text-gray-900">Sign in to continue</h3>
+              <button
+                onClick={() => setShowSignInPrompt(false)}
+                className="text-gray-400 hover:text-gray-600 transition"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <p className="text-gray-600 mb-6">
+              Please sign in to claim your lifetime deal. This ensures your purchase is linked to your account.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link
+                href="/sign-in"
+                className="flex-1 px-4 py-3 bg-[#2563EB] text-white rounded-lg font-medium hover:bg-[#1D4ED8] transition text-center"
+                onClick={() => setShowSignInPrompt(false)}
+              >
+                Sign in
+              </Link>
+              <button
+                onClick={() => setShowSignInPrompt(false)}
+                className="px-4 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       
       <ul className="space-y-3">
         {[
