@@ -1,5 +1,5 @@
 "use client"
-import { Suspense, useState, useEffect } from 'react'
+import { Suspense, useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
 import { AnimatedBackground } from '@/components/AnimatedBackground'
@@ -11,6 +11,12 @@ import { useAuth } from '@/hooks/useAuth'
 
 function LandingPageContent() {
   const { user } = useAuth()
+  const scrollToDemo = () => {
+    const el = document.getElementById('live-demo')
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
       {/* Navigation */}
@@ -47,7 +53,10 @@ function LandingPageContent() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </Link>
-            <button className="px-6 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 font-medium hover:bg-gray-50 transition text-base inline-flex items-center gap-3 h-[48px]">
+            <button
+              onClick={scrollToDemo}
+              className="px-6 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 font-medium hover:bg-gray-50 transition text-base inline-flex items-center gap-3 h-[48px]"
+            >
               <div className="w-6 h-6 rounded-full border-2 border-gray-900 flex items-center justify-center flex-shrink-0">
                 <svg className="w-3 h-3 text-gray-900 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z" />
@@ -76,12 +85,45 @@ function LandingPageContent() {
         </div>
       </section>
 
-      {/* Demo Section - Coming Soon */}
-      <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <div className="bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
-          <div className="flex items-center justify-center py-24 sm:py-32">
-            <div className="text-center">
-              <p className="text-xl sm:text-2xl text-gray-500 font-medium">Demo coming soon</p>
+      {/* Widget Demo Section */}
+      <section id="live-demo" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-blue-50 via-white to-orange-50 shadow-xl">
+          <div className="absolute -top-20 -right-10 w-80 h-80 bg-blue-200/40 blur-3xl rounded-full" />
+          <div className="absolute -bottom-24 -left-10 w-96 h-96 bg-orange-200/40 blur-3xl rounded-full" />
+          
+          <div className="relative grid lg:grid-cols-[1.05fr_1fr] items-center gap-10 p-8 sm:p-10">
+            <div className="space-y-4">
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/80 border border-blue-100 px-3 py-1 text-xs font-semibold text-[#2563EB] shadow-sm backdrop-blur">
+                <span className="w-2 h-2 rounded-full bg-[#22c55e] animate-pulse" />
+                Live widget demo
+              </span>
+              <h3 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">
+                Capture feedback without leaving your site.
+              </h3>
+              <p className="text-lg text-gray-700 max-w-2xl">
+                Watch the Feedkit widget open, collect an idea, and confirm submission — exactly how it feels for your users.
+              </p>
+              <div className="grid sm:grid-cols-2 gap-3">
+                {[
+                  { title: 'Guided clicks', desc: 'Smooth cursor choreography that shows the full flow.' },
+                  { title: 'Frictionless form', desc: 'Modern glassy UI, auto-counts characters, one-tap submit.' },
+                  { title: 'Delightful finish', desc: 'Snappy success state and subtle glow accents.' },
+                  { title: 'Widget ready', desc: 'Drop-in component you can embed anywhere.' },
+                ].map((item) => (
+                  <div key={item.title} className="rounded-xl border border-white/70 bg-white/80 p-4 shadow-sm backdrop-blur">
+                    <p className="text-sm font-semibold text-gray-900">{item.title}</p>
+                    <p className="text-sm text-gray-600">{item.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="relative flex justify-center">
+              <div className="absolute inset-0 blur-3xl bg-gradient-to-r from-[#2563EB]/20 via-[#818CF8]/10 to-[#FB923C]/20 scale-[1.15]" />
+              <div className="relative rounded-[28px]  p-4 sm:p-6">
+                <AnimatedWidgetDemo size="large" />
+      
+              </div>
             </div>
           </div>
         </div>
@@ -324,7 +366,7 @@ function LandingPageContent() {
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <Link 
               href="/dashboard" 
-              className="px-6 py-3 rounded-lg bg-[#2563EB] text-white font-medium hover:bg-[#1D4ED8] transition text-base"
+              className="px-6 py-3 rounded-lg bg-[#F97316] text-white font-medium hover:bg-[#EA580C] shadow-sm shadow-[#F97316]/30 transition text-base"
             >
               Get Started
             </Link>
@@ -427,7 +469,7 @@ function IdeaCard({ votes, title, description, author, date, tags, badges }: {
   )
 }
 
-function AnimatedWidgetDemo() {
+function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }) {
   const [state, setState] = useState<'closed' | 'open' | 'form' | 'success'>('closed')
   const [selectedType, setSelectedType] = useState<'issue' | 'idea' | 'other' | null>(null)
   const [feedbackText, setFeedbackText] = useState('')
@@ -437,6 +479,45 @@ function AnimatedWidgetDemo() {
   const [cursorClicking, setCursorClicking] = useState(false)
   const [zoomedElement, setZoomedElement] = useState<string | null>(null)
   const [cursorVisible, setCursorVisible] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const closedBtnRef = useRef<HTMLButtonElement>(null)
+  const ideaBtnRef = useRef<HTMLDivElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const sendBtnRef = useRef<HTMLButtonElement>(null)
+
+  const isLarge = size === 'large'
+  const containerHeight = isLarge ? '420px' : '320px'
+  const containerWidth = isLarge ? '420px' : '360px'
+  const contentMinHeight = isLarge ? '230px' : '190px'
+
+  const coords = isLarge
+    ? {
+        closedButton: { x: 50, y: 70 },
+        ideaButton: { x: 50, y: 32 },
+        textarea: { x: 12, y: 48 },
+        sendButton: { x: 82, y: 76 },
+      }
+    : {
+        closedButton: { x: 50, y: 68 },
+        ideaButton: { x: 50, y: 32 },
+        textarea: { x: 12, y: 46 },
+        sendButton: { x: 82, y: 72 },
+      }
+
+  const getCenteredPercent = (ref: React.RefObject<HTMLElement>, fallback: { x: number; y: number }) => {
+    const el = ref.current
+    const wrapper = containerRef.current
+    if (!el || !wrapper) return fallback
+    const rect = el.getBoundingClientRect()
+    const wrap = wrapper.getBoundingClientRect()
+    if (!rect.width || !rect.height || !wrap.width || !wrap.height) return fallback
+    const centerX = rect.left + rect.width / 2
+    const centerY = rect.top + rect.height / 2
+    return {
+      x: ((centerX - wrap.left) / wrap.width) * 100,
+      y: ((centerY - wrap.top) / wrap.height) * 100,
+    }
+  }
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout | undefined
@@ -450,7 +531,7 @@ function AnimatedWidgetDemo() {
         setZoomedElement(null)
         timeoutId = setTimeout(() => {
           setShowCursor(true)
-          setCursorPos({ x: 50, y: 50 })
+          setCursorPos(getCenteredPercent(closedBtnRef, coords.closedButton))
           setTimeout(() => setCursorVisible(true), 50)
           cursorTimeout = setTimeout(() => {
             setCursorClicking(true)
@@ -466,7 +547,7 @@ function AnimatedWidgetDemo() {
         // Header is ~56px (17.5% of 320px), content area starts at ~18%, button icon is at ~32% vertically
         setCursorVisible(false)
         cursorTimeout = setTimeout(() => {
-          setCursorPos({ x: 50, y: 32 })
+          setCursorPos(getCenteredPercent(ideaBtnRef, coords.ideaButton))
           setTimeout(() => setCursorVisible(true), 50)
         }, 500)
         timeoutId = setTimeout(() => {
@@ -486,7 +567,7 @@ function AnimatedWidgetDemo() {
         // Header ~56px (17.5%), content padding 16px (5%), textarea padding 16px (5%), so text starts at ~10% from left, vertically at ~45%
         setCursorVisible(false)
         cursorTimeout = setTimeout(() => {
-          setCursorPos({ x: 10, y: 45 })
+          setCursorPos(getCenteredPercent(textareaRef, coords.textarea))
           setTimeout(() => {
             setCursorVisible(true)
             setZoomedElement('textarea')
@@ -508,7 +589,7 @@ function AnimatedWidgetDemo() {
             // Send button is right-aligned, roughly at x: 80%, y: 72%
             setCursorVisible(false)
             cursorTimeout = setTimeout(() => {
-              setCursorPos({ x: 80, y: 72 })
+              setCursorPos(getCenteredPercent(sendBtnRef, coords.sendButton))
               setTimeout(() => setCursorVisible(true), 50)
             }, 500)
             timeoutId = setTimeout(() => {
@@ -543,7 +624,7 @@ function AnimatedWidgetDemo() {
   }, [state])
 
   return (
-    <div className="relative max-w-sm mx-auto" style={{ height: '320px' }}>
+    <div ref={containerRef} className="relative mx-auto" style={{ height: containerHeight, width: '100%', maxWidth: containerWidth }}>
       {/* Mac-style Cursor */}
       {showCursor && (
         <div
@@ -566,12 +647,13 @@ function AnimatedWidgetDemo() {
         // Floating button
         <div className="flex justify-center items-center h-full">
           <button 
-            className="w-14 h-14 bg-gradient-to-br from-[#F97316] to-[#FB923C] rounded-full shadow-lg transition-all duration-500 flex items-center justify-center hover:scale-110"
+            ref={closedBtnRef}
+            className={`${isLarge ? 'w-16 h-16' : 'w-14 h-14'} bg-gradient-to-br from-[#F97316] to-[#FB923C] rounded-full shadow-lg transition-all duration-500 flex items-center justify-center hover:scale-110`}
             style={{
               animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             }}
           >
-            <svg className="w-7 h-7 text-white transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
+            <svg className={`${isLarge ? 'w-8 h-8' : 'w-7 h-7'} text-white transition-transform duration-300`} fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 8L6 16h12L12 8z" />
             </svg>
           </button>
@@ -579,6 +661,8 @@ function AnimatedWidgetDemo() {
       ) : (
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200/60 transition-all duration-700 ease-out" style={{
           animation: 'fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+          minHeight: isLarge ? '360px' : '300px',
+          width: '100%',
         }}>
           {/* Widget Header - Sleeker Design */}
           <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-3 flex items-center justify-between border-b border-slate-700/40">
@@ -590,18 +674,25 @@ function AnimatedWidgetDemo() {
                   'bg-slate-500/15 ring-1 ring-slate-500/30'
                 }`}>
                   {selectedType === 'issue' && (
-                    <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m0 0v3.75m0-3.75h3.75m-3.75 0H8.25m6.75-6V3.75m0 6.75h3.75m-9 0H8.25m0 0H3.75m3.75 0v3.75m0-3.75H3.75m9 9h3.75m-3.75 0v-3.75m0 3.75v3.75m0-3.75H8.25" />
+                    <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 4.5l7 12.5a1 1 0 01-.87 1.5H5.87a1 1 0 01-.87-1.5l7-12.5z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+                      <path d="M12 10v3.5m0 2v.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                     </svg>
                   )}
                   {selectedType === 'idea' && (
-                    <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+                    <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none">
+                      <path d="M9 14.5c-1.25-1.04-2-2.56-2-4.2a6 6 0 1112 0c0 1.64-.75 3.16-2 4.2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                      <path d="M10 16h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                      <path d="M10.75 18.5h2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                      <path d="M11 21h2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                     </svg>
                   )}
                   {selectedType === 'other' && (
-                    <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none">
+                      <rect x="4" y="6" width="16" height="11" rx="3" stroke="currentColor" strokeWidth="2" />
+                      <path d="M8 14h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                      <path d="M8 11h5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                      <path d="M7 19.5c1.5-1.2 2.5-1.5 4-1.5h5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                     </svg>
                   )}
                 </div>
@@ -620,7 +711,7 @@ function AnimatedWidgetDemo() {
           </div>
           
           {/* Widget Content - Compact Height */}
-          <div className="p-4" style={{ minHeight: '180px' }}>
+          <div className="p-4" style={{ minHeight: contentMinHeight }}>
             {state === 'open' && (
               <div className="grid grid-cols-3 gap-3">
                 {[
@@ -630,6 +721,7 @@ function AnimatedWidgetDemo() {
                 ].map(({ type, color, iconColor, x }) => (
                   <div
                     key={type}
+                    ref={type === 'idea' ? ideaBtnRef : undefined}
                     className={`flex flex-col items-center gap-2.5 p-4 border rounded-xl transition-all duration-500 ease-out bg-white ${
                       type === 'idea' 
                         ? 'border-orange-200/80 shadow-md bg-gradient-to-br from-orange-50/60 to-white' 
@@ -659,18 +751,25 @@ function AnimatedWidgetDemo() {
                     >
                       <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-white/80 via-transparent to-transparent"></div>
                       {type === 'issue' && (
-                        <svg className="w-6 h-6 relative z-10" fill="none" viewBox="0 0 24 24" stroke="#DC2626" strokeWidth={2.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m0 0v3.75m0-3.75h3.75m-3.75 0H8.25m6.75-6V3.75m0 6.75h3.75m-9 0H8.25m0 0H3.75m3.75 0v3.75m0-3.75H3.75m9 9h3.75m-3.75 0v-3.75m0 3.75v3.75m0-3.75H8.25" />
+                        <svg className="w-7 h-7 relative z-10" viewBox="0 0 24 24" fill="none">
+                          <path d="M12 4.5l7 12.5a1 1 0 01-.87 1.5H5.87a1 1 0 01-.87-1.5l7-12.5z" stroke="#DC2626" strokeWidth="2" strokeLinejoin="round" />
+                          <path d="M12 10v3.5m0 2v.5" stroke="#F87171" strokeWidth="2" strokeLinecap="round" />
                         </svg>
                       )}
                       {type === 'idea' && (
-                        <svg className="w-6 h-6 relative z-10 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="#EA580C" strokeWidth={2.5} style={{ transform: 'scale(1.1)' }}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+                        <svg className="w-7 h-7 relative z-10 transition-transform duration-300" viewBox="0 0 24 24" fill="none" style={{ transform: 'scale(1.08)' }}>
+                          <path d="M9 14.5c-1.25-1.04-2-2.56-2-4.2a6 6 0 1112 0c0 1.64-.75 3.16-2 4.2" stroke="#EA580C" strokeWidth="2" strokeLinecap="round" />
+                          <path d="M10 16h4" stroke="#FDBA74" strokeWidth="2" strokeLinecap="round" />
+                          <path d="M10.75 18.5h2.5" stroke="#FDBA74" strokeWidth="2" strokeLinecap="round" />
+                          <path d="M11 21h2" stroke="#EA580C" strokeWidth="2" strokeLinecap="round" />
                         </svg>
                       )}
                       {type === 'other' && (
-                        <svg className="w-6 h-6 relative z-10" fill="none" viewBox="0 0 24 24" stroke="#64748B" strokeWidth={2.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        <svg className="w-7 h-7 relative z-10" viewBox="0 0 24 24" fill="none">
+                          <rect x="4" y="6" width="16" height="11" rx="3" stroke="#475569" strokeWidth="2" />
+                          <path d="M8 14h8" stroke="#CBD5E1" strokeWidth="2" strokeLinecap="round" />
+                          <path d="M8 11h5" stroke="#CBD5E1" strokeWidth="2" strokeLinecap="round" />
+                          <path d="M7 19.5c1.5-1.2 2.5-1.5 4-1.5h5" stroke="#475569" strokeWidth="2" strokeLinecap="round" />
                         </svg>
                       )}
                     </div>
@@ -686,6 +785,7 @@ function AnimatedWidgetDemo() {
               <div className="space-y-3">
                 <div className="relative">
                   <textarea
+                    ref={textareaRef}
                     value={feedbackText}
                     readOnly
                     className="w-full h-24 px-4 py-2.5 border border-gray-200/80 rounded-xl text-sm text-gray-900 resize-none transition-all duration-300 focus:border-gray-300 focus:ring-2 focus:ring-gray-100/50 bg-gray-50/40 placeholder:text-gray-400"
@@ -734,6 +834,7 @@ function AnimatedWidgetDemo() {
                     <span className="text-xs font-semibold">Add photo</span>
                   </button>
                   <button 
+                    ref={sendBtnRef}
                     className="px-6 py-2.5 bg-slate-900 text-white rounded-xl font-semibold text-sm shadow-md hover:bg-slate-800 hover:shadow-lg transition-all duration-300"
                     style={{
                       transform: zoomedElement === 'send-button' ? 'scale(1.05)' : 'scale(1)',
@@ -833,10 +934,7 @@ function FlavorCard({ title, subtitle, description, cta, href, gradient, type }:
                   className="px-2 py-1 border border-gray-300 rounded text-xs flex-1 max-w-[100px]"
                   readOnly
                 />
-                <div className="ml-auto flex items-center gap-3 text-xs text-gray-500">
-                  <span>Help</span>
-                  <span>Logout</span>
-                </div>
+      
               </div>
             </div>
             
@@ -1082,17 +1180,18 @@ function LifetimeDealCard() {
   }
 
   return (
-    <div className="relative rounded-xl p-6 sm:p-8 border-2 border-[#2563EB] bg-gradient-to-br from-[#2563EB] via-[#1D4ED8] to-[#1E40AF] text-white shadow-xl transform hover:scale-[1.02] transition-all duration-300">
+    <div className="relative rounded-2xl p-6 sm:p-8 pt-10 sm:pt-12 border border-gray-200/80 bg-white/98 text-slate-900 shadow-lg shadow-black/5 transform hover:scale-[1.005] transition-all duration-300 overflow-visible">
+      <div className="absolute inset-0 bg-gradient-to-br from-[#2563EB]/6 via-[#7C3AED]/6 to-[#F97316]/6 pointer-events-none" />
       {/* Ribbon Badge */}
-      <div className="absolute -top-3 right-4 bg-[#F97316] text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg">
+      <div className="absolute top-3 right-4 bg-[#F97316] text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg shadow-[#F97316]/40">
         LIMITED TIME
       </div>
       
-      <div className="mb-4">
+      <div className="mb-4 relative z-10">
         <div className="flex items-baseline gap-2 mb-2">
-          <span className="text-4xl sm:text-5xl font-bold">€59</span>
+          <span className="text-4xl sm:text-5xl font-bold text-slate-900">€59</span>
         </div>
-        <div className="flex items-center gap-2 text-sm text-blue-100 mb-1">
+        <div className="flex items-center gap-2 text-sm text-slate-600 mb-1">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
@@ -1100,14 +1199,14 @@ function LifetimeDealCard() {
         </div>
       </div>
       
-      <p className="text-sm sm:text-base mb-6 text-blue-50">
+      <p className="text-sm sm:text-base mb-6 text-slate-700 relative z-10">
         Get lifetime access to all Pro features with a one-time payment. Perfect for long-term projects.
       </p>
       
       <button
         onClick={handleLifetimePurchase}
         disabled={isProcessing}
-        className="w-full text-center py-3 rounded-lg font-medium transition mb-6 bg-white text-[#2563EB] hover:bg-gray-50 shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+        className="relative z-10 w-full text-center py-3 rounded-lg font-medium transition mb-6 bg-[#111827] text-white hover:bg-[#0f172a] shadow-sm shadow-black/10 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isProcessing ? (
           <span className="flex items-center justify-center gap-2">
@@ -1122,23 +1221,23 @@ function LifetimeDealCard() {
         )}
       </button>
       
-      <ul className="space-y-3">
+      <ul className="space-y-3 relative z-10">
         {[
           'Unlimited feedback submissions',
           'All Pro features included',
           'Lifetime updates & support',
           'No account limitations',
         ].map((f, i) => (
-          <li key={i} className="flex items-start gap-2 text-sm">
+          <li key={i} className="flex items-start gap-2 text-sm text-slate-800">
             <svg
-              className="w-5 h-5 flex-shrink-0 mt-0.5 text-blue-200"
+              className="w-5 h-5 flex-shrink-0 mt-0.5 text-[#2563EB]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
-            <span className="text-blue-50">{f}</span>
+            <span>{f}</span>
           </li>
         ))}
       </ul>
@@ -1170,11 +1269,11 @@ function PricingCard({
 }) {
   return (
     <div
-      className={`rounded-xl p-6 sm:p-8 border ${
+      className={`rounded-xl p-6 sm:p-8 border shadow-sm backdrop-blur-sm transition ${
         highlighted
-          ? 'bg-gray-50 border-gray-300 shadow-sm'
-          : 'bg-white border-gray-200'
-      } hover:shadow-md transition`}
+          ? 'bg-white/98 border-gray-200 shadow-lg shadow-black/5'
+          : 'bg-white/88 border-gray-200/80 hover:border-gray-200 shadow-black/5'
+      } hover:shadow-md`}
     >
       <div className="mb-4">
         <span className="text-4xl sm:text-5xl font-bold text-gray-900">{price}</span>
@@ -1183,10 +1282,10 @@ function PricingCard({
       <p className="text-sm sm:text-base mb-6 text-gray-600">{description}</p>
       <Link
         href={href}
-        className={`block text-center py-3 rounded-lg font-medium transition mb-6 ${
+        className={`block text-center py-3 rounded-lg font-medium transition mb-6 shadow-sm ${
           highlighted
-            ? 'bg-gray-900 text-white hover:bg-gray-800'
-            : 'bg-gray-900 text-white hover:bg-gray-800'
+            ? 'bg-slate-900 text-white hover:bg-slate-800 shadow-black/10'
+            : 'bg-slate-900 text-white hover:bg-slate-800 shadow-black/10'
         }`}
       >
         {cta}
