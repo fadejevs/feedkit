@@ -10,22 +10,39 @@ export function Footer({ showProjectId = false, projectId }: FooterProps) {
   return (
     <footer className="border-t border-gray-200 mt-12 sm:mt-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <div className="relative flex flex-col sm:flex-row items-center justify-between gap-4">
+        {/* Mobile: Stack vertically, all centered */}
+        <div className="flex flex-col sm:hidden items-center gap-4 text-sm text-gray-600">
+          <div className="flex items-center gap-3">
+            <span className="font-medium">Feedkit</span>
+            <span className="text-gray-400">© 2025</span>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+            <Link href="#" className="hover:text-gray-900 transition">Terms</Link>
+            <Link href="#" className="hover:text-gray-900 transition">Privacy</Link>
+            <span className="text-gray-500">Made with ❤️ in Riga</span>
+          </div>
+          <div>
+            <BrandLogo size={20} />
+          </div>
+        </div>
+        
+        {/* Desktop: Three-column layout with centered middle */}
+        <div className="hidden sm:flex relative items-center justify-between">
           {/* Left side - Brand */}
-          <div className="flex items-center gap-3 text-sm text-gray-600 order-1 sm:order-none">
+          <div className="flex items-center gap-3 text-sm text-gray-600">
             <span className="font-medium">Feedkit</span>
             <span className="text-gray-400">© 2025</span>
           </div>
           
           {/* Center - Links centered (absolutely positioned) */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-gray-600 order-2 sm:order-none">
+          <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center gap-x-4 text-sm text-gray-600">
             <Link href="#" className="hover:text-gray-900 transition">Terms</Link>
             <Link href="#" className="hover:text-gray-900 transition">Privacy</Link>
             <span className="text-gray-500">Made with ❤️ in Riga</span>
           </div>
           
           {/* Right side - Logo */}
-          <div className="order-3 sm:order-none">
+          <div>
             <BrandLogo size={20} />
           </div>
         </div>
