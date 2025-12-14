@@ -1,4 +1,4 @@
-// File: /Users/ralfsfadejevs/Desktop/sayso/sayso/src/app/auth/callback/page.tsx
+// File: /Users/ralfsfadejevs/Desktop/feedkit/sayso/src/app/auth/callback/page.tsx
 import * as entry from '../../../../../src/app/auth/callback/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

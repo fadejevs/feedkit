@@ -450,7 +450,6 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
   const [state, setState] = useState<'closed' | 'open' | 'form' | 'success'>('closed')
   const [selectedType, setSelectedType] = useState<'issue' | 'idea' | 'other' | null>(null)
   const [feedbackText, setFeedbackText] = useState('')
-  const [hasPhoto, setHasPhoto] = useState(false)
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 })
   const [showCursor, setShowCursor] = useState(false)
   const [cursorClicking, setCursorClicking] = useState(false)
@@ -458,27 +457,26 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
   const [cursorVisible, setCursorVisible] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const closedBtnRef = useRef<HTMLButtonElement>(null)
-  const ideaBtnRef = useRef<HTMLDivElement>(null)
+  const ideaBtnRef = useRef<HTMLButtonElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const sendBtnRef = useRef<HTMLButtonElement>(null)
 
   const isLarge = size === 'large'
-  const containerHeight = isLarge ? '420px' : '320px'
-  const containerWidth = isLarge ? '420px' : '360px'
-  const contentMinHeight = isLarge ? '230px' : '190px'
+  const containerHeight = isLarge ? '400px' : '340px'
+  const containerWidth = isLarge ? '400px' : '380px'
 
   const coords = isLarge
     ? {
-        closedButton: { x: 50, y: 70 },
-        ideaButton: { x: 50, y: 32 },
-        textarea: { x: 12, y: 48 },
-        sendButton: { x: 82, y: 76 },
+        closedButton: { x: 50, y: 50 },
+        ideaButton: { x: 50, y: 38 },
+        textarea: { x: 20, y: 45 },
+        sendButton: { x: 85, y: 75 },
       }
     : {
-        closedButton: { x: 50, y: 68 },
-        ideaButton: { x: 50, y: 32 },
-        textarea: { x: 12, y: 46 },
-        sendButton: { x: 82, y: 72 },
+        closedButton: { x: 50, y: 50 },
+        ideaButton: { x: 50, y: 38 },
+        textarea: { x: 20, y: 45 },
+        sendButton: { x: 85, y: 75 },
       }
 
   const getCenteredPercent = (ref: React.RefObject<HTMLElement>, fallback: { x: number; y: number }) => {
@@ -520,8 +518,6 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
         }, 1500)
         break
       case 'open':
-        // Move cursor to Idea button (middle column, center of the icon)
-        // Header is ~56px (17.5% of 320px), content area starts at ~18%, button icon is at ~32% vertically
         setCursorVisible(false)
         cursorTimeout = setTimeout(() => {
           setCursorPos(getCenteredPercent(ideaBtnRef, coords.ideaButton))
@@ -540,8 +536,6 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
         break
       case 'form':
         setZoomedElement(null)
-        // Move cursor to textarea (left side where text starts, accounting for padding)
-        // Header ~56px (17.5%), content padding 16px (5%), textarea padding 16px (5%), so text starts at ~10% from left, vertically at ~45%
         setCursorVisible(false)
         cursorTimeout = setTimeout(() => {
           setCursorPos(getCenteredPercent(textareaRef, coords.textarea))
@@ -553,8 +547,7 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
             }, 400)
           }, 50)
         }, 300)
-        // Simulate typing
-        const text = "I love the new design! Could we add dark mode?"
+        const text = "Love the new design! Dark mode would be great."
         let i = 0
         typeInterval = setInterval(() => {
           if (i < text.length) {
@@ -562,8 +555,6 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
             i++
           } else {
             clearInterval(typeInterval)
-            // After typing, move cursor directly to send button
-            // Send button is right-aligned, roughly at x: 80%, y: 72%
             setCursorVisible(false)
             cursorTimeout = setTimeout(() => {
               setCursorPos(getCenteredPercent(sendBtnRef, coords.sendButton))
@@ -588,7 +579,6 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
           setState('closed')
           setSelectedType(null)
           setFeedbackText('')
-          setHasPhoto(false)
         }, 2500)
         break
     }
@@ -599,6 +589,12 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
       if (cursorTimeout) clearTimeout(cursorTimeout)
     }
   }, [state])
+
+  const typeConfig = {
+    issue: { emoji: '🐛', label: 'Bug' },
+    idea: { emoji: '💡', label: 'Idea' },
+    other: { emoji: '💬', label: 'Other' },
+  }
 
   return (
     <div ref={containerRef} className="relative mx-auto" style={{ height: containerHeight, width: '100%', maxWidth: containerWidth }}>
@@ -621,227 +617,157 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
       )}
 
       {state === 'closed' ? (
-        // Floating button
+        // Floating pill button
         <div className="flex justify-center items-center h-full">
           <button 
             ref={closedBtnRef}
-            className={`${isLarge ? 'w-16 h-16' : 'w-14 h-14'} bg-gradient-to-br from-[#F97316] to-[#FB923C] rounded-full shadow-lg transition-all duration-500 flex items-center justify-center hover:scale-110`}
+            className="flex items-center gap-2 px-5 py-3 bg-gray-900 hover:bg-gray-800 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 active:scale-95"
             style={{
               animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             }}
           >
-            <svg className={`${isLarge ? 'w-8 h-8' : 'w-7 h-7'} text-white transition-transform duration-300`} fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 8L6 16h12L12 8z" />
+            <svg 
+              className="w-5 h-5 text-white/90" 
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
             </svg>
+            <span className="text-sm font-medium">Feedback</span>
           </button>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200/60 transition-all duration-700 ease-out" style={{
+        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] overflow-hidden border border-white/20 transition-all duration-700 ease-out" style={{
           animation: 'fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
-          minHeight: isLarge ? '360px' : '300px',
           width: '100%',
         }}>
-          {/* Widget Header - Sleeker Design */}
-          <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-3 flex items-center justify-between border-b border-slate-700/40">
+          {/* Minimal Header */}
+          <div className="px-6 pt-5 pb-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               {selectedType && (
-                <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-500 backdrop-blur-sm ${
-                  selectedType === 'issue' ? 'bg-red-500/15 ring-1 ring-red-500/30' :
-                  selectedType === 'idea' ? 'bg-orange-500/15 ring-1 ring-orange-500/30' :
-                  'bg-slate-500/15 ring-1 ring-slate-500/30'
-                }`}>
-                  {selectedType === 'issue' && (
-                    <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none">
-                      <path d="M12 4.5l7 12.5a1 1 0 01-.87 1.5H5.87a1 1 0 01-.87-1.5l7-12.5z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
-                      <path d="M12 10v3.5m0 2v.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                    </svg>
-                  )}
-                  {selectedType === 'idea' && (
-                    <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none">
-                      <path d="M9 14.5c-1.25-1.04-2-2.56-2-4.2a6 6 0 1112 0c0 1.64-.75 3.16-2 4.2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                      <path d="M10 16h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                      <path d="M10.75 18.5h2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                      <path d="M11 21h2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                    </svg>
-                  )}
-                  {selectedType === 'other' && (
-                    <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none">
-                      <rect x="4" y="6" width="16" height="11" rx="3" stroke="currentColor" strokeWidth="2" />
-                      <path d="M8 14h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                      <path d="M8 11h5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                      <path d="M7 19.5c1.5-1.2 2.5-1.5 4-1.5h5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                    </svg>
-                  )}
-                </div>
+                <span className="text-2xl">{typeConfig[selectedType].emoji}</span>
               )}
-              <h3 className="text-white font-semibold text-sm transition-all duration-500 tracking-tight">
-                {state === 'success' ? 'Thank you!' : 
-                 selectedType ? (selectedType === 'issue' ? 'Report an issue' : selectedType === 'idea' ? 'Share an idea' : 'Other feedback') : 
-                 "What's on your mind?"}
-              </h3>
+              <div>
+                <h3 className="text-gray-900 font-semibold text-lg tracking-tight">
+                  {state === 'success' ? 'Thanks!' : 
+                   selectedType ? (selectedType === 'issue' ? 'Report a bug' : selectedType === 'idea' ? 'Share an idea' : 'Other feedback') : 
+                   'Send feedback'}
+                </h3>
+                {selectedType && state !== 'success' && (
+                  <p className="text-gray-500 text-xs mt-0.5">
+                    {selectedType === 'issue' ? 'Help us squash it' : selectedType === 'idea' ? 'We love new ideas' : 'Tell us anything'}
+                  </p>
+                )}
+              </div>
             </div>
-            <button className="text-white/60 hover:text-white/90 hover:bg-white/8 rounded-lg p-1.5 transition-all duration-300">
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <button className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-2 transition-all duration-200">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
           
-          {/* Widget Content - Compact Height */}
-          <div className="p-4" style={{ minHeight: contentMinHeight }}>
+          {/* Widget Content */}
+          <div className="px-6 pb-5">
             {state === 'open' && (
-              <div className="grid grid-cols-3 gap-3">
-                {[
-                  { type: 'issue', color: 'red', iconColor: '#EF4444', x: 16.67 },
-                  { type: 'idea', color: 'orange', iconColor: '#F97316', x: 50 },
-                  { type: 'other', color: 'gray', iconColor: '#6B7280', x: 83.33 }
-                ].map(({ type, color, iconColor, x }) => (
-                  <div
-                    key={type}
-                    ref={type === 'idea' ? ideaBtnRef : undefined}
-                    className={`flex flex-col items-center gap-2.5 p-4 border rounded-xl transition-all duration-500 ease-out bg-white ${
-                      type === 'idea' 
-                        ? 'border-orange-200/80 shadow-md bg-gradient-to-br from-orange-50/60 to-white' 
-                        : 'border-gray-200/60 shadow-sm hover:border-gray-300/80 hover:shadow-md'
-                    }`}
-                    style={{
-                      transform: zoomedElement === 'idea-button' && type === 'idea' 
-                        ? 'scale(1.08)' 
-                        : type === 'idea' 
-                        ? 'scale(1.05)' 
-                        : 'scale(1)',
-                      transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s, box-shadow 0.3s',
-                    }}
-                  >
-                    <div 
-                      className={`w-12 h-12 rounded-xl flex items-center justify-center relative transition-all duration-500 ${
-                        type === 'issue' ? 'bg-red-50/80' :
-                        type === 'idea' ? 'bg-orange-50/80' :
-                        'bg-gray-50/80'
+              <div className="space-y-4">
+                <p className="text-gray-500 text-sm">What type of feedback?</p>
+                <div className="flex flex-wrap gap-2">
+                  {(['issue', 'idea', 'other'] as const).map((type) => (
+                    <button
+                      key={type}
+                      ref={type === 'idea' ? ideaBtnRef : undefined}
+                      className={`group flex items-center gap-2 px-5 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300 rounded-full transition-all duration-200 active:scale-95 ${
+                        zoomedElement === 'idea-button' && type === 'idea' ? 'scale-105 bg-gray-100 border-gray-300' : ''
                       }`}
-                      style={{
-                        boxShadow: type === 'idea' 
-                          ? '0 3px 10px rgba(249, 115, 22, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.9)'
-                          : '0 2px 5px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
-                        transform: type === 'idea' ? 'scale(1.08)' : 'scale(1)',
-                      }}
                     >
-                      <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-white/80 via-transparent to-transparent"></div>
-                      {type === 'issue' && (
-                        <svg className="w-7 h-7 relative z-10" viewBox="0 0 24 24" fill="none">
-                          <path d="M12 4.5l7 12.5a1 1 0 01-.87 1.5H5.87a1 1 0 01-.87-1.5l7-12.5z" stroke="#DC2626" strokeWidth="2" strokeLinejoin="round" />
-                          <path d="M12 10v3.5m0 2v.5" stroke="#F87171" strokeWidth="2" strokeLinecap="round" />
-                        </svg>
-                      )}
-                      {type === 'idea' && (
-                        <svg className="w-7 h-7 relative z-10 transition-transform duration-300" viewBox="0 0 24 24" fill="none" style={{ transform: 'scale(1.08)' }}>
-                          <path d="M9 14.5c-1.25-1.04-2-2.56-2-4.2a6 6 0 1112 0c0 1.64-.75 3.16-2 4.2" stroke="#EA580C" strokeWidth="2" strokeLinecap="round" />
-                          <path d="M10 16h4" stroke="#FDBA74" strokeWidth="2" strokeLinecap="round" />
-                          <path d="M10.75 18.5h2.5" stroke="#FDBA74" strokeWidth="2" strokeLinecap="round" />
-                          <path d="M11 21h2" stroke="#EA580C" strokeWidth="2" strokeLinecap="round" />
-                        </svg>
-                      )}
-                      {type === 'other' && (
-                        <svg className="w-7 h-7 relative z-10" viewBox="0 0 24 24" fill="none">
-                          <rect x="4" y="6" width="16" height="11" rx="3" stroke="#475569" strokeWidth="2" />
-                          <path d="M8 14h8" stroke="#CBD5E1" strokeWidth="2" strokeLinecap="round" />
-                          <path d="M8 11h5" stroke="#CBD5E1" strokeWidth="2" strokeLinecap="round" />
-                          <path d="M7 19.5c1.5-1.2 2.5-1.5 4-1.5h5" stroke="#475569" strokeWidth="2" strokeLinecap="round" />
-                        </svg>
-                      )}
-                    </div>
-                    <span className={`text-xs font-semibold capitalize transition-colors duration-300 ${
-                      type === 'idea' ? 'text-orange-600' : type === 'issue' ? 'text-red-600' : 'text-slate-600'
-                    }`}>{type}</span>
-                  </div>
-                ))}
+                      <span className="text-lg group-hover:scale-110 transition-transform">{typeConfig[type].emoji}</span>
+                      <span className="text-sm font-medium text-gray-700">{typeConfig[type].label}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
             
             {state === 'form' && (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div className="relative">
                   <textarea
                     ref={textareaRef}
                     value={feedbackText}
                     readOnly
-                    className="w-full h-24 px-4 py-2.5 border border-gray-200/80 rounded-xl text-sm text-gray-900 resize-none transition-all duration-300 focus:border-gray-300 focus:ring-2 focus:ring-gray-100/50 bg-gray-50/40 placeholder:text-gray-400"
-                    placeholder="Tell us more about your feedback..."
+                    className="w-full h-32 px-4 py-3 bg-gray-50 border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:bg-white resize-none text-sm text-gray-900 placeholder:text-gray-400 transition-all duration-200"
+                    placeholder="Describe your feedback..."
                     style={{
                       transform: zoomedElement === 'textarea' ? 'scale(1.02)' : 'scale(1)',
-                      transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s',
+                      transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
                     }}
                   />
-                  {feedbackText && (
-                    <span className="absolute bottom-2.5 right-2.5 text-xs text-gray-400/80 font-medium">{feedbackText.length} characters</span>
-                  )}
                 </div>
-                {hasPhoto && (
-                  <div className="relative w-24 h-24 rounded-xl overflow-hidden border-2 border-gray-200/60 bg-gray-50/40" style={{
-                    animation: 'fadeInScale 0.4s ease-out',
-                  }}>
-                    <div className="w-full h-full bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 flex items-center justify-center">
-                      <svg className="w-10 h-10 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6.75A1.5 1.5 0 0019.5 5.25h-16.5a1.5 1.5 0 00-1.5 1.5v12.75a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                
+                {/* Actions */}
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-1">
+                    <button className="flex items-center justify-center w-10 h-10 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all duration-200">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                       </svg>
-                    </div>
-                    <button className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center shadow-md hover:bg-red-600 transition-colors">
-                      <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </button>
+                    <button className="flex items-center justify-center w-10 h-10 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all duration-200">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                       </svg>
                     </button>
                   </div>
-                )}
-                <div className="flex items-center justify-between gap-3">
-                  <button 
-                    className={`flex items-center gap-2 px-4 py-2.5 border-2 rounded-xl font-medium text-sm transition-all duration-300 ${
-                      hasPhoto 
-                        ? 'bg-gray-50/80 border-gray-200/60 text-gray-600' 
-                        : 'bg-white border-gray-200/80 text-gray-700 hover:border-gray-300/80 hover:bg-gray-50/50'
-                    }`}
-                    style={{
-                      transform: zoomedElement === 'photo-button' ? 'scale(1.05)' : 'scale(1)',
-                      transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s, background-color 0.3s',
-                    }}
-                  >
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
-                    </svg>
-                    <span className="text-xs font-semibold">Add photo</span>
-                  </button>
                   <button 
                     ref={sendBtnRef}
-                    className="px-6 py-2.5 bg-slate-900 text-white rounded-xl font-semibold text-sm shadow-md hover:bg-slate-800 hover:shadow-lg transition-all duration-300"
+                    className="px-5 py-2.5 bg-gray-900 text-white rounded-full font-medium hover:bg-gray-800 transition-all duration-200 text-sm active:scale-95"
                     style={{
                       transform: zoomedElement === 'send-button' ? 'scale(1.05)' : 'scale(1)',
-                      transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s, box-shadow 0.3s',
+                      transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
                     }}
                   >
-                    Send feedback
+                    Send
                   </button>
                 </div>
               </div>
             )}
             
             {state === 'success' && (
-              <div className="text-center py-6 flex flex-col items-center justify-center h-full">
-                <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-3 transition-all duration-500" style={{
+              <div className="text-center py-8">
+                <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-4" style={{
                   animation: 'zoomIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)',
                 }}>
-                  <svg className="w-7 h-7 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                  <svg className="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h4 className="text-base font-bold text-gray-900 mb-1.5 transition-all duration-500">Thank you!</h4>
-                <p className="text-xs text-gray-600 transition-all duration-500">Your feedback has been submitted successfully.</p>
+                <h4 className="text-lg font-semibold text-gray-900 mb-1">Thanks!</h4>
+                <p className="text-sm text-gray-500">Your feedback was sent.</p>
               </div>
             )}
           </div>
-          
+
+          {/* Footer */}
           {state !== 'success' && (
-            <div className="px-4 pb-2.5 text-center border-t border-gray-100/60 pt-2.5">
-              <p className="text-xs text-gray-400/70 font-medium">Powered by Feedkit</p>
+            <div className="px-6 pb-4 pt-2 border-t border-gray-100">
+              <p className="text-[11px] text-gray-400 flex items-center justify-center gap-1.5">
+                <span>Powered by</span>
+                <svg
+                  width="14"
+                  height="9"
+                  viewBox="0 0 28 12"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="inline-block opacity-60"
+                >
+                  <circle cx="6" cy="6" r="5" fill="#374151" />
+                  <polygon points="17,0.5 23.5,11.5 11,11.5" fill="#9CA3AF" />
+                </svg>
+                <span className="font-medium text-gray-500">Feedkit</span>
+              </p>
             </div>
           )}
         </div>
@@ -856,20 +782,6 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
           to {
             opacity: 1;
             transform: translateY(0);
-          }
-        }
-        @keyframes subtleBounce {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.05); }
-        }
-        @keyframes fadeInScale {
-          from {
-            opacity: 0;
-            transform: scale(0.9);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
           }
         }
         @keyframes zoomIn {
