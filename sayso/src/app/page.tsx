@@ -1,6 +1,7 @@
 "use client"
 import { Suspense, useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Navbar } from '@/components/Navbar'
 import { AnimatedBackground } from '@/components/AnimatedBackground'
 import { IntegrationCard } from '@/components/IntegrationCard'
@@ -12,7 +13,7 @@ import { useAuth } from '@/hooks/useAuth'
 function LandingPageContent() {
   const { user } = useAuth()
   const scrollToDemo = () => {
-    const el = document.getElementById('live-demo')
+    const el = document.getElementById('product')
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
@@ -85,49 +86,25 @@ function LandingPageContent() {
         </div>
       </section>
 
-      {/* Widget Demo Section */}
-      <section id="live-demo" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-blue-50 via-white to-orange-50 shadow-xl">
-          <div className="absolute -top-20 -right-10 w-80 h-80 bg-blue-200/40 blur-3xl rounded-full" />
-          <div className="absolute -bottom-24 -left-10 w-96 h-96 bg-orange-200/40 blur-3xl rounded-full" />
-          
-          <div className="relative grid lg:grid-cols-[1.05fr_1fr] items-center gap-10 p-8 sm:p-10">
-            <div className="space-y-4">
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/80 border border-blue-100 px-3 py-1 text-xs font-semibold text-[#2563EB] shadow-sm backdrop-blur">
-                <span className="w-2 h-2 rounded-full bg-[#22c55e] animate-pulse" />
-                Live widget demo
-              </span>
-              <h3 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">
-                Capture feedback without leaving your site.
-              </h3>
-              <p className="text-lg text-gray-700 max-w-2xl">
-                Watch the Feedkit widget open, collect an idea, and confirm submission — exactly how it feels for your users.
-              </p>
-              <div className="grid sm:grid-cols-2 gap-3">
-                {[
-                  { title: 'Guided clicks', desc: 'Smooth cursor choreography that shows the full flow.' },
-                  { title: 'Frictionless form', desc: 'Modern glassy UI, auto-counts characters, one-tap submit.' },
-                  { title: 'Delightful finish', desc: 'Snappy success state and subtle glow accents.' },
-                  { title: 'Widget ready', desc: 'Drop-in component you can embed anywhere.' },
-                ].map((item) => (
-                  <div key={item.title} className="rounded-xl border border-white/70 bg-white/80 p-4 shadow-sm backdrop-blur">
-                    <p className="text-sm font-semibold text-gray-900">{item.title}</p>
-                    <p className="text-sm text-gray-600">{item.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="relative flex justify-center">
-              <div className="absolute inset-0 blur-3xl bg-gradient-to-r from-[#2563EB]/20 via-[#818CF8]/10 to-[#FB923C]/20 scale-[1.15]" />
-              <div className="relative rounded-[28px]  p-4 sm:p-6">
-                <AnimatedWidgetDemo size="large" />
-      
-              </div>
+      {/* Demo Section (Dashboard preview) */}
+      {/* <section id="live-demo" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl">
+          <div className="absolute -top-20 -right-10 w-80 h-80 bg-blue-100/40 blur-3xl rounded-full" />
+          <div className="absolute -bottom-24 -left-10 w-96 h-96 bg-orange-100/40 blur-3xl rounded-full" />
+          <div className="relative p-4 sm:p-6 lg:p-8">
+            <div className="max-w-5xl mx-auto overflow-hidden rounded-2xl border border-gray-100 shadow-lg bg-white">
+              <Image
+                src="/Screenshot 2025-12-14 at 02.33.28.png"
+                alt="Feedkit dashboard preview"
+                width={1600}
+                height={900}
+                priority
+                className="w-full h-auto"
+              />
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Company Logos Section */}
       <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
