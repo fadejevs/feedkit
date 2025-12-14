@@ -1,10 +1,10 @@
 "use client"
 
-import { useMemo } from 'react'
+import { Suspense, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { FeedbackWidget } from '@/components/FeedbackWidget'
 
-export default function WidgetPage() {
+function WidgetContent() {
   const searchParams = useSearchParams()
 
   const position = useMemo(() => {
@@ -25,6 +25,18 @@ export default function WidgetPage() {
     <div className="min-h-screen bg-transparent">
       <FeedbackWidget position={position} projectId={projectId} />
     </div>
+  )
+}
+
+export default function WidgetPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-transparent">
+        <FeedbackWidget />
+      </div>
+    }>
+      <WidgetContent />
+    </Suspense>
   )
 }
 
