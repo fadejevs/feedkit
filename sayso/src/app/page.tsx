@@ -26,7 +26,7 @@ function LandingPageContent() {
       </div>
 
       {/* Hero Section */}
-      <section id="home" className="relative z-10 w-full pt-12 pb-4 sm:pt-24 sm:pb-6 overflow-hidden min-h-[480px] sm:min-h-[650px]">
+      <section id="home" className="relative z-10 w-full pt-12 pb-2 sm:pt-24 sm:pb-6 overflow-hidden min-h-[480px] sm:min-h-[650px]">
         {/* Animated Background - covers entire hero section */}
         <div className="absolute inset-0 w-full h-full">
           <AnimatedBackground />
@@ -104,24 +104,24 @@ function LandingPageContent() {
           <div>
             <p className="text-3xl font-bold text-gray-900">500+</p>
             <p className="text-sm text-gray-500">Happy users</p>
-          </div>
+        </div>
           <div className="w-px h-10 bg-gray-200 hidden sm:block" />
           <div>
             <p className="text-3xl font-bold text-gray-900">10k+</p>
             <p className="text-sm text-gray-500">Feedback collected</p>
-          </div>
+        </div>
           <div className="w-px h-10 bg-gray-200 hidden sm:block" />
           <div>
             <p className="text-3xl font-bold text-gray-900">2 min</p>
             <p className="text-sm text-gray-500">Setup time</p>
-          </div>
+      </div>
         </div>
       </section> */}
 
 
 
       {/* Two Flavors Section */}
-      <section id="product" className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-20">
+      <section id="product" className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1 sm:py-2">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-5xl mx-auto">
           <FlavorCard
             title="Feedkit web app"
@@ -260,7 +260,7 @@ function LandingPageContent() {
                   Works on any website
                 </li>
               </ul>
-            </div>
+        </div>
             <div className="relative order-1 md:order-2">
               <div className="bg-gradient-to-br from-orange-100/50 via-white to-orange-50/50 rounded-2xl sm:rounded-3xl p-4 sm:p-8 relative overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(249,115,22,0.1),transparent_50%)]" />
@@ -290,12 +290,12 @@ function LandingPageContent() {
                   Archive when done
                 </li>
               </ul>
-            </div>
+        </div>
             <div className="order-1 relative">
               <div className="bg-gradient-to-br from-blue-100/50 via-white to-indigo-50/50 rounded-2xl sm:rounded-3xl p-3 sm:p-6 relative overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(37,99,235,0.1),transparent_50%)]" />
                 <DashboardMockup />
-              </div>
+        </div>
             </div>
           </div>
 
@@ -322,8 +322,7 @@ function LandingPageContent() {
               </ul>
             </div>
             <div className="relative order-1 md:order-2">
-              <div className="bg-gradient-to-br from-emerald-100/50 via-white to-teal-50/50 rounded-2xl sm:rounded-3xl p-3 sm:p-6 relative overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(16,185,129,0.1),transparent_50%)]" />
+              <div className="bg-gray-50/50 rounded-2xl sm:rounded-3xl p-3 sm:p-6 relative overflow-hidden">
                 <InsightsMockup />
               </div>
             </div>
@@ -331,6 +330,25 @@ function LandingPageContent() {
         </div>
       </section>
 
+      {/* Integrations Section */}
+      <section id="integrations" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-gray-900 leading-tight">Integrations</h2>
+          <p className="text-base sm:text-lg text-gray-600">
+            Connect Feedkit to the tools that you already use.
+          </p>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-8">
+          {integrations.slice(0, 12).map((integration) => (
+            <IntegrationCard key={integration.name} name={integration.name} description={integration.description} />
+          ))}
+        </div>
+        <div className="text-center">
+          <button className="px-6 py-2 rounded-lg bg-gray-50 border border-gray-200 text-gray-700 font-medium hover:bg-gray-100 transition text-sm">
+            Show more
+          </button>
+        </div>
+      </section>
 
       {/* Pricing Section */}
       <section id="pricing" className="bg-white py-12 sm:py-20">
@@ -339,24 +357,8 @@ function LandingPageContent() {
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-gray-900 leading-tight">Pricing</h2>
         </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:gap-8 max-w-5xl mx-auto sm:grid-cols-3">
-          <PricingCard
-              name="Free"
-            price="Free"
-              description="Perfect to start collecting feedback for your app"
-              features={['25 total feedback submissions']}
-              cta="Get started"
-              href="/dashboard"
-            />
+          <div className="flex justify-center max-w-4xl mx-auto">
             <LifetimeDealCard />
-          <PricingCard
-            name="Enterprise"
-              price="Enterprise"
-              description="Talk to us about your custom needs"
-              features={['Whitelabeling', 'Service-level agreements', 'Live chat support']}
-              cta="Contact us"
-              href="mailto:hello@feedkit.co"
-            />
           </div>
         </div>
       </section>
@@ -430,7 +432,9 @@ function DashboardMockup() {
     <div className="bg-white rounded-lg sm:rounded-xl shadow-lg border border-gray-200 overflow-hidden">
       {/* Header */}
       <div className="bg-white border-b border-gray-100 px-3 sm:px-4 py-2 sm:py-3 flex items-center gap-2 sm:gap-3">
-        <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-md sm:rounded-lg flex-shrink-0" />
+        <div className="flex-shrink-0">
+          <BrandLogo size={20} />
+        </div>
         <span className="font-semibold text-xs sm:text-sm text-gray-900">Feedkit</span>
         <div className="ml-auto flex gap-1 sm:gap-2">
           <div className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-blue-50 text-blue-600 text-[10px] sm:text-xs rounded font-medium">All</div>
@@ -472,39 +476,55 @@ function FeedbackItemMockup({ type, title, time }: { type: 'bug' | 'idea' | 'oth
 
 function InsightsMockup() {
   return (
-    <div className="bg-white rounded-lg sm:rounded-xl shadow-lg border border-gray-200 overflow-hidden p-3 sm:p-4">
+    <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+      {/* Header */}
+      <div className="px-4 sm:px-5 py-3 sm:py-4 border-b border-gray-100">
+        <h4 className="text-sm sm:text-base font-semibold text-gray-900">Insights</h4>
+      </div>
+      
       {/* Stats Row */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-3 sm:mb-4">
-        <div className="bg-gradient-to-br from-blue-50 to-white p-2 sm:p-3 rounded-lg sm:rounded-xl border border-blue-100">
-          <p className="text-lg sm:text-2xl font-bold text-blue-600">24</p>
-          <p className="text-[10px] sm:text-xs text-gray-500">This week</p>
+      <div className="px-4 sm:px-5 py-3 sm:py-4">
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-4 sm:mb-5">
+          <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-3 sm:p-4 border border-blue-200/50">
+            <p className="text-xl sm:text-2xl font-bold text-blue-600 mb-0.5">24</p>
+            <p className="text-[10px] sm:text-xs text-blue-600/70">This week</p>
+          </div>
+          <div className="bg-gradient-to-br from-orange-50 to-orange-100/50 rounded-xl p-3 sm:p-4 border border-orange-200/50">
+            <p className="text-xl sm:text-2xl font-bold text-orange-600 mb-0.5">12</p>
+            <p className="text-[10px] sm:text-xs text-orange-600/70">Ideas</p>
+          </div>
+          <div className="bg-gradient-to-br from-red-50 to-red-100/50 rounded-xl p-3 sm:p-4 border border-red-200/50">
+            <p className="text-xl sm:text-2xl font-bold text-red-600 mb-0.5">8</p>
+            <p className="text-[10px] sm:text-xs text-red-600/70">Bugs</p>
+          </div>
         </div>
-        <div className="bg-gradient-to-br from-amber-50 to-white p-2 sm:p-3 rounded-lg sm:rounded-xl border border-amber-100">
-          <p className="text-lg sm:text-2xl font-bold text-amber-600">12</p>
-          <p className="text-[10px] sm:text-xs text-gray-500">Ideas</p>
+        
+        {/* Chart */}
+        <div className="bg-gray-50 rounded-xl p-3 sm:p-4 mb-4 sm:mb-5">
+          <p className="text-[10px] sm:text-xs text-gray-500 mb-3 sm:mb-4 font-medium">Feedback Trends</p>
+          <div className="flex items-end gap-1.5 sm:gap-2 h-16 sm:h-24">
+            {[40, 65, 45, 80, 55, 90, 70].map((h, i) => (
+              <div 
+                key={i} 
+                className="flex-1 rounded-t transition-all duration-300 hover:opacity-80" 
+                style={{ 
+                  height: `${h}%`,
+                  background: `linear-gradient(to top, ${i % 2 === 0 ? '#2563EB' : '#F97316'}, ${i % 2 === 0 ? '#3B82F6' : '#FB923C'})`
+                }} 
+              />
+            ))}
+          </div>
+          <div className="flex justify-between mt-2 sm:mt-3 text-[9px] sm:text-[10px] text-gray-400">
+            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+          </div>
         </div>
-        <div className="bg-gradient-to-br from-red-50 to-white p-2 sm:p-3 rounded-lg sm:rounded-xl border border-red-100">
-          <p className="text-lg sm:text-2xl font-bold text-red-500">8</p>
-          <p className="text-[10px] sm:text-xs text-gray-500">Bugs</p>
+        
+        {/* Top Request */}
+        <div className="bg-gradient-to-br from-orange-50 to-orange-100/30 rounded-xl p-3 sm:p-4 border border-orange-200/50">
+          <p className="text-[10px] sm:text-xs text-orange-600 font-medium mb-1 sm:mb-1.5 uppercase tracking-wide">🔥 Most requested</p>
+          <p className="text-xs sm:text-sm font-semibold text-gray-900 mb-0.5">Dark mode support</p>
+          <p className="text-[10px] sm:text-xs text-gray-600">Requested 8 times</p>
         </div>
-      </div>
-      {/* Chart Placeholder */}
-      <div className="bg-gray-50 rounded-lg sm:rounded-xl p-3 sm:p-4">
-        <p className="text-[10px] sm:text-xs text-gray-500 mb-2 sm:mb-3 font-medium">Feedback Trends</p>
-        <div className="flex items-end gap-1 sm:gap-2 h-14 sm:h-20">
-          {[40, 65, 45, 80, 55, 90, 70].map((h, i) => (
-            <div key={i} className="flex-1 bg-gradient-to-t from-blue-500 to-blue-400 rounded-t" style={{ height: `${h}%` }} />
-          ))}
-        </div>
-        <div className="flex justify-between mt-1.5 sm:mt-2 text-[8px] sm:text-[10px] text-gray-400">
-          <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
-        </div>
-      </div>
-      {/* Top Request */}
-      <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-emerald-50 rounded-lg sm:rounded-xl border border-emerald-100">
-        <p className="text-[10px] sm:text-xs text-emerald-600 font-medium mb-0.5 sm:mb-1">🔥 Most requested</p>
-        <p className="text-xs sm:text-sm font-semibold text-gray-900">Dark mode support</p>
-        <p className="text-[10px] sm:text-xs text-gray-500">Requested 8 times</p>
       </div>
     </div>
   )
@@ -706,7 +726,7 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
   }
 
   return (
-    <div ref={containerRef} className="relative mx-auto" style={{ height: containerHeight, width: containerWidth, maxWidth: maxContainerWidth }}>
+    <div ref={containerRef} className="relative mx-auto overflow-hidden" style={{ height: containerHeight, width: containerWidth, maxWidth: maxContainerWidth }}>
       {/* Mac-style Cursor */}
       {showCursor && (
         <div
@@ -748,12 +768,17 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
           </button>
         </div>
       ) : (
-        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] overflow-hidden border border-white/20 transition-all duration-700 ease-out" style={{
+        <div className={`rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] overflow-hidden overflow-x-hidden border border-white/20 transition-all duration-700 ease-out flex flex-col ${
+          state === 'success' ? 'bg-white' : 'bg-white/95 backdrop-blur-xl'
+        }`} style={{
           animation: 'fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
           width: '100%',
+          maxWidth: '100%',
+          maxHeight: '100%',
+          boxSizing: 'border-box',
         }}>
           {/* Minimal Header */}
-          <div className="px-6 pt-5 pb-4 flex items-center justify-between">
+          <div className="px-6 pt-5 pb-3 flex items-center justify-between flex-shrink-0">
             <div className="flex items-center gap-3">
               {selectedType && (
                 <span className="text-2xl">{typeConfig[selectedType].emoji}</span>
@@ -768,8 +793,8 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
                   <p className="text-gray-500 text-xs mt-0.5">
                     {selectedType === 'issue' ? 'Help us squash it' : selectedType === 'idea' ? 'We love new ideas' : 'Tell us anything'}
                   </p>
-                )}
-              </div>
+                  )}
+                </div>
             </div>
             <button className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-2 transition-all duration-200">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -779,21 +804,21 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
           </div>
           
           {/* Widget Content */}
-          <div className="px-6 pb-5">
+          <div className="px-6 pb-5 overflow-y-auto overflow-x-hidden flex-1 min-h-0 w-full box-border">
             {state === 'open' && (
               <div className="space-y-4">
                 <p className="text-gray-500 text-sm">What type of feedback?</p>
-                <div className="flex flex-wrap gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   {(['issue', 'idea', 'other'] as const).map((type) => (
                     <button
-                      key={type}
+                    key={type}
                       ref={type === 'idea' ? ideaBtnRef : undefined}
-                      className={`group flex items-center gap-2 px-5 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300 rounded-full transition-all duration-200 active:scale-95 ${
+                      className={`group flex items-center justify-center gap-1.5 px-2 py-2.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300 rounded-full transition-all duration-200 active:scale-95 ${
                         zoomedElement === 'idea-button' && type === 'idea' ? 'scale-105 bg-gray-100 border-gray-300' : ''
                       }`}
                     >
-                      <span className="text-lg group-hover:scale-110 transition-transform">{typeConfig[type].emoji}</span>
-                      <span className="text-sm font-medium text-gray-700">{typeConfig[type].label}</span>
+                      <span className="text-base group-hover:scale-110 transition-transform flex-shrink-0">{typeConfig[type].emoji}</span>
+                      <span className="text-xs font-medium text-gray-700 whitespace-nowrap">{typeConfig[type].label}</span>
                     </button>
                   ))}
                 </div>
@@ -801,16 +826,17 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
             )}
             
             {state === 'form' && (
-              <div className="space-y-4">
-                <div className="relative">
+              <div className="space-y-3 w-full">
+                <div className="relative w-full overflow-hidden">
                   <textarea
                     ref={textareaRef}
                     value={feedbackText}
                     readOnly
-                    className="w-full h-32 px-4 py-3 bg-gray-50 border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:bg-white resize-none text-sm text-gray-900 placeholder:text-gray-400 transition-all duration-200"
+                    className="w-full h-24 px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:border-orange-500/50 focus:bg-white resize-none text-sm text-gray-900 placeholder:text-gray-400 transition-all duration-200 box-border"
                     placeholder="Describe your feedback..."
                     style={{
-                      transform: zoomedElement === 'textarea' ? 'scale(1.02)' : 'scale(1)',
+                      transform: zoomedElement === 'textarea' ? 'scale(1.01)' : 'scale(1)',
+                      maxWidth: '100%',
                       transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
                     }}
                   />
@@ -858,11 +884,11 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
               </div>
             )}
           </div>
-
+          
           {/* Footer */}
           {state !== 'success' && (
-            <div className="px-6 pb-4 pt-2 border-t border-gray-100">
-              <p className="text-[11px] text-gray-400 flex items-center justify-center gap-1.5">
+            <div className="px-6 pb-4 pt-2 border-t border-gray-100 bg-white/95 flex-shrink-0">
+              <p className="text-[11px] text-gray-500 flex items-center justify-center gap-1.5">
                 <span>Powered by</span>
                 <svg
                   width="14"
@@ -870,12 +896,12 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
                   viewBox="0 0 28 12"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="inline-block opacity-60"
+                  className="inline-block"
                 >
                   <circle cx="6" cy="6" r="5" fill="#374151" />
                   <polygon points="17,0.5 23.5,11.5 11,11.5" fill="#9CA3AF" />
                 </svg>
-                <span className="font-medium text-gray-500">Feedkit</span>
+                <span className="font-medium text-gray-600">Feedkit</span>
               </p>
             </div>
           )}
@@ -932,9 +958,9 @@ function FlavorCard({ title, subtitle, description, cta, href, gradient, type }:
               priority={false}
             />
           </div>
-        </div>
+          </div>
       ) : (
-        <div className={`bg-gradient-to-br ${gradient} p-4 sm:p-8 relative`} style={{ minHeight: '320px' }}>
+        <div className={`bg-gradient-to-br ${gradient} p-4 sm:p-8 relative overflow-hidden`} style={{ minHeight: '320px', maxHeight: '420px' }}>
           <AnimatedWidgetDemo />
         </div>
       )}

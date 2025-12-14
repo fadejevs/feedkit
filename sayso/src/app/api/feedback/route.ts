@@ -1,4 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createServiceRoleClient } from '@/lib/supabaseClient'
+
+// Handle CORS preflight
+export async function OPTIONS(request: NextRequest) {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    },
+  })
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,48 +25,101 @@ export async function POST(request: NextRequest) {
     if (!type || !message) {
       return NextResponse.json(
         { error: 'Missing required fields' },
-        { status: 400 }
+        { 
+          status: 400,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+          },
+        }
       )
     }
 
-    // Handle image if provided
+    // Handle image if provided (convert to base64 for now)
     let imageUrl = null
     if (image && image.size > 0) {
-      // TODO: Upload image to storage (Supabase Storage, S3, etc.)
-      // For now, just log that an image was received
-      console.log('Image received:', {
-        name: image.name,
-        size: image.size,
-        type: image.type,
-      })
-      // In production, you would upload the image and get a URL
-      // imageUrl = await uploadImageToStorage(image)
+      // Convert image to base64 data URL
+      const arrayBuffer = await image.arrayBuffer()
+      const buffer = Buffer.from(arrayBuffer)
+      const base64 = buffer.toString('base64')
+      imageUrl = `data:${image.type};base64,${base64}`
     }
 
-    // TODO: Save to database (Supabase or your preferred database)
-    // For now, just log it
-    console.log('Feedback received:', {
+    // Get device info from headers
+    const userAgent = request.headers.get('user-agent') || ''
+    const browserMatch = userAgent.match(/(Chrome|Firefox|Safari|Edge)\/(\d+\.\d+)/)
+    const browser = browserMatch ? browserMatch[0] : ''
+    const device = `${browser}, ${userAgent.includes('Mobile') ? 'Mobile' : 'Desktop'}`
+
+    // Save to Supabase
+    let supabase
+    try {
+      supabase = createServiceRoleClient()
+    } catch (supabaseError: any) {
+      console.error('Failed to create Supabase client:', supabaseError)
+      return NextResponse.json(
+        { error: 'Database connection failed', details: supabaseError.message },
+        { 
+          status: 500,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+          },
+        }
+      )
+    }
+
+    const insertData = {
       type,
       message,
-      projectId,
-      url,
-      hasImage: !!image,
-      imageUrl,
-      timestamp: new Date().toISOString(),
-    })
+      project_id: projectId || null,
+      page: url || null,
+      image_url: imageUrl,
+      device: device || null,
+      user_email: null, // Can be added later if you collect email
+      archived: false,
+    }
 
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500))
+    console.log('Inserting feedback:', { ...insertData, image_url: imageUrl ? '[has image]' : null })
+
+    const { data, error } = await supabase
+      .from('feedback')
+      .insert(insertData)
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Supabase insert error:', error)
+      console.error('Error details:', JSON.stringify(error, null, 2))
+      return NextResponse.json(
+        { error: 'Failed to save feedback', details: error.message, code: error.code },
+        { 
+          status: 500,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+          },
+        }
+      )
+    }
 
     return NextResponse.json(
-      { success: true, message: 'Feedback submitted successfully' },
-      { status: 200 }
+      { success: true, message: 'Feedback submitted successfully', id: data.id },
+      { 
+        status: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
     )
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error submitting feedback:', error)
+    console.error('Error stack:', error.stack)
     return NextResponse.json(
-      { error: 'Failed to submit feedback' },
-      { status: 500 }
+      { error: 'Failed to submit feedback', details: error.message || 'Unknown error' },
+      { 
+        status: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
     )
   }
 }

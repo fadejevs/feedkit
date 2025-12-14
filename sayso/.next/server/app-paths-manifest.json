@@ -1,18 +1,5 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/api/stripe/checkout-lifetime/route": "app/api/stripe/checkout-lifetime/route.js",
-  "/api/feedback/route": "app/api/feedback/route.js",
-  "/api/stripe/checkout/route": "app/api/stripe/checkout/route.js",
-  "/api/stripe/portal/route": "app/api/stripe/portal/route.js",
-  "/api/stripe/webhook/route": "app/api/stripe/webhook/route.js",
   "/app/[projectId]/page": "app/app/[projectId]/page.js",
-  "/auth/callback/page": "app/auth/callback/page.js",
-  "/pricing/page": "app/pricing/page.js",
   "/page": "app/page.js",
-  "/sign-in/page": "app/sign-in/page.js",
-  "/widget/builder/page": "app/widget/builder/page.js",
-  "/widget/page": "app/widget/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/api/transcribe/route": "app/api/transcribe/route.js",
-  "/api/transcribe/url/route": "app/api/transcribe/url/route.js"
+  "/api/feedback/[projectId]/route": "app/api/feedback/[projectId]/route.js"
 }

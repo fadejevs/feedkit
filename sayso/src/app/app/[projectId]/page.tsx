@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { BrandLogo } from '@/components/BrandLogo'
 import { Footer } from '@/components/Footer'
+import { IntegrationModal } from '@/components/IntegrationModal'
+import { FeedbackWidget } from '@/components/FeedbackWidget'
 import { useAuth } from '@/hooks/useAuth'
 
 type FeedbackType = 'all' | 'issue' | 'idea' | 'other' | 'archive'
@@ -36,22 +38,60 @@ export default function AppProjectPage() {
   
   const [selectedFilter, setSelectedFilter] = useState<FeedbackType>('all')
   const [feedback, setFeedback] = useState<Feedback[]>([])
+  const [isIntegrationModalOpen, setIsIntegrationModalOpen] = useState(false)
+  const [isProjectDropdownOpen, setIsProjectDropdownOpen] = useState(false)
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+  const [projectName, setProjectName] = useState('feedkit')
+  const [isLoading, setIsLoading] = useState(true)
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false)
 
-  useEffect(() => {
-    // Load feedback from localStorage filtered by projectId
-    const stored = localStorage.getItem('feedkit_feedback')
-    if (stored) {
-      try {
-        const allFeedback = JSON.parse(stored)
-        // Filter feedback by projectId, or show all if projectId matches
-        const projectFeedback = allFeedback.filter((f: Feedback) => 
-          !f.projectId || f.projectId === projectId
-        )
-        setFeedback(projectFeedback)
-      } catch (e) {
-        console.error('Failed to load feedback:', e)
+  const loadFeedback = async (isInitialLoad = false) => {
+    try {
+      const startTime = Date.now()
+      // Fetch both archived and non-archived feedback
+      const [activeResponse, archivedResponse] = await Promise.all([
+        fetch(`/api/feedback/${projectId}?archived=false`),
+        fetch(`/api/feedback/${projectId}?archived=true`),
+      ])
+      
+      if (activeResponse.ok && archivedResponse.ok) {
+        const activeData = await activeResponse.json()
+        const archivedData = await archivedResponse.json()
+        // Combine all feedback
+        setFeedback([...(activeData.feedback || []), ...(archivedData.feedback || [])])
+        
+        if (isInitialLoad) {
+          setHasLoadedOnce(true)
+          // Ensure minimum 2 second loading time for initial load
+          const elapsed = Date.now() - startTime
+          const remaining = Math.max(0, 2000 - elapsed)
+          setTimeout(() => {
+            setIsLoading(false)
+          }, remaining)
+        }
+      } else {
+        console.error('Failed to load feedback')
+        if (isInitialLoad) {
+          setIsLoading(false)
+        }
+      }
+    } catch (e) {
+      console.error('Failed to load feedback:', e)
+      if (isInitialLoad) {
+        setIsLoading(false)
       }
     }
+  }
+
+  useEffect(() => {
+    setIsLoading(true)
+    setHasLoadedOnce(false)
+    loadFeedback(true)
+    // Refresh feedback every 5 seconds to catch new submissions (without loading state)
+    const interval = setInterval(() => {
+      loadFeedback(false)
+    }, 5000)
+    return () => clearInterval(interval)
   }, [projectId])
 
   const filteredFeedback = feedback.filter((item) => {
@@ -60,31 +100,48 @@ export default function AppProjectPage() {
     return item.type === selectedFilter && !item.archived
   })
 
-  const filterCounts = {
-    all: feedback.filter(f => !f.archived).length,
-    issue: feedback.filter(f => f.type === 'issue' && !f.archived).length,
-    idea: feedback.filter(f => f.type === 'idea' && !f.archived).length,
-    other: feedback.filter(f => f.type === 'other' && !f.archived).length,
-    archive: feedback.filter(f => f.archived).length,
+  // Mock feedback item for new users
+  const mockFeedback: Feedback = {
+    id: 'mock-demo-feedback',
+    type: 'idea',
+    message: 'This is an example feedback item! Try archiving it, replying to the user, or filtering by type to see how Feedkit works. Once you integrate the widget, real customer feedback will appear here.',
+    userEmail: 'demo@example.com',
+    device: 'Desktop',
+    page: '/dashboard',
+    createdAt: Date.now() - 3600000, // 1 hour ago
+    archived: false,
+    projectId: projectId,
   }
 
-  const handleArchive = (id: string) => {
-    const updated = feedback.map(f => 
-      f.id === id ? { ...f, archived: true } : f
-    )
-    setFeedback(updated)
-    // Update localStorage with all feedback
-    const stored = localStorage.getItem('feedkit_feedback')
-    if (stored) {
-      try {
-        const allFeedback = JSON.parse(stored)
-        const updatedAll = allFeedback.map((f: Feedback) => 
-          f.id === id ? { ...f, archived: true } : f
-        )
-        localStorage.setItem('feedkit_feedback', JSON.stringify(updatedAll))
-      } catch (e) {
-        console.error('Failed to update feedback:', e)
+  const shouldShowMock = !isLoading && filteredFeedback.length === 0 && selectedFilter === 'all' && feedback.length === 0 && hasLoadedOnce
+
+  // Include mock feedback in counts if showing it
+  const feedbackForCounts = shouldShowMock ? [...feedback, mockFeedback] : feedback
+  
+  const filterCounts = {
+    all: feedbackForCounts.filter(f => !f.archived).length,
+    issue: feedbackForCounts.filter(f => f.type === 'issue' && !f.archived).length,
+    idea: feedbackForCounts.filter(f => f.type === 'idea' && !f.archived).length,
+    other: feedbackForCounts.filter(f => f.type === 'other' && !f.archived).length,
+    archive: feedbackForCounts.filter(f => f.archived).length,
+  }
+
+  const handleArchive = async (id: string, archive: boolean = true) => {
+    try {
+      const response = await fetch(`/api/feedback/archive/${id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ archived: archive }),
+      })
+      
+      if (response.ok) {
+        // Reload feedback from API
+        loadFeedback()
+      } else {
+        console.error(`Failed to ${archive ? 'archive' : 'unarchive'} feedback`)
       }
+    } catch (e) {
+      console.error(`Failed to ${archive ? 'archive' : 'unarchive'} feedback:`, e)
     }
   }
 
@@ -105,15 +162,56 @@ export default function AppProjectPage() {
                 <BrandLogo size={24} />
               </Link>
               <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Project name"
-                  defaultValue="feedkit"
-                  className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent"
-                />
-                <svg className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
+                <button
+                  onClick={() => setIsProjectDropdownOpen(!isProjectDropdownOpen)}
+                  className="flex items-center gap-2 px-3 py-1.5 border border-gray-300 rounded-lg text-sm bg-white hover:bg-gray-50 transition text-left min-w-[140px]"
+                >
+                  <span className="flex-1 text-gray-900">{projectName}</span>
+                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                  </svg>
+                </button>
+                
+                {isProjectDropdownOpen && (
+                  <>
+                    <div 
+                      className="fixed inset-0 z-40" 
+                      onClick={() => setIsProjectDropdownOpen(false)}
+                    />
+                    <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                      <button
+                        onClick={() => setIsProjectDropdownOpen(false)}
+                        className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center justify-between"
+                      >
+                        <span>{projectName}</span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setIsProjectDropdownOpen(false)
+                            setIsSettingsOpen(true)
+                          }}
+                          className="text-gray-400 hover:text-gray-600"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                        </button>
+                      </button>
+                      <div className="border-t border-gray-100">
+                        <button
+                          onClick={() => setIsProjectDropdownOpen(false)}
+                          className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                          </svg>
+                          New Project
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
             <div className="flex items-center gap-6">
@@ -144,7 +242,10 @@ export default function AppProjectPage() {
                 Integrate the widget into your website and start collecting customer feedback.
               </p>
             </div>
-            <button className="px-6 py-3 bg-[#2563EB] text-white rounded-lg font-medium hover:bg-[#1D4ED8] transition">
+            <button 
+              onClick={() => setIsIntegrationModalOpen(true)}
+              className="px-6 py-3 bg-[#2563EB] text-white rounded-lg font-medium hover:bg-[#1D4ED8] transition"
+            >
               Integrate widget &gt;
             </button>
           </div>
@@ -159,11 +260,11 @@ export default function AppProjectPage() {
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">FILTER</h2>
             <div className="space-y-2">
               {[
-                { id: 'all' as FeedbackType, label: 'All', color: '#2563EB' },
-                { id: 'issue' as FeedbackType, label: 'Issue', color: '#EF4444' },
-                { id: 'idea' as FeedbackType, label: 'Idea', color: '#F97316' },
-                { id: 'other' as FeedbackType, label: 'Other', color: '#6B7280' },
-                { id: 'archive' as FeedbackType, label: 'Archive', color: '#6B7280' },
+                { id: 'all' as FeedbackType, label: 'All', emoji: null, color: '#2563EB' },
+                { id: 'issue' as FeedbackType, label: 'Bug', emoji: '🐛', color: '#EF4444' },
+                { id: 'idea' as FeedbackType, label: 'Idea', emoji: '💡', color: '#F97316' },
+                { id: 'other' as FeedbackType, label: 'Other', emoji: '💬', color: '#6B7280' },
+                { id: 'archive' as FeedbackType, label: 'Archive', emoji: null, color: '#6B7280' },
               ].map((filter) => (
                 <button
                   key={filter.id}
@@ -175,10 +276,12 @@ export default function AppProjectPage() {
                   }`}
                 >
                   <div className="flex items-center gap-2">
-                    {filter.id !== 'archive' ? (
-                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: filter.color }} />
-                    ) : (
+                    {filter.emoji ? (
+                      <span className="text-base">{filter.emoji}</span>
+                    ) : filter.id === 'archive' ? (
                       <div className="w-2 h-2 rounded-full border-2 border-gray-400" />
+                    ) : (
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: filter.color }} />
                     )}
                     <span>{filter.label}</span>
                   </div>
@@ -192,7 +295,27 @@ export default function AppProjectPage() {
           <main className="flex-1">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Feedback</h2>
             
-            {filteredFeedback.length === 0 ? (
+            {isLoading ? (
+              <div className="flex items-center justify-center py-20">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-12 h-12 border-4 border-[#2563EB]/20 border-t-[#2563EB] rounded-full animate-spin"></div>
+                  <p className="text-sm text-gray-600">Loading feedback...</p>
+                </div>
+              </div>
+            ) : shouldShowMock ? (
+              <div className="space-y-4">
+                <FeedbackCard
+                  key={mockFeedback.id}
+                  feedback={mockFeedback}
+                  onArchive={() => {
+                    // Show a message that this is a demo
+                    alert('This is a demo feedback item. Once you integrate the widget, you\'ll be able to archive real feedback!')
+                  }}
+                  onReply={() => handleReply(mockFeedback.userEmail)}
+                  isDemo={true}
+                />
+              </div>
+            ) : filteredFeedback.length === 0 ? (
               <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
                 <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -206,7 +329,10 @@ export default function AppProjectPage() {
                     : `No ${selectedFilter} feedback found.`}
                 </p>
                 {selectedFilter === 'all' && (
-                  <button className="px-6 py-3 bg-[#2563EB] text-white rounded-lg font-medium hover:bg-[#1D4ED8] transition">
+                  <button 
+                    onClick={() => setIsIntegrationModalOpen(true)}
+                    className="px-6 py-3 bg-[#2563EB] text-white rounded-lg font-medium hover:bg-[#1D4ED8] transition"
+                  >
                     Integrate widget &gt;
                   </button>
                 )}
@@ -217,8 +343,9 @@ export default function AppProjectPage() {
                   <FeedbackCard
                     key={item.id}
                     feedback={item}
-                    onArchive={() => handleArchive(item.id)}
+                    onArchive={() => handleArchive(item.id, !item.archived)}
                     onReply={() => handleReply(item.userEmail)}
+                    isArchived={item.archived}
                   />
                 ))}
               </div>
@@ -229,21 +356,130 @@ export default function AppProjectPage() {
 
       {/* Footer */}
       <Footer showProjectId={true} projectId={projectId} />
+
+      {/* Integration Modal */}
+      <IntegrationModal 
+        isOpen={isIntegrationModalOpen}
+        onClose={() => setIsIntegrationModalOpen(false)}
+        projectId={projectId}
+      />
+
+      {/* Settings Modal */}
+      {isSettingsOpen && (
+        <SettingsModal
+          projectId={projectId}
+          projectName={projectName}
+          feedbackCount={feedback.filter(f => !f.archived).length}
+          onClose={() => setIsSettingsOpen(false)}
+        />
+      )}
+
+      {/* Feedback Widget */}
+      <FeedbackWidget projectId={projectId} position="bottom-right" />
     </div>
   )
 }
 
-function FeedbackCard({ feedback, onArchive, onReply }: { 
+function SettingsModal({ projectId, projectName, feedbackCount, onClose }: { projectId: string; projectName: string; feedbackCount: number; onClose: () => void }) {
+  
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+      <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+          <h2 className="text-xl font-bold text-gray-900">Settings</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 transition p-1 hover:bg-gray-100 rounded-lg"
+            aria-label="Close"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="p-6 space-y-6">
+          {/* Project Settings */}
+          <div className="bg-white rounded-lg border border-gray-200 p-5">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Project Settings</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Name</label>
+                <input
+                  type="text"
+                  value={projectName}
+                  readOnly
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-gray-50 text-gray-600"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Project Id:</label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={projectId}
+                    readOnly
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm bg-gray-50 text-gray-600"
+                  />
+                  <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200 transition">
+                    Save
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Current Plan */}
+          <div className="bg-white rounded-lg border border-gray-200 p-5">
+            <div className="flex items-center gap-2 mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Current Plan</h3>
+              <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-medium rounded-full">Lifetime</span>
+            </div>
+            <div className="space-y-4">
+              <p className="text-sm text-gray-600">
+                {feedbackCount} feedback submissions
+              </p>
+              <p className="text-sm text-gray-700">
+                <strong>Unlimited feedback submissions</strong>
+              </p>
+              <p className="text-sm text-gray-700">
+                Contact us about Enterprise to additionally unlock: Whitelabeling, service-level agreements and live chat support
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function FeedbackCard({ feedback, onArchive, onReply, isDemo = false, isArchived = false }: { 
   feedback: Feedback
   onArchive: () => void
   onReply: () => void
+  isDemo?: boolean
+  isArchived?: boolean
 }) {
+  const [isExpanded, setIsExpanded] = useState(false)
+
+  const typeConfig = {
+    issue: { emoji: '🐛', label: 'Bug', color: 'bg-red-100 text-red-700' },
+    idea: { emoji: '💡', label: 'Idea', color: 'bg-orange-100 text-orange-700' },
+    other: { emoji: '💬', label: 'Other', color: 'bg-gray-100 text-gray-700' },
+  }
+
   const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'issue': return 'bg-red-100 text-red-700'
-      case 'idea': return 'bg-orange-100 text-orange-700'
-      default: return 'bg-gray-100 text-gray-700'
-    }
+    return typeConfig[type as keyof typeof typeConfig]?.color || 'bg-gray-100 text-gray-700'
+  }
+
+  const getTypeLabel = (type: string) => {
+    return typeConfig[type as keyof typeof typeConfig]?.label || type.charAt(0).toUpperCase() + type.slice(1)
+  }
+
+  const getTypeEmoji = (type: string) => {
+    return typeConfig[type as keyof typeof typeConfig]?.emoji || ''
   }
 
   const formatTimeAgo = (timestamp: number) => {
@@ -260,12 +496,15 @@ function FeedbackCard({ feedback, onArchive, onReply }: {
     return new Date(timestamp).toLocaleDateString()
   }
 
+  const hasDetails = !!(feedback.userEmail || feedback.device || feedback.page)
+
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <span className={`px-2 py-1 rounded text-xs font-medium ${getTypeColor(feedback.type)}`}>
-            {feedback.type.charAt(0).toUpperCase() + feedback.type.slice(1)}
+          <span className={`px-2 py-1 rounded text-xs font-medium flex items-center gap-1.5 ${getTypeColor(feedback.type)}`}>
+            <span>{getTypeEmoji(feedback.type)}</span>
+            <span>{getTypeLabel(feedback.type)}</span>
           </span>
         </div>
         <span className="text-sm text-gray-500">{formatTimeAgo(feedback.createdAt)}</span>
@@ -283,39 +522,63 @@ function FeedbackCard({ feedback, onArchive, onReply }: {
         </div>
       )}
 
-      <div className="grid grid-cols-3 gap-4 text-sm text-gray-600 mb-4">
-        {feedback.userEmail && (
-          <div>
-            <span className="font-medium">USER:</span> {feedback.userEmail}
-          </div>
-        )}
-        {feedback.device && (
-          <div>
-            <span className="font-medium">DEVICE:</span> {feedback.device}
-          </div>
-        )}
-        {feedback.page && (
-          <div>
-            <span className="font-medium">PAGE:</span> {feedback.page}
-          </div>
-        )}
-      </div>
+      {isExpanded && hasDetails && (
+        <div className="grid grid-cols-3 gap-4 text-sm text-gray-600 mb-4">
+          {feedback.userEmail && (
+            <div>
+              <span className="font-medium">USER:</span> {feedback.userEmail}
+            </div>
+          )}
+          {feedback.device && (
+            <div>
+              <span className="font-medium">DEVICE:</span> {feedback.device}
+            </div>
+          )}
+          {feedback.page && (
+            <div>
+              <span className="font-medium">PAGE:</span> {feedback.page}
+            </div>
+          )}
+        </div>
+      )}
 
-      <div className="flex items-center justify-end gap-3">
-        <button
-          onClick={onArchive}
-          className="px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
-        >
-          Archive
-        </button>
-        {feedback.userEmail && (
+      <div className="flex items-center justify-between gap-3">
+        {hasDetails && (
           <button
-            onClick={onReply}
-            className="px-4 py-2 text-sm text-[#2563EB] bg-[#2563EB]/10 rounded-lg hover:bg-[#2563EB]/20 transition"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="px-3 py-1.5 text-xs text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition flex items-center gap-1"
           >
-            Reply with Mail
+            <svg 
+              className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+            {isExpanded ? 'Hide details' : 'Show details'}
           </button>
         )}
+        <div className="flex items-center gap-3 ml-auto">
+          <button
+            onClick={onArchive}
+            className={`px-4 py-2 text-sm rounded-lg transition ${
+              isArchived
+                ? 'text-white bg-gray-600 border border-gray-600 hover:bg-gray-700'
+                : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'
+            }`}
+          >
+            {isArchived ? 'Unarchive' : 'Archive'}
+          </button>
+          {feedback.userEmail && (
+            <button
+              onClick={onReply}
+              className="px-4 py-2 text-sm text-[#2563EB] bg-[#2563EB]/10 rounded-lg hover:bg-[#2563EB]/20 transition"
+            >
+              Reply with Mail
+            </button>
+          )}
+        </div>
       </div>
     </div>
   )

@@ -76,30 +76,17 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
         device = `${browser}, ${navigator.platform}`
       }
 
-      const response = await fetch('/api/feedback', {
+      // Use full URL for cross-domain support
+      const apiUrl = typeof window !== 'undefined' 
+        ? `${window.location.origin}/api/feedback`
+        : '/api/feedback'
+      
+      const response = await fetch(apiUrl, {
         method: 'POST',
         body: formData,
       })
 
       if (response.ok) {
-        const feedbackItem = {
-          id: Date.now().toString(),
-          type: selectedType,
-          message: feedback,
-          imageUrl: imagePreview || undefined,
-          userEmail: undefined,
-          device: device,
-          page: typeof window !== 'undefined' ? window.location.href : '',
-          createdAt: Date.now(),
-          archived: false,
-          projectId: projectId || '714363294e1e3c',
-        }
-
-        const existing = localStorage.getItem('feedkit_feedback')
-        const feedbackList = existing ? JSON.parse(existing) : []
-        feedbackList.unshift(feedbackItem)
-        localStorage.setItem('feedkit_feedback', JSON.stringify(feedbackList))
-
         setSubmitted(true)
         setTimeout(() => {
           setIsOpen(false)
@@ -109,9 +96,15 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
           setSelectedImage(null)
           setImagePreview(null)
         }, 2000)
+      } else {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+        console.error('Failed to submit feedback:', errorData)
+        const errorMessage = errorData.details || errorData.error || 'Please try again.'
+        alert(`Failed to submit feedback: ${errorMessage}`)
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to submit feedback:', error)
+      alert(`Failed to submit feedback: ${error.message || 'Network error'}`)
     } finally {
       setIsSubmitting(false)
     }
@@ -137,9 +130,11 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
   return (
     <div className={`fixed ${getPositionClass()} z-50`}>
       {isOpen ? (
-        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] w-[380px] max-w-[calc(100vw-2rem)] border border-white/20 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+        <div className={`rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] w-[380px] max-w-[calc(100vw-2rem)] max-h-[calc(100vh-3rem)] border border-white/20 overflow-hidden overflow-x-hidden flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-300 ${
+          submitted ? 'bg-white' : 'bg-white/95 backdrop-blur-xl'
+        }`}>
           {/* Minimal Header */}
-          <div className="px-6 pt-5 pb-4 flex items-center justify-between">
+          <div className="px-6 pt-5 pb-3 flex items-center justify-between flex-shrink-0">
             <div className="flex items-center gap-3">
               {selectedType && (
                 <span className="text-2xl">{typeConfig[selectedType].emoji}</span>
@@ -165,20 +160,20 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
           </div>
 
           {/* Content */}
-          <div className="px-6 pb-5">
+          <div className="px-6 pb-5 overflow-y-auto overflow-x-hidden flex-1 min-h-0 w-full box-border">
             {!selectedType ? (
               // Type selection - Pill chips
               <div className="space-y-4">
                 <p className="text-gray-500 text-sm">What type of feedback?</p>
-                <div className="flex flex-wrap gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   {(['issue', 'idea', 'other'] as FeedbackType[]).map((type) => (
                     <button
                       key={type}
                       onClick={() => setSelectedType(type)}
-                      className="group flex items-center gap-2 px-5 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300 rounded-full transition-all duration-200 active:scale-95"
+                      className="group flex items-center justify-center gap-1.5 px-2 py-2.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300 rounded-full transition-all duration-200 active:scale-95"
                     >
-                      <span className="text-lg group-hover:scale-110 transition-transform">{typeConfig[type].emoji}</span>
-                      <span className="text-sm font-medium text-gray-700">{typeConfig[type].label}</span>
+                      <span className="text-base group-hover:scale-110 transition-transform flex-shrink-0">{typeConfig[type].emoji}</span>
+                      <span className="text-xs font-medium text-gray-700 whitespace-nowrap">{typeConfig[type].label}</span>
                     </button>
                   ))}
                 </div>
@@ -196,13 +191,14 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
               </div>
             ) : (
               // Feedback form - Clean & minimal
-              <div className="space-y-4">
-                <div className="relative">
+              <div className="space-y-3 w-full">
+                <div className="relative w-full overflow-hidden">
                   <textarea
                     value={feedback}
                     onChange={(e) => setFeedback(e.target.value)}
                     placeholder="Describe your feedback..."
-                    className="w-full h-32 px-4 py-3 bg-gray-50 border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:bg-white resize-none text-sm text-gray-900 placeholder:text-gray-400 transition-all duration-200"
+                    className="w-full h-24 px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:border-orange-500/50 focus:bg-white resize-none text-sm text-gray-900 placeholder:text-gray-400 transition-all duration-200 box-border"
+                    style={{ maxWidth: '100%' }}
                     autoFocus
                   />
                 </div>
@@ -282,8 +278,8 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
 
           {/* Footer */}
           {!submitted && (
-            <div className="px-6 pb-4 pt-2 border-t border-gray-100">
-              <p className="text-[11px] text-gray-400 flex items-center justify-center gap-1.5">
+            <div className="px-6 pb-4 pt-2 border-t border-gray-100 bg-white/95 flex-shrink-0">
+              <p className="text-[11px] text-gray-500 flex items-center justify-center gap-1.5">
                 <span>Powered by</span>
                 <svg
                   width="14"
@@ -291,12 +287,12 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
                   viewBox="0 0 28 12"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="inline-block opacity-60"
+                  className="inline-block"
                 >
                   <circle cx="6" cy="6" r="5" fill="#374151" />
                   <polygon points="17,0.5 23.5,11.5 11,11.5" fill="#9CA3AF" />
                 </svg>
-                <span className="font-medium text-gray-500">Feedkit</span>
+                <span className="font-medium text-gray-600">Feedkit</span>
               </p>
             </div>
           )}
