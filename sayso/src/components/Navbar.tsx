@@ -11,6 +11,7 @@ export function Navbar() {
   const { user, loading: authLoading, signOut } = useAuth()
   const { isSubscribed, loading: subLoading } = useSubscription()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [upgrading, setUpgrading] = useState(false)
 
   async function handleUpgrade() {
@@ -50,10 +51,10 @@ export function Navbar() {
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-[100]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo */}
-          <Link href="/">
-            <BrandLogo size={32} showText={true} />
+          <Link href="/" className="flex-shrink-0">
+            <BrandLogo size={28} showText={true} />
           </Link>
 
           {/* Desktop Navigation */}
@@ -73,7 +74,7 @@ export function Navbar() {
           </div>
 
           {/* Right side buttons */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             {authLoading ? (
               <div className="flex items-center justify-center">
                 <svg className="animate-spin h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -87,17 +88,17 @@ export function Navbar() {
                 <div className="relative">
                   <button
                     onClick={() => setMenuOpen(!menuOpen)}
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition relative z-[100]"
+                    className="flex items-center gap-2 px-2 sm:px-3 py-2 rounded-lg hover:bg-gray-100 transition relative z-[100]"
                   >
                     {user.avatar ? (
-                      <img src={user.avatar} alt={user.name || user.email} className="w-8 h-8 rounded-full" />
+                      <img src={user.avatar} alt={user.name || user.email} className="w-7 h-7 sm:w-8 sm:h-8 rounded-full" />
                     ) : (
-                      <div className="w-8 h-8 rounded-full bg-[#2563EB] text-white flex items-center justify-center text-sm font-medium">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#2563EB] text-white flex items-center justify-center text-xs sm:text-sm font-medium">
                         {(user.name || user.email).charAt(0).toUpperCase()}
                       </div>
                     )}
                     <span className="hidden sm:inline text-sm font-medium text-gray-700">{user.name || user.email.split('@')[0]}</span>
-                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-gray-400 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
@@ -116,7 +117,7 @@ export function Navbar() {
                       >
                         <div className="px-4 py-2 border-b border-gray-100">
                           <p className="text-sm font-medium text-gray-900">{user.name || user.email.split('@')[0]}</p>
-                          <p className="text-xs text-gray-500">{user.email}</p>
+                          <p className="text-xs text-gray-500 truncate">{user.email}</p>
                           {isSubscribed && (
                             <span className="inline-block mt-1 px-2 py-0.5 bg-blue-100 text-[#2563EB] text-xs rounded-full font-medium">
                               Pro
@@ -176,46 +177,79 @@ export function Navbar() {
               <>
                 <Link
                   href="/sign-in"
-                  className="px-4 py-2 text-sm text-gray-700 hover:text-gray-900 transition font-medium"
+                  className="hidden sm:block px-4 py-2 text-sm text-gray-700 hover:text-gray-900 transition font-medium"
                 >
                   Log In
                 </Link>
                 <Link
                   href="/dashboard"
-                  className="px-4 py-2 rounded-lg bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition text-sm font-medium"
+                  className="px-3 sm:px-4 py-2 rounded-lg bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition text-xs sm:text-sm font-medium"
                 >
-                  Start for free
+                  Start free
                 </Link>
               </>
             )}
 
             {/* Mobile menu button */}
             <button
-              onClick={() => setMenuOpen(!menuOpen)}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition"
             >
-              <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+              {mobileMenuOpen ? (
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
             </button>
           </div>
         </div>
 
         {/* Mobile menu */}
-        {menuOpen && !user && (
-          <div className="md:hidden border-t border-gray-200 py-4">
-            <Link href="/#product" className="block px-4 py-2 text-sm text-gray-600 hover:text-gray-900" onClick={() => setMenuOpen(false)}>
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-gray-200 py-3 space-y-1">
+            <Link 
+              href="/#product" 
+              className="block px-4 py-2.5 text-base text-gray-700 hover:bg-gray-50 rounded-lg" 
+              onClick={() => setMobileMenuOpen(false)}
+            >
               Product
             </Link>
-            <Link href="/#product" className="block px-4 py-2 text-sm text-gray-600 hover:text-gray-900" onClick={() => setMenuOpen(false)}>
+            <Link 
+              href="/#product" 
+              className="block px-4 py-2.5 text-base text-gray-700 hover:bg-gray-50 rounded-lg" 
+              onClick={() => setMobileMenuOpen(false)}
+            >
               Widget
             </Link>
-            <Link href="/#pricing" className="block px-4 py-2 text-sm text-gray-600 hover:text-gray-900" onClick={() => setMenuOpen(false)}>
+            <Link 
+              href="/#pricing" 
+              className="block px-4 py-2.5 text-base text-gray-700 hover:bg-gray-50 rounded-lg" 
+              onClick={() => setMobileMenuOpen(false)}
+            >
               Pricing
             </Link>
-            <Link href="/#features" className="block px-4 py-2 text-sm text-gray-600 hover:text-gray-900" onClick={() => setMenuOpen(false)}>
+            <Link 
+              href="/#features" 
+              className="block px-4 py-2.5 text-base text-gray-700 hover:bg-gray-50 rounded-lg" 
+              onClick={() => setMobileMenuOpen(false)}
+            >
               Features
             </Link>
+            {!user && (
+              <div className="pt-2 border-t border-gray-100 mt-2">
+                <Link 
+                  href="/sign-in" 
+                  className="block px-4 py-2.5 text-base text-gray-700 hover:bg-gray-50 rounded-lg" 
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Log In
+                </Link>
+              </div>
+            )}
           </div>
         )}
       </div>

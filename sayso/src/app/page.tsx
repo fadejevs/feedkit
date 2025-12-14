@@ -13,7 +13,7 @@ import { useAuth } from '@/hooks/useAuth'
 function LandingPageContent() {
   const { user } = useAuth()
   const scrollToDemo = () => {
-    const el = document.getElementById('product')
+    const el = document.getElementById('features')
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
@@ -26,28 +26,28 @@ function LandingPageContent() {
       </div>
 
       {/* Hero Section */}
-      <section id="home" className="relative z-10 w-full pt-16 pb-4 sm:pt-24 sm:pb-6 overflow-hidden min-h-[550px] sm:min-h-[650px]">
+      <section id="home" className="relative z-10 w-full pt-12 pb-4 sm:pt-24 sm:pb-6 overflow-hidden min-h-[480px] sm:min-h-[650px]">
         {/* Animated Background - covers entire hero section */}
         <div className="absolute inset-0 w-full h-full">
           <AnimatedBackground />
           </div>
         
         {/* Background decorative circle */}
-        <div className="absolute top-0 left-0 w-[600px] sm:w-[900px] h-[600px] sm:h-[900px] bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-50 rounded-full -translate-x-[30%] -translate-y-[30%] opacity-30 blur-3xl z-0" />
+        <div className="absolute top-0 left-0 w-[400px] sm:w-[900px] h-[400px] sm:h-[900px] bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-50 rounded-full -translate-x-[30%] -translate-y-[30%] opacity-30 blur-3xl z-0" />
         
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-4xl mx-auto">
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-gray-900 leading-[1.1]">
+          <h1 className="text-3xl xs:text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-4 sm:mb-6 text-gray-900 leading-[1.1]">
             Build more of what<br />
             customers want
           </h1>
-          <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-2">
             Capture, organize, and announce product feedback in one place.
           </p>
-          <div className="flex items-center justify-center gap-4 flex-wrap mb-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-4 px-4 sm:px-0">
             <Link 
               href="/dashboard" 
-              className="px-6 py-3 rounded-lg bg-[#2563EB] text-white font-medium hover:bg-[#1D4ED8] transition text-base inline-flex items-center gap-2"
+              className="w-full sm:w-auto px-6 py-3 rounded-lg bg-[#2563EB] text-white font-medium hover:bg-[#1D4ED8] transition text-base inline-flex items-center justify-center gap-2"
             >
               Start for free
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,7 +56,7 @@ function LandingPageContent() {
             </Link>
             <button
               onClick={scrollToDemo}
-              className="px-6 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 font-medium hover:bg-gray-50 transition text-base inline-flex items-center gap-3 h-[48px]"
+              className="w-full sm:w-auto px-6 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 font-medium hover:bg-gray-50 transition text-base inline-flex items-center justify-center gap-3"
             >
               <div className="w-6 h-6 rounded-full border-2 border-gray-900 flex items-center justify-center flex-shrink-0">
                 <svg className="w-3 h-3 text-gray-900 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
@@ -64,10 +64,10 @@ function LandingPageContent() {
                 </svg>
               </div>
               <span>Watch the demo</span>
-              <span className="text-gray-500 text-sm">15s</span>
+              <span className="text-gray-500 text-sm hidden xs:inline">15s</span>
             </button>
           </div>
-          <p className="text-sm text-gray-500">
+          <p className="text-xs sm:text-sm text-gray-500">
             14-day free trial. No credit card required.
           </p>
         </div>
@@ -76,15 +76,7 @@ function LandingPageContent() {
 
 
 
-      {/* Feature Cards */}
-      <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mx-auto">
-          <FeatureCard title="Feedback Boards" active />
-          <FeatureCard title="Public Roadmaps" />
-          <FeatureCard title="Announcements" />
-          <FeatureCard title="Surveys" />
-        </div>
-      </section>
+
 
       {/* Demo Section (Dashboard preview) */}
       {/* <section id="live-demo" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
@@ -106,37 +98,31 @@ function LandingPageContent() {
         </div>
       </section> */}
 
-      {/* Company Logos Section */}
-      <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-12 opacity-60">
-          <CompanyLogo name="orange" />
-          <CompanyLogo name="Canary Mail" />
-          <CompanyLogo name="Landbook" />
-          <CompanyLogo name="Dash" />
-          <CompanyLogo name="Zion Builder" />
-          <CompanyLogo name="Superlist" />
+      {/* Social Proof - Simple Stats */}
+      {/* <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-16 text-center">
+          <div>
+            <p className="text-3xl font-bold text-gray-900">500+</p>
+            <p className="text-sm text-gray-500">Happy users</p>
+          </div>
+          <div className="w-px h-10 bg-gray-200 hidden sm:block" />
+          <div>
+            <p className="text-3xl font-bold text-gray-900">10k+</p>
+            <p className="text-sm text-gray-500">Feedback collected</p>
+          </div>
+          <div className="w-px h-10 bg-gray-200 hidden sm:block" />
+          <div>
+            <p className="text-3xl font-bold text-gray-900">2 min</p>
+            <p className="text-sm text-gray-500">Setup time</p>
+          </div>
         </div>
-        <div className="flex items-center justify-center gap-8 mt-8">
-          <TrustBadge name="Trustpilot" rating="4.6" />
-          <TrustBadge name="Capterra" rating="4.8" />
-          <TrustBadge name="G2 CROWD" rating="4.8" />
-        </div>
-      </section>
+      </section> */}
 
-      {/* Divider */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <hr className="border-gray-200" />
-      </div>
 
 
       {/* Two Flavors Section */}
-      <section id="product" className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-gray-900 leading-tight">
-            Feedkit comes in two flavors.
-          </h2>
-        </div>
-        <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+      <section id="product" className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-5xl mx-auto">
           <FlavorCard
             title="Feedkit web app"
             description="Capture, plan and publish ideas on the web."
@@ -201,16 +187,16 @@ function LandingPageContent() {
       </section> */}
 
       {/* Features Grid Section */}
-      <section id="features" className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+      <section id="features" className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
         {/* Background gradient with complementary colors */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-blue-100 via-indigo-50 to-orange-50 rounded-full -translate-y-1/2 translate-x-1/2 opacity-20 blur-3xl" />
+        <div className="absolute top-0 right-0 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-gradient-to-br from-blue-100 via-indigo-50 to-orange-50 rounded-full -translate-y-1/2 translate-x-1/2 opacity-20 blur-3xl" />
         
-        <div className="relative text-center mb-12 sm:mb-16">
-          <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-gray-900 leading-tight">
+        <div className="relative text-center mb-8 sm:mb-16 px-2">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-4 text-gray-900 leading-tight">
             Built for teams that want to ship better products, faster.
           </h2>
             </div>
-        <div className="relative grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
           <FeatureItem 
             icon={<InlineAdminIcon />} 
             title="One Dashboard" 
@@ -250,68 +236,110 @@ function LandingPageContent() {
         </div>
       </section>
 
-      {/* Product Showcase Sections */}
-      <section className="bg-gray-50 py-16 sm:py-20">
+      {/* Feature Showcase Sections */}
+      <section className="bg-gray-50 py-12 sm:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ProductShowcase
-            title="Capture Ideas"
-            description="Customer feedback is the lifeblood of your product. Capture ideas from your customers and let the most voted and commented on ideas surface to the top."
-            linkText="Learn about capturing Ideas"
-            imageSide="right"
-            gradient="from-[#2563EB]/10 via-[#818CF8]/5 to-[#2563EB]/10"
-          />
-          <ProductShowcase
-            title="Build a public roadmap"
-            description="Turn customer ideas into a stunning product roadmap and let users know what's up next."
-            linkText="Learn about Roadmaps"
-            imageSide="left"
-            gradient="from-[#F97316]/10 via-[#FB923C]/5 to-[#F97316]/10"
-          />
-          <ProductShowcase
-            title="Prioritize and plan ahead"
-            description="Fully customise Benefit and Cost scores according to your business priorities. Easily identify Quick Wins and Major Projects."
-            linkText="Learn about Prioritization"
-            imageSide="right"
-            gradient="from-[#2563EB]/10 via-[#818CF8]/5 to-[#2563EB]/10"
-          />
-          <ProductShowcase
-            title="Announcements"
-            description="Keep your customers informed as you ship new features. Announcements is our version of Changelog. And we think you'll love it."
-            linkText="Learn about Announcements"
-            imageSide="left"
-            gradient="from-[#F97316]/10 via-[#FB923C]/5 to-[#F97316]/10"
-          />
+          {/* Feature 1: Collect Feedback */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-20 items-center mb-16 sm:mb-24">
+            <div className="order-2 md:order-1">
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-gray-900">Collect feedback without friction</h3>
+              <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 leading-relaxed">
+                Drop a sleek widget on your site. Users report bugs, share ideas, or leave feedback in seconds — no forms, no friction.
+              </p>
+              <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base text-gray-600">
+                <li className="flex items-center gap-3">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  Bug reports, ideas & general feedback
+                </li>
+                <li className="flex items-center gap-3">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  Screenshot attachments
+                </li>
+                <li className="flex items-center gap-3">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  Works on any website
+                </li>
+              </ul>
+            </div>
+            <div className="relative order-1 md:order-2">
+              <div className="bg-gradient-to-br from-orange-100/50 via-white to-orange-50/50 rounded-2xl sm:rounded-3xl p-4 sm:p-8 relative overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(249,115,22,0.1),transparent_50%)]" />
+                <WidgetMockup />
+              </div>
+            </div>
+          </div>
+
+          {/* Feature 2: Dashboard */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-20 items-center mb-16 sm:mb-24">
+            <div className="order-2">
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-gray-900">All feedback in one place</h3>
+              <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 leading-relaxed">
+                Every piece of feedback lands in your dashboard. Filter by type, search, archive, and never lose track of what users are saying.
+              </p>
+              <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base text-gray-600">
+                <li className="flex items-center gap-3">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  Filter by bugs, ideas, or other
+                </li>
+                <li className="flex items-center gap-3">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  Search and organize feedback
+                </li>
+                <li className="flex items-center gap-3">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  Archive when done
+                </li>
+              </ul>
+            </div>
+            <div className="order-1 relative">
+              <div className="bg-gradient-to-br from-blue-100/50 via-white to-indigo-50/50 rounded-2xl sm:rounded-3xl p-3 sm:p-6 relative overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(37,99,235,0.1),transparent_50%)]" />
+                <DashboardMockup />
+              </div>
+            </div>
+          </div>
+
+          {/* Feature 3: Insights */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-20 items-center">
+            <div className="order-2 md:order-1">
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-gray-900">Build what users actually want</h3>
+              <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 leading-relaxed">
+                Stop guessing. See which features users request most, what bugs are causing pain, and prioritize your roadmap with confidence.
+              </p>
+              <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base text-gray-600">
+                <li className="flex items-center gap-3">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  See feedback trends at a glance
+                </li>
+                <li className="flex items-center gap-3">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  Know what to build next
+                </li>
+                <li className="flex items-center gap-3">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  Data-driven product decisions
+                </li>
+              </ul>
+            </div>
+            <div className="relative order-1 md:order-2">
+              <div className="bg-gradient-to-br from-emerald-100/50 via-white to-teal-50/50 rounded-2xl sm:rounded-3xl p-3 sm:p-6 relative overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(16,185,129,0.1),transparent_50%)]" />
+                <InsightsMockup />
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Integrations Section */}
-      <section id="integrations" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-gray-900 leading-tight">Integrations</h2>
-          <p className="text-lg text-gray-600">
-            Connect Feedkit to the tools that you already use.
-          </p>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-8">
-          {integrations.slice(0, 12).map((integration) => (
-            <IntegrationCard key={integration.name} name={integration.name} description={integration.description} />
-          ))}
-        </div>
-        <div className="text-center">
-          <button className="px-6 py-2 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 text-[#2563EB] font-medium hover:from-blue-100 hover:to-indigo-100 transition">
-            Show more
-          </button>
-        </div>
-      </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="bg-white py-16 sm:py-20">
+      <section id="pricing" className="bg-white py-12 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-gray-900 leading-tight">Pricing</h2>
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-gray-900 leading-tight">Pricing</h2>
         </div>
 
-          <div className="grid gap-6 sm:gap-8 max-w-5xl mx-auto sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:gap-8 max-w-5xl mx-auto sm:grid-cols-3">
           <PricingCard
               name="Free"
             price="Free"
@@ -334,13 +362,12 @@ function LandingPageContent() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-white py-16 sm:py-20">
+      <section className="bg-white py-12 sm:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl sm:text-5xl font-bold mb-8 leading-tight text-gray-900">
-            Start managing customer<br />
-            feedback — today.
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight text-gray-900">
+            Start managing customer feedback — today.
           </h2>
-          <div className="flex items-center justify-center gap-4 flex-wrap">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <Link 
               href="/dashboard" 
               className="px-6 py-3 rounded-lg bg-[#F97316] text-white font-medium hover:bg-[#EA580C] shadow-sm shadow-[#F97316]/30 transition text-base"
@@ -364,45 +391,125 @@ function LandingPageContent() {
   )
 }
 
-function FeatureCard({ title, active }: { title: string; active?: boolean }) {
-  const accentColors = ['#2563EB', '#818CF8', '#F97316', '#FB923C']
-  const accentColor = accentColors[title.length % accentColors.length]
-  
+// Visual Mockup Components for Feature Sections
+function WidgetMockup() {
   return (
-    <div className={`bg-white border rounded-lg p-4 sm:p-6 transition cursor-pointer text-center ${
-      active 
-        ? 'border-[#2563EB] border-2 shadow-sm' 
-        : 'border-gray-200 hover:border-opacity-60 hover:shadow-sm'
-    }`} style={!active ? { 
-      borderColor: `${accentColor}40`,
-      transition: 'all 0.3s ease'
-    } : {}}>
-      <h3 className={`font-semibold text-sm sm:text-base ${
-        active ? 'text-[#2563EB]' : 'text-gray-900'
-      }`}>{title}</h3>
-    </div>
-  )
-}
-
-function CompanyLogo({ name }: { name: string }) {
-  return (
-    <div className="text-gray-400 font-medium text-sm sm:text-base uppercase">
-      {name}
-    </div>
-  )
-}
-
-function TrustBadge({ name, rating }: { name: string; rating: string }) {
-  return (
-    <div className="flex items-center gap-2">
-      <div className="text-gray-500 text-sm">{name}</div>
-      <div className="flex items-center gap-1">
-        <span className="text-yellow-400">★★★★★</span>
-        <span className="text-gray-600 text-sm">{rating}/5</span>
+    <div className="relative mx-auto max-w-[280px] sm:max-w-[320px]">
+      {/* Widget Card */}
+      <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+        <div className="px-4 sm:px-5 pt-4 sm:pt-5 pb-3 sm:pb-4">
+          <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+            <span className="text-lg sm:text-xl">💡</span>
+            <div>
+              <h4 className="font-semibold text-gray-900 text-xs sm:text-sm">Share an idea</h4>
+              <p className="text-[10px] sm:text-xs text-gray-500">We love new ideas</p>
+            </div>
+          </div>
+          <div className="bg-gray-50 rounded-lg sm:rounded-xl p-2 sm:p-3 mb-3 sm:mb-4">
+            <p className="text-xs sm:text-sm text-gray-600">Add dark mode support for better UX at night...</p>
+          </div>
+          <div className="flex justify-between items-center">
+            <div className="flex gap-2">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                <svg className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Z" /></svg>
+              </div>
+            </div>
+            <button className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-900 text-white text-xs sm:text-sm font-medium rounded-full">Send</button>
+          </div>
+        </div>
+        <div className="px-4 sm:px-5 py-2 border-t border-gray-100 text-center">
+          <p className="text-[9px] sm:text-[10px] text-gray-400">Powered by Feedkit</p>
+        </div>
       </div>
     </div>
   )
 }
+
+function DashboardMockup() {
+  return (
+    <div className="bg-white rounded-lg sm:rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-100 px-3 sm:px-4 py-2 sm:py-3 flex items-center gap-2 sm:gap-3">
+        <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-md sm:rounded-lg flex-shrink-0" />
+        <span className="font-semibold text-xs sm:text-sm text-gray-900">Feedkit</span>
+        <div className="ml-auto flex gap-1 sm:gap-2">
+          <div className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-blue-50 text-blue-600 text-[10px] sm:text-xs rounded font-medium">All</div>
+          <div className="px-1.5 sm:px-2 py-0.5 sm:py-1 text-gray-500 text-[10px] sm:text-xs rounded hidden xs:block">Bugs</div>
+          <div className="px-1.5 sm:px-2 py-0.5 sm:py-1 text-gray-500 text-[10px] sm:text-xs rounded hidden xs:block">Ideas</div>
+        </div>
+      </div>
+      {/* Feedback Items */}
+      <div className="p-2 sm:p-3 space-y-1.5 sm:space-y-2">
+        <FeedbackItemMockup type="idea" title="Dark mode support" time="2m ago" />
+        <FeedbackItemMockup type="bug" title="Button not working on mobile" time="15m ago" />
+        <FeedbackItemMockup type="idea" title="Export to CSV feature" time="1h ago" />
+        <FeedbackItemMockup type="other" title="Love the new dashboard!" time="3h ago" />
+      </div>
+    </div>
+  )
+}
+
+function FeedbackItemMockup({ type, title, time }: { type: 'bug' | 'idea' | 'other'; title: string; time: string }) {
+  const colors = {
+    bug: 'bg-red-50 text-red-600',
+    idea: 'bg-amber-50 text-amber-600',
+    other: 'bg-gray-50 text-gray-600'
+  }
+  const emojis = { bug: '🐛', idea: '💡', other: '💬' }
+  return (
+    <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gray-50/50 rounded-lg hover:bg-gray-50 transition">
+      <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-md sm:rounded-lg flex items-center justify-center text-xs sm:text-sm flex-shrink-0 ${colors[type]}`}>
+        {emojis[type]}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-xs sm:text-sm font-medium text-gray-900 truncate">{title}</p>
+        <p className="text-[10px] sm:text-xs text-gray-400">{time}</p>
+      </div>
+      <button className="text-[10px] sm:text-xs text-gray-400 hover:text-gray-600 hidden xs:block">Archive</button>
+    </div>
+  )
+}
+
+function InsightsMockup() {
+  return (
+    <div className="bg-white rounded-lg sm:rounded-xl shadow-lg border border-gray-200 overflow-hidden p-3 sm:p-4">
+      {/* Stats Row */}
+      <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-3 sm:mb-4">
+        <div className="bg-gradient-to-br from-blue-50 to-white p-2 sm:p-3 rounded-lg sm:rounded-xl border border-blue-100">
+          <p className="text-lg sm:text-2xl font-bold text-blue-600">24</p>
+          <p className="text-[10px] sm:text-xs text-gray-500">This week</p>
+        </div>
+        <div className="bg-gradient-to-br from-amber-50 to-white p-2 sm:p-3 rounded-lg sm:rounded-xl border border-amber-100">
+          <p className="text-lg sm:text-2xl font-bold text-amber-600">12</p>
+          <p className="text-[10px] sm:text-xs text-gray-500">Ideas</p>
+        </div>
+        <div className="bg-gradient-to-br from-red-50 to-white p-2 sm:p-3 rounded-lg sm:rounded-xl border border-red-100">
+          <p className="text-lg sm:text-2xl font-bold text-red-500">8</p>
+          <p className="text-[10px] sm:text-xs text-gray-500">Bugs</p>
+        </div>
+      </div>
+      {/* Chart Placeholder */}
+      <div className="bg-gray-50 rounded-lg sm:rounded-xl p-3 sm:p-4">
+        <p className="text-[10px] sm:text-xs text-gray-500 mb-2 sm:mb-3 font-medium">Feedback Trends</p>
+        <div className="flex items-end gap-1 sm:gap-2 h-14 sm:h-20">
+          {[40, 65, 45, 80, 55, 90, 70].map((h, i) => (
+            <div key={i} className="flex-1 bg-gradient-to-t from-blue-500 to-blue-400 rounded-t" style={{ height: `${h}%` }} />
+          ))}
+        </div>
+        <div className="flex justify-between mt-1.5 sm:mt-2 text-[8px] sm:text-[10px] text-gray-400">
+          <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+        </div>
+      </div>
+      {/* Top Request */}
+      <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-emerald-50 rounded-lg sm:rounded-xl border border-emerald-100">
+        <p className="text-[10px] sm:text-xs text-emerald-600 font-medium mb-0.5 sm:mb-1">🔥 Most requested</p>
+        <p className="text-xs sm:text-sm font-semibold text-gray-900">Dark mode support</p>
+        <p className="text-[10px] sm:text-xs text-gray-500">Requested 8 times</p>
+      </div>
+    </div>
+  )
+}
+
 
 function IdeaCard({ votes, title, description, author, date, tags, badges }: {
   votes: number
@@ -462,8 +569,10 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
   const sendBtnRef = useRef<HTMLButtonElement>(null)
 
   const isLarge = size === 'large'
-  const containerHeight = isLarge ? '400px' : '340px'
-  const containerWidth = isLarge ? '400px' : '380px'
+  // Use relative units for mobile responsiveness
+  const containerHeight = isLarge ? '380px' : '300px'
+  const containerWidth = '100%'
+  const maxContainerWidth = isLarge ? '380px' : '340px'
 
   const coords = isLarge
     ? {
@@ -597,7 +706,7 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
   }
 
   return (
-    <div ref={containerRef} className="relative mx-auto" style={{ height: containerHeight, width: '100%', maxWidth: containerWidth }}>
+    <div ref={containerRef} className="relative mx-auto" style={{ height: containerHeight, width: containerWidth, maxWidth: maxContainerWidth }}>
       {/* Mac-style Cursor */}
       {showCursor && (
         <div
@@ -799,6 +908,7 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
   )
 }
 
+
 function FlavorCard({ title, subtitle, description, cta, href, gradient, type }: {
   title: string
   subtitle?: string
@@ -809,95 +919,32 @@ function FlavorCard({ title, subtitle, description, cta, href, gradient, type }:
   type: 'webapp' | 'widget'
 }) {
   return (
-    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-gray-300 transition">
+    <div className="bg-white border border-gray-200 rounded-xl sm:rounded-2xl overflow-hidden hover:border-gray-300 hover:shadow-lg transition-all duration-300">
       {type === 'webapp' ? (
-        <div className={`bg-gradient-to-r ${gradient} p-4`}>
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            {/* Dashboard Header */}
-            <div className="bg-white border-b border-gray-200 px-4 py-3">
-              <div className="flex items-center gap-3">
-                <BrandLogo size={16} />
-                <input
-                  type="text"
-                  defaultValue="feedkit"
-                  className="px-2 py-1 border border-gray-300 rounded text-xs flex-1 max-w-[100px]"
-                  readOnly
-                />
-      
-              </div>
-            </div>
-            
-            
-            {/* Dashboard Content */}
-            <div className="p-4">
-              <div className="flex gap-3">
-                {/* Sidebar */}
-                <div className="w-16 flex-shrink-0">
-                  <div className="text-[8px] font-semibold text-gray-500 uppercase mb-2">FILTER</div>
-                  <div className="space-y-1">
-                    {['All', 'Issue', 'Idea', 'Other'].map((label, i) => (
-                      <div
-                        key={label}
-                        className={`px-2 py-1 rounded text-[8px] font-medium ${
-                          i === 0 ? 'bg-[#2563EB]/10 text-[#2563EB]' : 'text-gray-600'
-                        }`}
-                      >
-                        {label}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                
-                {/* Feedback Cards */}
-                <div className="flex-1 space-y-2">
-                  <div className="text-xs font-bold text-gray-900 mb-2">Feedback</div>
-                  <div className="bg-white border border-gray-200 rounded p-3">
-                    <div className="flex items-start justify-between mb-2">
-                      <span className="px-1.5 py-0.5 bg-orange-100 text-orange-700 rounded text-[8px] font-medium">Idea</span>
-                      <span className="text-[8px] text-gray-500">2 hours ago</span>
-                    </div>
-                    <p className="text-[10px] text-gray-900 mb-2 leading-tight">Add dark mode support for better UX</p>
-                    <div className="flex items-center gap-2 text-[8px] text-gray-600 mb-2">
-                      <span>USER: user@example.com</span>
-                      <span>DEVICE: Desktop</span>
-                    </div>
-                    <div className="flex items-center justify-end gap-2">
-                      <button className="px-2 py-1 text-[8px] text-gray-700 bg-white border border-gray-300 rounded">Archive</button>
-                      <button className="px-2 py-1 text-[8px] text-[#2563EB] bg-[#2563EB]/10 rounded">Reply</button>
-                    </div>
-                  </div>
-                  <div className="bg-white border border-gray-200 rounded p-3">
-                    <div className="flex items-start justify-between mb-2">
-                      <span className="px-1.5 py-0.5 bg-red-100 text-red-700 rounded text-[8px] font-medium">Issue</span>
-                      <span className="text-[8px] text-gray-500">1 day ago</span>
-                    </div>
-                    <p className="text-[10px] text-gray-900 mb-2 leading-tight">Button not working on mobile</p>
-                    <div className="flex items-center gap-2 text-[8px] text-gray-600 mb-2">
-                      <span>USER: customer@site.com</span>
-                      <span>DEVICE: Mobile</span>
-                    </div>
-                    <div className="flex items-center justify-end gap-2">
-                      <button className="px-2 py-1 text-[8px] text-gray-700 bg-white border border-gray-300 rounded">Archive</button>
-                      <button className="px-2 py-1 text-[8px] text-[#2563EB] bg-[#2563EB]/10 rounded">Reply</button>
-                    </div>
-                  </div>
-            </div>
-            </div>
-            </div>
+        <div className={`bg-gradient-to-r ${gradient} p-3 sm:p-6`}>
+          <div className="bg-white rounded-lg sm:rounded-xl shadow-lg overflow-hidden border border-gray-200">
+            <Image
+              src="/Screenshot 2025-12-14 at 02.33.28.png"
+              alt="Feedkit dashboard preview"
+              width={1600}
+              height={900}
+              className="w-full h-auto"
+              priority={false}
+            />
           </div>
-          </div>
+        </div>
       ) : (
-        <div className={`bg-gradient-to-br ${gradient} p-8 relative`} style={{ minHeight: '440px' }}>
+        <div className={`bg-gradient-to-br ${gradient} p-4 sm:p-8 relative`} style={{ minHeight: '320px' }}>
           <AnimatedWidgetDemo />
         </div>
       )}
-      <div className="p-6">
-        <h3 className="text-xl font-bold mb-1 text-gray-900">{title}</h3>
-        {subtitle && <p className="text-sm text-gray-600 mb-1 font-medium">{subtitle}</p>}
-        <p className="text-gray-600 mb-4 text-sm">{description}</p>
-        <Link href={href} className="text-[#2563EB] font-medium hover:text-[#059669] text-sm inline-flex items-center gap-1">
+      <div className="p-4 sm:p-6">
+        <h3 className="text-lg sm:text-xl font-bold mb-1 text-gray-900">{title}</h3>
+        {subtitle && <p className="text-xs sm:text-sm text-gray-600 mb-1 font-medium">{subtitle}</p>}
+        <p className="text-gray-600 mb-3 sm:mb-4 text-xs sm:text-sm">{description}</p>
+        <Link href={href} className="text-[#2563EB] font-medium hover:text-[#1D4ED8] text-xs sm:text-sm inline-flex items-center gap-1 group">
           {cta}
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </Link>
@@ -995,40 +1042,6 @@ function StatusIcon() {
   )
 }
 
-function ProductShowcase({ title, description, linkText, imageSide, gradient }: {
-  title: string
-  description: string
-  linkText: string
-  imageSide: 'left' | 'right'
-  gradient: string
-}) {
-  return (
-    <div className={`grid md:grid-cols-2 gap-12 items-center mb-16 sm:mb-20`}>
-      {imageSide === 'left' && (
-        <div className={`bg-gradient-to-br ${gradient} rounded-xl p-8 h-96 flex items-center justify-center relative overflow-hidden shadow-xl`}>
-          <div className="absolute inset-0 bg-white/90 backdrop-blur-sm rounded-xl m-4 border border-gray-200 shadow-lg"></div>
-          <div className="relative z-10 text-gray-400 text-sm font-medium">Feedkit—{title}</div>
-        </div>
-      )}
-      <div className={imageSide === 'left' ? 'md:order-2' : ''}>
-        <h3 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-900">{title}</h3>
-        <p className="text-lg text-gray-600 mb-6 leading-relaxed">{description}</p>
-              <Link href="#" className="text-[#2563EB] font-medium hover:text-[#1D4ED8] inline-flex items-center gap-1 transition">
-                {linkText}
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-      </div>
-      {imageSide === 'right' && (
-        <div className={`bg-gradient-to-br ${gradient} rounded-xl p-8 h-96 flex items-center justify-center relative overflow-hidden shadow-xl`}>
-          <div className="absolute inset-0 bg-white/90 backdrop-blur-sm rounded-xl m-4 border border-gray-200 shadow-lg"></div>
-          <div className="relative z-10 text-gray-400 text-sm font-medium">Feedkit—{title}</div>
-        </div>
-      )}
-    </div>
-  )
-}
 
 
 function LifetimeDealCard() {
