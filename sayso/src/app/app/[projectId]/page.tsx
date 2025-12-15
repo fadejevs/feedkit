@@ -44,6 +44,25 @@ export default function AppProjectPage() {
   const [projectName, setProjectName] = useState('feedkit')
   const [isLoading, setIsLoading] = useState(true)
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false)
+  const [widgetSettings, setWidgetSettings] = useState<{ accentColor: string; customLogo: string | null; position: string } | null>(null)
+
+  const loadWidgetSettings = async () => {
+    try {
+      const response = await fetch(`/api/widget-settings/${projectId}`)
+      if (response.ok) {
+        const data = await response.json()
+        if (data.settings) {
+          setWidgetSettings({
+            accentColor: data.settings.accent_color || '#F97316',
+            customLogo: data.settings.custom_logo || null,
+            position: data.settings.position || 'bottom-right',
+          })
+        }
+      }
+    } catch (e) {
+      console.error('Failed to load widget settings:', e)
+    }
+  }
 
   const loadFeedback = async (isInitialLoad = false) => {
     try {
@@ -75,8 +94,8 @@ export default function AppProjectPage() {
           setIsLoading(false)
         }
       }
-    } catch (e) {
-      console.error('Failed to load feedback:', e)
+      } catch (e) {
+        console.error('Failed to load feedback:', e)
       if (isInitialLoad) {
         setIsLoading(false)
       }
@@ -86,6 +105,7 @@ export default function AppProjectPage() {
   useEffect(() => {
     setIsLoading(true)
     setHasLoadedOnce(false)
+    loadWidgetSettings()
     loadFeedback(true)
     // Refresh feedback every 5 seconds to catch new submissions (without loading state)
     const interval = setInterval(() => {
@@ -117,7 +137,7 @@ export default function AppProjectPage() {
 
   // Include mock feedback in counts if showing it
   const feedbackForCounts = shouldShowMock ? [...feedback, mockFeedback] : feedback
-  
+
   const filterCounts = {
     all: feedbackForCounts.filter(f => !f.archived).length,
     issue: feedbackForCounts.filter(f => f.type === 'issue' && !f.archived).length,
@@ -205,7 +225,7 @@ export default function AppProjectPage() {
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                          </svg>
+                </svg>
                           New Project
                         </button>
                       </div>
@@ -370,21 +390,268 @@ export default function AppProjectPage() {
           projectId={projectId}
           projectName={projectName}
           feedbackCount={feedback.filter(f => !f.archived).length}
-          onClose={() => setIsSettingsOpen(false)}
+          onClose={() => {
+            setIsSettingsOpen(false)
+            loadWidgetSettings() // Reload settings after closing
+          }}
         />
       )}
 
       {/* Feedback Widget */}
-      <FeedbackWidget projectId={projectId} position="bottom-right" />
+      <FeedbackWidget 
+        projectId={projectId} 
+        position={(widgetSettings?.position as any) || 'bottom-right'}
+        accentColor={widgetSettings?.accentColor}
+        customLogo={widgetSettings?.customLogo}
+      />
+    </div>
+  )
+}
+
+function WidgetPreview({ accentColor, customLogo, position }: { accentColor: string; customLogo: string | null; position: string }) {
+  return (
+    <div className="relative" style={{ transform: 'scale(0.7)', transformOrigin: 'bottom right' }}>
+      <div className="bg-white rounded-3xl shadow-lg w-[380px] border border-gray-200 overflow-hidden">
+        {/* Widget Header */}
+        <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+          <span className="text-sm font-medium text-gray-900">Share feedback</span>
+          <button className="text-gray-400 hover:text-gray-600">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        
+        {/* Type Selection */}
+        <div className="p-4">
+          <div className="grid grid-cols-3 gap-2 mb-4">
+            {['🐛', '💡', '💬'].map((emoji, i) => (
+              <button
+                key={i}
+                className="px-3 py-2 rounded-full text-sm font-medium border border-gray-200 hover:border-gray-300 transition"
+                style={i === 1 ? { borderColor: accentColor, backgroundColor: `${accentColor}15` } : {}}
+              >
+                {emoji}
+              </button>
+            ))}
+          </div>
+          
+          {/* Form */}
+          <textarea
+            placeholder="Tell us what you think..."
+            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm resize-none"
+            rows={3}
+          />
+          
+          {/* Footer */}
+          <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+            {customLogo ? (
+              <div className="flex items-center justify-center flex-1">
+                <img src={customLogo} alt="Logo" className="h-4 w-auto object-contain" />
+              </div>
+            ) : (
+              <div className="flex items-center gap-1 text-xs text-gray-500">
+                <BrandLogo size={12} />
+                <span>Powered by Feedkit</span>
+              </div>
+            )}
+            <button
+              className="px-4 py-1.5 rounded-lg text-white text-sm font-medium"
+              style={{ backgroundColor: accentColor }}
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
 
 function SettingsModal({ projectId, projectName, feedbackCount, onClose }: { projectId: string; projectName: string; feedbackCount: number; onClose: () => void }) {
-  
+  const [accentColor, setAccentColor] = useState('#F97316')
+  const [customLogo, setCustomLogo] = useState<string | null>(null)
+  const [position, setPosition] = useState<'bottom-right' | 'bottom-left' | 'top-right' | 'top-left'>('bottom-right')
+  const [isLoading, setIsLoading] = useState(true)
+  const [isSaving, setIsSaving] = useState(false)
+  const [logoPreview, setLogoPreview] = useState<string | null>(null)
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [showError, setShowError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
+  const [isUploadingLogo, setIsUploadingLogo] = useState(false)
+
+  // Load settings on mount
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const response = await fetch(`/api/widget-settings/${projectId}`)
+        if (response.ok) {
+          const data = await response.json()
+          if (data.settings) {
+            setAccentColor(data.settings.accent_color || '#F97316')
+            setCustomLogo(data.settings.custom_logo || null)
+            setPosition(data.settings.position || 'bottom-right')
+            if (data.settings.custom_logo) {
+              setLogoPreview(data.settings.custom_logo)
+            }
+          }
+        }
+      } catch (e) {
+        console.error('Failed to load settings:', e)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    loadSettings()
+  }, [projectId])
+
+  const handleSave = async () => {
+    setIsSaving(true)
+    try {
+      const response = await fetch(`/api/widget-settings/${projectId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          accent_color: accentColor,
+          custom_logo: customLogo,
+          position: position,
+        }),
+      })
+      
+      if (response.ok) {
+        // Show success indicator
+        setShowSuccess(true)
+        setTimeout(() => {
+          setShowSuccess(false)
+          onClose()
+        }, 1500)
+      } else {
+        const error = await response.json()
+        showErrorToast(error.error || 'Failed to save settings')
+      }
+    } catch (e) {
+      console.error('Failed to save settings:', e)
+      showErrorToast('Failed to save settings. Please try again.')
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const showErrorToast = (message: string) => {
+    setErrorMessage(message)
+    setShowError(true)
+    setTimeout(() => {
+      setShowError(false)
+    }, 3000)
+  }
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      showErrorToast('Please select an image file')
+      return
+    }
+
+    // Validate file size
+    if (file.size > 2 * 1024 * 1024) {
+      showErrorToast('Image size should be less than 2MB')
+      return
+    }
+
+    setIsUploadingLogo(true)
+
+    try {
+      // Show preview immediately
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setLogoPreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+
+      // Upload to server
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('projectId', projectId)
+
+      const response = await fetch('/api/upload-logo', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setCustomLogo(data.url)
+        setLogoPreview(data.url)
+      } else {
+        const error = await response.json()
+        showErrorToast(error.error || error.details || 'Failed to upload logo')
+        setLogoPreview(null)
+      }
+    } catch (error) {
+      console.error('Failed to upload logo:', error)
+      showErrorToast('Failed to upload logo. Please try again.')
+      setLogoPreview(null)
+    } finally {
+      setIsUploadingLogo(false)
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div className="bg-white rounded-xl shadow-2xl p-8">
+          <div className="w-8 h-8 border-4 border-[#2563EB]/20 border-t-[#2563EB] rounded-full animate-spin"></div>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      {/* Success Toast */}
+      {showSuccess && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 pointer-events-none">
+          <div className="bg-white rounded-xl shadow-2xl border border-gray-200 px-6 py-4 flex items-center gap-3 animate-in fade-in zoom-in duration-300">
+            <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <div>
+              <p className="font-medium text-gray-900">Settings saved!</p>
+              <p className="text-sm text-gray-500">Your widget has been updated</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Error Toast */}
+      {showError && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 pointer-events-none">
+          <div className="bg-white rounded-xl shadow-2xl border border-red-200 px-6 py-4 flex items-center gap-3 animate-in fade-in zoom-in duration-300">
+            <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </div>
+            <div>
+              <p className="font-medium text-gray-900">Error</p>
+              <p className="text-sm text-gray-500">{errorMessage}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div 
+        className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-900">Settings</h2>
@@ -426,6 +693,125 @@ function SettingsModal({ projectId, projectName, feedbackCount, onClose }: { pro
                   <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200 transition">
                     Save
                   </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Widget Customization */}
+          <div className="bg-white rounded-lg border border-gray-200 p-5">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Widget Customization</h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Settings */}
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Accent Color</label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="color"
+                      value={accentColor}
+                      onChange={(e) => setAccentColor(e.target.value)}
+                      className="w-16 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={accentColor}
+                      onChange={(e) => setAccentColor(e.target.value)}
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm font-mono"
+                      placeholder="#F97316"
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">Color used for buttons and highlights</p>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Custom Logo</label>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3">
+                      <div className="w-16 h-16 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50 overflow-hidden relative">
+                        {isUploadingLogo ? (
+                          <div className="w-6 h-6 border-2 border-[#2563EB]/20 border-t-[#2563EB] rounded-full animate-spin"></div>
+                        ) : logoPreview ? (
+                          <img src={logoPreview} alt="Logo preview" className="w-full h-full object-contain" />
+                        ) : (
+                          <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                        )}
+                      </div>
+                      <div className="flex-1 flex gap-2">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileUpload}
+                          disabled={isUploadingLogo}
+                          className="hidden"
+                          id="logo-upload"
+                        />
+                        <label
+                          htmlFor="logo-upload"
+                          className={`flex-1 block px-3 py-2 border border-gray-300 rounded-lg text-sm text-center transition ${
+                            isUploadingLogo 
+                              ? 'opacity-50 cursor-not-allowed' 
+                              : 'cursor-pointer hover:bg-gray-50'
+                          }`}
+                        >
+                          {isUploadingLogo ? 'Uploading...' : 'Upload'}
+                        </label>
+                        {logoPreview && (
+                          <button
+                            onClick={() => {
+                              setCustomLogo(null)
+                              setLogoPreview(null)
+                            }}
+                            className="px-3 py-2 border border-red-300 text-red-600 rounded-lg text-sm hover:bg-red-50 transition"
+                          >
+                            Remove
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-500">Upload an image file (max 2MB)</p>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Widget Position</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {(['bottom-right', 'bottom-left', 'top-right', 'top-left'] as const).map((pos) => (
+                      <button
+                        key={pos}
+                        onClick={() => setPosition(pos)}
+                        className={`px-4 py-2 border rounded-lg text-sm transition ${
+                          position === pos
+                            ? 'border-[#2563EB] bg-[#2563EB]/10 text-[#2563EB]'
+                            : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                        }`}
+                      >
+                        {pos.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-2">
+                  <button
+                    onClick={handleSave}
+                    disabled={isSaving}
+                    className="w-full px-4 py-2 bg-[#2563EB] text-white rounded-lg text-sm font-medium hover:bg-[#1D4ED8] transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isSaving ? 'Saving...' : 'Save Widget Settings'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Preview */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Live Preview</label>
+                <div className="relative border border-gray-200 rounded-lg p-4 bg-gray-50 h-[400px] overflow-hidden">
+                  <div className="absolute bottom-4 right-4">
+                    <WidgetPreview accentColor={accentColor} customLogo={customLogo} position={position} />
+                  </div>
                 </div>
               </div>
             </div>
@@ -523,23 +909,23 @@ function FeedbackCard({ feedback, onArchive, onReply, isDemo = false, isArchived
       )}
 
       {isExpanded && hasDetails && (
-        <div className="grid grid-cols-3 gap-4 text-sm text-gray-600 mb-4">
-          {feedback.userEmail && (
-            <div>
-              <span className="font-medium">USER:</span> {feedback.userEmail}
-            </div>
-          )}
-          {feedback.device && (
-            <div>
-              <span className="font-medium">DEVICE:</span> {feedback.device}
-            </div>
-          )}
-          {feedback.page && (
-            <div>
-              <span className="font-medium">PAGE:</span> {feedback.page}
-            </div>
-          )}
-        </div>
+      <div className="grid grid-cols-3 gap-4 text-sm text-gray-600 mb-4">
+        {feedback.userEmail && (
+          <div>
+            <span className="font-medium">USER:</span> {feedback.userEmail}
+          </div>
+        )}
+        {feedback.device && (
+          <div>
+            <span className="font-medium">DEVICE:</span> {feedback.device}
+          </div>
+        )}
+        {feedback.page && (
+          <div>
+            <span className="font-medium">PAGE:</span> {feedback.page}
+          </div>
+        )}
+      </div>
       )}
 
       <div className="flex items-center justify-between gap-3">
@@ -560,8 +946,8 @@ function FeedbackCard({ feedback, onArchive, onReply, isDemo = false, isArchived
           </button>
         )}
         <div className="flex items-center gap-3 ml-auto">
-          <button
-            onClick={onArchive}
+        <button
+          onClick={onArchive}
             className={`px-4 py-2 text-sm rounded-lg transition ${
               isArchived
                 ? 'text-white bg-gray-600 border border-gray-600 hover:bg-gray-700'
@@ -569,15 +955,15 @@ function FeedbackCard({ feedback, onArchive, onReply, isDemo = false, isArchived
             }`}
           >
             {isArchived ? 'Unarchive' : 'Archive'}
+        </button>
+        {feedback.userEmail && (
+          <button
+            onClick={onReply}
+            className="px-4 py-2 text-sm text-[#2563EB] bg-[#2563EB]/10 rounded-lg hover:bg-[#2563EB]/20 transition"
+          >
+            Reply with Mail
           </button>
-          {feedback.userEmail && (
-            <button
-              onClick={onReply}
-              className="px-4 py-2 text-sm text-[#2563EB] bg-[#2563EB]/10 rounded-lg hover:bg-[#2563EB]/20 transition"
-            >
-              Reply with Mail
-            </button>
-          )}
+        )}
         </div>
       </div>
     </div>

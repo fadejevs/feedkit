@@ -1,6 +1,5 @@
 {
-  "/app/[projectId]/page": "app/app/[projectId]/page.js",
-  "/page": "app/page.js",
-  "/api/feedback/[projectId]/route": "app/api/feedback/[projectId]/route.js",
-  "/_not-found/page": "app/_not-found/page.js"
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/stripe/checkout-lifetime/route": "app/api/stripe/checkout-lifetime/route.js",
+  "/page": "app/page.js"
 }

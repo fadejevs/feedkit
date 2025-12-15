@@ -39,7 +39,7 @@ function LandingPageContent() {
         <div className="text-center max-w-4xl mx-auto">
           <h1 className="text-3xl xs:text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-4 sm:mb-6 text-gray-900 leading-[1.1]">
             Build more of what<br />
-            customers want
+            your users want
           </h1>
           <p className="text-base sm:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-2">
             Capture, organize, and announce product feedback in one place.
@@ -86,7 +86,7 @@ function LandingPageContent() {
           <div className="relative p-4 sm:p-6 lg:p-8">
             <div className="max-w-5xl mx-auto overflow-hidden rounded-2xl border border-gray-100 shadow-lg bg-white">
               <Image
-                src="/Screenshot 2025-12-14 at 02.33.28.png"
+                src="/Screenshot 2025-12-15 at 14.06.08.png"
                 alt="Feedkit dashboard preview"
                 width={1600}
                 height={900}
@@ -1117,7 +1117,7 @@ function LifetimeDealCard() {
       
       <div className="mb-4 relative z-10">
         <div className="flex items-baseline gap-2 mb-2">
-          <span className="text-4xl sm:text-5xl font-bold text-slate-900">€59</span>
+          <span className="text-4xl sm:text-5xl font-bold text-slate-900">€39</span>
         </div>
         <div className="flex items-center gap-2 text-sm text-slate-600 mb-1">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

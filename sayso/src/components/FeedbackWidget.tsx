@@ -6,9 +6,11 @@ type FeedbackType = 'issue' | 'idea' | 'other'
 interface FeedbackWidgetProps {
   projectId?: string
   position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left'
+  accentColor?: string
+  customLogo?: string | null
 }
 
-export function FeedbackWidget({ projectId, position = 'bottom-right' }: FeedbackWidgetProps) {
+export function FeedbackWidget({ projectId, position = 'bottom-right', accentColor = '#F97316', customLogo = null }: FeedbackWidgetProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedType, setSelectedType] = useState<FeedbackType | null>(null)
   const [feedback, setFeedback] = useState('')
@@ -197,8 +199,14 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
                     value={feedback}
                     onChange={(e) => setFeedback(e.target.value)}
                     placeholder="Describe your feedback..."
-                    className="w-full h-24 px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:border-orange-500/50 focus:bg-white resize-none text-sm text-gray-900 placeholder:text-gray-400 transition-all duration-200 box-border"
-                    style={{ maxWidth: '100%' }}
+                    className="w-full h-24 px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:bg-white resize-none text-sm text-gray-900 placeholder:text-gray-400 transition-all duration-200 box-border"
+                    style={{ maxWidth: '100%', '--accent-color': accentColor } as React.CSSProperties & { '--accent-color': string }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = `${accentColor}80`
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = ''
+                    }}
                     autoFocus
                   />
                 </div>
@@ -257,7 +265,8 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
                   <button
                     onClick={handleSubmit}
                     disabled={!feedback.trim() || isSubmitting}
-                    className="px-5 py-2.5 bg-gray-900 text-white rounded-full font-medium hover:bg-gray-800 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed text-sm active:scale-95"
+                    className="px-5 py-2.5 text-white rounded-full font-medium hover:opacity-90 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed text-sm active:scale-95"
+                    style={{ backgroundColor: accentColor }}
                   >
                     {isSubmitting ? (
                       <span className="flex items-center gap-2">
@@ -279,21 +288,27 @@ export function FeedbackWidget({ projectId, position = 'bottom-right' }: Feedbac
           {/* Footer */}
           {!submitted && (
             <div className="px-6 pb-4 pt-2 border-t border-gray-100 bg-white/95 flex-shrink-0">
-              <p className="text-[11px] text-gray-500 flex items-center justify-center gap-1.5">
-                <span>Powered by</span>
-                <svg
-                  width="14"
-                  height="9"
-                  viewBox="0 0 28 12"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="inline-block"
-                >
-                  <circle cx="6" cy="6" r="5" fill="#374151" />
-                  <polygon points="17,0.5 23.5,11.5 11,11.5" fill="#9CA3AF" />
-                </svg>
-                <span className="font-medium text-gray-600">Feedkit</span>
-              </p>
+              {customLogo ? (
+                <div className="flex items-center justify-center">
+                  <img src={customLogo} alt="Logo" className="h-4 w-auto object-contain" />
+                </div>
+              ) : (
+                <p className="text-[11px] text-gray-500 flex items-center justify-center gap-1.5">
+                  <span>Powered by</span>
+                  <svg
+                    width="14"
+                    height="9"
+                    viewBox="0 0 28 12"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="inline-block"
+                  >
+                    <circle cx="6" cy="6" r="5" fill="#374151" />
+                    <polygon points="17,0.5 23.5,11.5 11,11.5" fill="#9CA3AF" />
+                  </svg>
+                  <span className="font-medium text-gray-600">Feedkit</span>
+                </p>
+              )}
             </div>
           )}
         </div>
