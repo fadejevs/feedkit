@@ -109,14 +109,13 @@ export function IntegrationModal({ isOpen, onClose, projectId }: IntegrationModa
   const getCodeSnippet = (integrationId: string) => {
     switch (integrationId) {
       case 'html':
-        return `<iframe 
-  src="${productionBaseUrl}/widget?projectId=${projectId}&pos=bottom-right" 
-  style="width:400px;height:520px;border:0;" 
-  allow="clipboard-read; clipboard-write"
-  title="Feedback Widget"
-></iframe>
+        return `<script 
+  src="${productionBaseUrl}/widget.js?pid=${projectId}" 
+  defer
+></script>
 
-<!-- Add this before closing </body> tag -->`
+<!-- Add this before closing </body> tag -->
+<!-- The widget will automatically appear on your site -->`
       
       case 'react':
         return `import { FeedbackWidget } from '@feedkit/react'

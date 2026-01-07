@@ -9,6 +9,17 @@ import { FeedbackWidget } from '@/components/FeedbackWidget'
 import { Footer } from '@/components/Footer'
 import { BrandLogo } from '@/components/BrandLogo'
 import { useAuth } from '@/hooks/useAuth'
+import { 
+  HiOutlineLightningBolt, 
+  HiOutlineGlobeAlt, 
+  HiOutlineShieldCheck,
+  HiOutlineViewGrid,
+  HiOutlineLockClosed,
+  HiOutlineCube,
+  HiOutlineTranslate,
+  HiOutlineColorSwatch,
+  HiOutlineRefresh
+} from 'react-icons/hi'
 
 function LandingPageContent() {
   const { user } = useAuth()
@@ -26,28 +37,28 @@ function LandingPageContent() {
       </div>
 
       {/* Hero Section */}
-      <section id="home" className="relative z-10 w-full pt-12 pb-2 sm:pt-24 sm:pb-6 overflow-hidden min-h-[480px] sm:min-h-[650px]">
+      <section id="home" className="relative z-10 w-full pt-16 pb-8 sm:pt-24 sm:pb-12 md:pt-32 md:pb-16 overflow-hidden min-h-[500px] sm:min-h-[600px] md:min-h-[700px]">
         {/* Animated Background - covers entire hero section */}
         <div className="absolute inset-0 w-full h-full">
           <AnimatedBackground />
           </div>
         
         {/* Background decorative circle */}
-        <div className="absolute top-0 left-0 w-[400px] sm:w-[900px] h-[400px] sm:h-[900px] bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-50 rounded-full -translate-x-[30%] -translate-y-[30%] opacity-30 blur-3xl z-0" />
+        <div className="absolute top-0 left-0 w-[400px] sm:w-[600px] md:w-[900px] h-[400px] sm:h-[600px] md:h-[900px] bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-50 rounded-full -translate-x-[30%] -translate-y-[30%] opacity-30 blur-3xl z-0" />
         
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
         <div className="text-center max-w-4xl mx-auto">
-          <h1 className="text-3xl xs:text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-4 sm:mb-6 text-gray-900 leading-[1.1]">
-            Build more of what<br />
-            customers want
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-5 sm:mb-6 md:mb-8 text-gray-900 leading-[1.1] px-2">
+            Instant channel to your<br className="hidden sm:block" />
+            <span className="sm:hidden"> </span>customers needs
           </h1>
-          <p className="text-base sm:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-2">
-            Capture, organize, and announce product feedback in one place.
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-8 sm:mb-10 md:mb-12 max-w-2xl mx-auto leading-relaxed px-4 sm:px-2">
+            Capture, organize, and announce feedback in one place.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-4 px-4 sm:px-0">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 mb-6 sm:mb-8 px-4 sm:px-0 max-w-md sm:max-w-none mx-auto">
             <Link 
               href="/dashboard" 
-              className="w-full sm:w-auto px-6 py-3 rounded-lg bg-[#2563EB] text-white font-medium hover:bg-[#1D4ED8] transition text-base inline-flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 py-3.5 sm:py-3 rounded-lg bg-[#2563EB] text-white font-medium hover:bg-[#1D4ED8] transition text-base sm:text-base inline-flex items-center justify-center gap-2 shadow-lg shadow-[#2563EB]/20 sm:shadow-md"
             >
               Start for free
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -55,8 +66,10 @@ function LandingPageContent() {
               </svg>
             </Link>
             <button
-              onClick={scrollToDemo}
-              className="w-full sm:w-auto px-6 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 font-medium hover:bg-gray-50 transition text-base inline-flex items-center justify-center gap-3"
+              onClick={() => {
+                window.open('', '_blank')
+              }}
+              className="w-full sm:w-auto px-8 py-3.5 sm:py-3 rounded-lg border border-gray-300 bg-white text-gray-900 font-medium hover:bg-gray-50 transition text-base sm:text-base inline-flex items-center justify-center gap-3 shadow-sm"
             >
               <div className="w-6 h-6 rounded-full border-2 border-gray-900 flex items-center justify-center flex-shrink-0">
                 <svg className="w-3 h-3 text-gray-900 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
@@ -64,10 +77,10 @@ function LandingPageContent() {
                 </svg>
               </div>
               <span>Watch the demo</span>
-              <span className="text-gray-500 text-sm hidden xs:inline">15s</span>
+              <span className="text-gray-500 text-sm hidden sm:inline">15s</span>
             </button>
           </div>
-          <p className="text-xs sm:text-sm text-gray-500">
+          <p className="text-sm sm:text-base text-gray-500 px-4">
             14-day free trial. No credit card required.
           </p>
         </div>
@@ -121,8 +134,8 @@ function LandingPageContent() {
 
 
       {/* Two Flavors Section */}
-      <section id="product" className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1 sm:py-2">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-5xl mx-auto">
+      <section id="product" className="relative max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 max-w-5xl mx-auto">
           <FlavorCard
             title="Feedkit web app"
             description="Capture, plan and publish ideas on the web."
@@ -187,16 +200,16 @@ function LandingPageContent() {
       </section> */}
 
       {/* Features Grid Section */}
-      <section id="features" className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
+      <section id="features" className="relative max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
         {/* Background gradient with complementary colors */}
-        <div className="absolute top-0 right-0 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-gradient-to-br from-blue-100 via-indigo-50 to-orange-50 rounded-full -translate-y-1/2 translate-x-1/2 opacity-20 blur-3xl" />
+        <div className="absolute top-0 right-0 w-[300px] sm:w-[500px] md:w-[600px] h-[300px] sm:h-[500px] md:h-[600px] bg-gradient-to-br from-blue-100 via-indigo-50 to-orange-50 rounded-full -translate-y-1/2 translate-x-1/2 opacity-20 blur-3xl" />
         
-        <div className="relative text-center mb-8 sm:mb-16 px-2">
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-4 text-gray-900 leading-tight">
+        <div className="relative text-center mb-10 sm:mb-12 md:mb-16 px-4 sm:px-2">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold mb-4 sm:mb-6 text-gray-900 leading-tight">
             Built for teams that want to ship better products, faster.
           </h2>
             </div>
-        <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
+        <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 max-w-5xl mx-auto">
           <FeatureItem 
             icon={<InlineAdminIcon />} 
             title="One Dashboard" 
@@ -236,59 +249,120 @@ function LandingPageContent() {
         </div>
       </section>
 
+      {/* Widget Integration Showcase */}
+      <section id="implementation" className="bg-gray-50 py-12 sm:py-16 md:py-20">
+        <div className="max-w-5xl mx-auto px-5 sm:px-6 lg:px-8">
+          <div className="text-center mb-10 sm:mb-12 md:mb-16 px-2">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold mb-4 sm:mb-6 text-gray-900 leading-tight">
+              Integrate in seconds, not hours
+            </h2>
+            <p className="text-base sm:text-lg md:text-lg text-gray-600 max-w-2xl mx-auto px-4 sm:px-0">
+              Add our widget to any website with a single line of code. No complex setup, no dependencies.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-200 overflow-hidden mb-8 sm:mb-10">
+            <div className="bg-gray-900 px-4 sm:px-6 py-3 flex items-center gap-2">
+              <div className="flex gap-1.5">
+                <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div className="w-3 h-3 rounded-full bg-green-500"></div>
+              </div>
+              <span className="text-gray-400 text-xs sm:text-sm ml-2">Integration Code</span>
+            </div>
+            <div className="p-5 sm:p-6 md:p-8">
+              <div className="space-y-5 sm:space-y-6">
+                <div>
+                  <p className="text-sm sm:text-base text-gray-500 mb-3 font-medium">Step 1: Add the script tag</p>
+                  <div className="bg-gray-50 rounded-lg p-4 sm:p-5 overflow-x-auto -mx-1 sm:mx-0">
+                    <code className="text-xs sm:text-sm text-gray-800 whitespace-pre-wrap break-words">
+                      <span className="text-purple-600">&lt;script</span>{' '}
+                      <span className="text-blue-600">src</span>=
+                      <span className="text-green-600">"https://feedkit.co/widget.js?pid=YOUR_PROJECT_ID"</span>{' '}
+                      <span className="text-blue-600">defer</span>
+                      <span className="text-purple-600">&gt;&lt;/script&gt;</span>
+                    </code>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm sm:text-base text-gray-500 mb-3 font-medium">Step 2: That's it! 🎉</p>
+                  <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                    The widget will automatically appear on your site. Replace <span className="font-mono text-xs sm:text-sm bg-gray-100 px-1.5 py-0.5 rounded">YOUR_PROJECT_ID</span> with your actual project ID from the dashboard.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6 md:gap-8">
+            <div className="bg-white rounded-lg p-6 sm:p-6 md:p-8 border border-gray-200 text-center">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4 sm:mb-5">
+                <HiOutlineLightningBolt className="w-6 h-6 sm:w-7 sm:h-7 text-blue-600" />
+              </div>
+              <h3 className="font-semibold text-base sm:text-lg text-gray-900 mb-2 sm:mb-3">One Line of Code</h3>
+              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">Copy and paste. No npm installs or build steps.</p>
+            </div>
+            <div className="bg-white rounded-lg p-6 sm:p-6 md:p-8 border border-gray-200 text-center">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-4 sm:mb-5">
+                <HiOutlineGlobeAlt className="w-6 h-6 sm:w-7 sm:h-7 text-orange-600" />
+              </div>
+              <h3 className="font-semibold text-base sm:text-lg text-gray-900 mb-2 sm:mb-3">Works Everywhere</h3>
+              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">React, Vue, WordPress, HTML—works on any platform.</p>
+            </div>
+            <div className="bg-white rounded-lg p-6 sm:p-6 md:p-8 border border-gray-200 text-center">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4 sm:mb-5">
+                <HiOutlineShieldCheck className="w-6 h-6 sm:w-7 sm:h-7 text-green-600" />
+              </div>
+              <h3 className="font-semibold text-base sm:text-lg text-gray-900 mb-2 sm:mb-3">Zero Maintenance</h3>
+              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">Updates happen automatically. No version management needed.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Integrations Section */}
-      <section id="integrations" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
-        <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-gray-900 leading-tight">Integrations</h2>
-          <p className="text-base sm:text-lg text-gray-600">
+      <section id="integrations" className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
+        <div className="text-center mb-10 sm:mb-12 md:mb-16 px-2">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold mb-4 sm:mb-6 text-gray-900 leading-tight">Integrations</h2>
+          <p className="text-base sm:text-lg md:text-lg text-gray-600 px-4 sm:px-0">
             Connect Feedkit to the tools that you already use.
           </p>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-5 md:gap-6 mb-8">
           {integrations.slice(0, 12).map((integration) => (
             <IntegrationCard key={integration.name} name={integration.name} description={integration.description} />
           ))}
         </div>
-        <div className="text-center">
-          <button className="px-6 py-2 rounded-lg bg-gray-50 border border-gray-200 text-gray-700 font-medium hover:bg-gray-100 transition text-sm">
-            Show more
-          </button>
-        </div>
+
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="bg-white py-12 sm:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-gray-900 leading-tight">Pricing</h2>
+      <section id="pricing" className="bg-white py-12 sm:py-16 md:py-20">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+          <div className="text-center mb-10 sm:mb-12 md:mb-16 px-2">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold mb-4 sm:mb-6 text-gray-900 leading-tight">Pricing</h2>
         </div>
 
-          <div className="flex justify-center max-w-4xl mx-auto">
+          <div className="flex justify-center max-w-4xl mx-auto px-4 sm:px-0">
             <LifetimeDealCard />
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="bg-white py-12 sm:py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight text-gray-900">
+      <section className="bg-white py-12 sm:py-16 md:py-20">
+        <div className="max-w-4xl mx-auto px-5 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold mb-8 sm:mb-10 md:mb-12 leading-tight text-gray-900 px-4 sm:px-0">
             Start managing customer feedback — today.
           </h2>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 sm:gap-4 max-w-sm sm:max-w-none mx-auto">
             <Link 
               href="/dashboard" 
-              className="px-6 py-3 rounded-lg bg-[#F97316] text-white font-medium hover:bg-[#EA580C] shadow-sm shadow-[#F97316]/30 transition text-base"
+              className="w-full sm:w-auto px-8 py-3.5 sm:py-3 rounded-lg bg-[#F97316] text-white font-medium hover:bg-[#EA580C] shadow-lg shadow-[#F97316]/30 sm:shadow-md transition text-base"
             >
               Get Started
             </Link>
-            <Link 
-              href="#" 
-              className="px-6 py-3 rounded-lg border border-gray-300 text-gray-900 font-medium hover:bg-gray-50 transition text-base"
-            >
-              Request a demo
-          </Link>
+      
           </div>
         </div>
       </section>
@@ -717,33 +791,23 @@ function FlavorCard({ title, subtitle, description, cta, href, gradient, type }:
   return (
     <div className="bg-white border border-gray-200 rounded-xl sm:rounded-2xl overflow-hidden hover:border-gray-300 hover:shadow-lg transition-all duration-300">
       {type === 'webapp' ? (
-        <div className={`bg-gradient-to-r ${gradient} p-3 sm:p-6 relative overflow-hidden`} style={{ minHeight: '320px', maxHeight: '420px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div className="bg-white rounded-lg sm:rounded-xl shadow-lg overflow-hidden border border-gray-200 w-full" style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0' }}>
-            <div className="relative w-full" style={{ maxHeight: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Image
-                src="/Screenshot 2025-12-15 at 14.06.08.png"
-                alt="Feedkit dashboard preview"
-                width={1600}
-                height={900}
-                className="w-auto h-auto max-w-full max-h-full"
-                style={{ objectFit: 'contain' }}
-                priority={false}
-              />
-            </div>
+        <div className={`bg-gradient-to-r ${gradient} p-3 sm:p-4 md:p-5 relative overflow-hidden min-h-[280px] sm:min-h-[300px] md:min-h-[320px] max-h-[320px] flex items-center justify-center`}>
+          <div className="bg-white rounded-lg sm:rounded-xl shadow-lg overflow-hidden border border-gray-200 w-full h-full flex flex-col max-h-full">
+            <DashboardShowcase />
           </div>
         </div>
       ) : (
-        <div className={`bg-gradient-to-br ${gradient} p-4 sm:p-8 relative overflow-hidden`} style={{ minHeight: '320px', maxHeight: '420px' }}>
+        <div className={`bg-gradient-to-br ${gradient} p-4 sm:p-6 md:p-8 relative overflow-hidden`} style={{ minHeight: '280px', maxHeight: '420px' }}>
           <AnimatedWidgetDemo />
         </div>
       )}
-      <div className="p-4 sm:p-6">
-        <h3 className="text-lg sm:text-xl font-bold mb-1 text-gray-900">{title}</h3>
-        {subtitle && <p className="text-xs sm:text-sm text-gray-600 mb-1 font-medium">{subtitle}</p>}
-        <p className="text-gray-600 mb-3 sm:mb-4 text-xs sm:text-sm">{description}</p>
-        <Link href={href} className="text-[#2563EB] font-medium hover:text-[#1D4ED8] text-xs sm:text-sm inline-flex items-center gap-1 group">
+      <div className="p-5 sm:p-6 md:p-7">
+        <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3 text-gray-900">{title}</h3>
+        {subtitle && <p className="text-xs sm:text-sm md:text-base text-gray-600 mb-2 font-medium">{subtitle}</p>}
+        <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-5 leading-relaxed">{description}</p>
+        <Link href={href} className="text-[#2563EB] font-medium hover:text-[#1D4ED8] text-sm sm:text-base inline-flex items-center gap-1.5 group">
           {cta}
-          <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </Link>
@@ -777,68 +841,108 @@ function TestimonialCard({ quote, author, role, avatar }: { quote: string; autho
   )
 }
 
+function DashboardShowcase() {
+  return (
+    <div className="flex h-full w-full overflow-hidden">
+      {/* Filter Sidebar */}
+      <aside className="w-16 sm:w-20 md:w-24 flex-shrink-0 bg-gray-50 border-r border-gray-200 p-1.5 sm:p-2">
+        <h2 className="text-[7px] sm:text-[8px] md:text-[9px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5 sm:mb-2 px-0.5">FILTER</h2>
+        <div className="space-y-1">
+          {[
+            { label: 'All', count: 8, active: true, color: '#2563EB' },
+            { label: 'Bug', emoji: '🐛', count: 3, color: '#EF4444' },
+            { label: 'Idea', emoji: '💡', count: 4, color: '#F97316' },
+            { label: 'Other', emoji: '💬', count: 1, color: '#6B7280' },
+          ].map((filter, i) => (
+            <button
+              key={i}
+              className={`w-full flex items-center justify-between px-1 sm:px-1.5 py-0.5 sm:py-1 rounded text-[8px] sm:text-[9px] md:text-[10px] font-medium transition ${
+                filter.active
+                  ? 'bg-[#2563EB]/10 text-[#2563EB]'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <div className="flex items-center gap-1">
+                {filter.emoji ? (
+                  <span className="text-[9px] sm:text-[10px]">{filter.emoji}</span>
+                ) : (
+                  <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full" style={{ backgroundColor: filter.color }} />
+                )}
+                <span className="truncate">{filter.label}</span>
+              </div>
+              <span className="text-gray-500 text-[8px] sm:text-[9px]">{filter.count}</span>
+            </button>
+          ))}
+        </div>
+      </aside>
+
+      {/* Feedback List */}
+      <main className="flex-1 overflow-y-auto p-2 sm:p-2.5 md:p-3">
+        <h2 className="text-xs sm:text-sm md:text-base font-bold text-gray-900 mb-2 sm:mb-2.5">Feedback</h2>
+        <div className="space-y-1.5 sm:space-y-2">
+          {[
+            { type: 'idea', emoji: '💡', message: 'Add dark mode support for better UX at night', time: '2m ago', color: '#F97316' },
+            { type: 'bug', emoji: '🐛', message: 'Button not working on mobile devices', time: '15m ago', color: '#EF4444' },
+            { type: 'idea', emoji: '💡', message: 'Export to CSV feature would be helpful', time: '1h ago', color: '#F97316' },
+            { type: 'other', emoji: '💬', message: 'Love the new dashboard design!', time: '3h ago', color: '#6B7280' },
+          ].map((item, i) => (
+            <div key={i} className="bg-gray-50 rounded-lg p-1.5 sm:p-2 border border-gray-200 hover:border-gray-300 transition">
+              <div className="flex items-start gap-1.5 sm:gap-2">
+                <div className={`w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 rounded-md flex items-center justify-center text-xs sm:text-sm flex-shrink-0`} style={{ backgroundColor: `${item.color}15` }}>
+                  <span>{item.emoji}</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[9px] sm:text-[10px] md:text-xs font-medium text-gray-900 mb-0.5 sm:mb-1 line-clamp-2 leading-tight">{item.message}</p>
+                  <p className="text-[8px] sm:text-[9px] text-gray-400">{item.time}</p>
+                </div>
+                <button className="text-[8px] sm:text-[9px] text-gray-400 hover:text-gray-600 flex-shrink-0 hidden sm:block">
+                  Archive
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </main>
+    </div>
+  )
+}
+
 function FeatureItem({ icon, title, description, color }: { icon: React.ReactNode; title: string; description: string; color?: string }) {
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 hover:border-opacity-60 hover:shadow-md transition" style={{
+    <div className="bg-white border border-gray-200 rounded-lg p-5 sm:p-6 md:p-7 hover:border-opacity-60 hover:shadow-md transition" style={{
       borderColor: color ? `${color}30` : undefined
     }}>
-      <div className="mb-3" style={{ color: color || '#10B981' }}>
+      <div className="mb-4 sm:mb-5" style={{ color: color || '#10B981' }}>
         {icon}
       </div>
-      <h3 className="font-semibold text-lg mb-2 text-gray-900">{title}</h3>
-      <p className="text-gray-600 leading-relaxed text-sm">{description}</p>
+      <h3 className="font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3 text-gray-900">{title}</h3>
+      <p className="text-gray-600 leading-relaxed text-sm sm:text-base">{description}</p>
     </div>
   )
 }
 
 function InlineAdminIcon() {
-  return (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
-      <rect x="2" y="4" width="20" height="16" rx="2" strokeWidth={1.5} fill="none" />
-      <rect x="6" y="8" width="8" height="4" rx="1" strokeWidth={1.5} fill="none" />
-    </svg>
-  )
+  return <HiOutlineViewGrid className="w-6 h-6" />
 }
 
 function SSOIcon() {
-  return (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-    </svg>
-  )
+  return <HiOutlineLockClosed className="w-6 h-6" />
 }
 
 function WidgetIcon() {
-  return (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-    </svg>
-  )
+  return <HiOutlineCube className="w-6 h-6" />
 }
 
 function TranslationIcon() {
-  return (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
-    </svg>
-  )
+  return <HiOutlineTranslate className="w-6 h-6" />
 }
 
 function ThemeIcon() {
-  return (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-    </svg>
-  )
+  return <HiOutlineColorSwatch className="w-6 h-6" />
 }
 
 function StatusIcon() {
-  return (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-    </svg>
-  )
+  return <HiOutlineRefresh className="w-6 h-6" />
 }
 
 
@@ -881,28 +985,28 @@ function LifetimeDealCard() {
   }
 
   return (
-    <div className="relative rounded-2xl sm:rounded-3xl p-8 sm:p-10 border-2 border-gray-200 bg-white text-slate-900 shadow-xl shadow-black/5 transform hover:scale-[1.01] transition-all duration-300 overflow-visible max-w-2xl w-full">
+    <div className="relative rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border-2 border-gray-200 bg-white text-slate-900 shadow-xl shadow-black/5 transform hover:scale-[1.01] transition-all duration-300 overflow-visible max-w-2xl w-full mx-4 sm:mx-0">
       <div className="absolute inset-0 bg-gradient-to-br from-[#2563EB]/5 via-[#7C3AED]/5 to-[#F97316]/5 rounded-2xl sm:rounded-3xl pointer-events-none" />
       
       {/* Ribbon Badge */}
-      <div className="absolute -top-3 right-6 bg-[#F97316] text-white px-5 py-1.5 rounded-full text-xs font-bold shadow-lg shadow-[#F97316]/40 z-20">
+      <div className="absolute -top-2 sm:-top-3 right-4 sm:right-6 bg-[#F97316] text-white px-4 sm:px-5 py-1 sm:py-1.5 rounded-full text-xs font-bold shadow-lg shadow-[#F97316]/40 z-20">
         LIMITED TIME
       </div>
       
       {/* Header Section */}
-      <div className="relative z-10 mb-8">
-        <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-4">Lifetime Deal</h3>
+      <div className="relative z-10 mb-6 sm:mb-8">
+        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 mb-4 sm:mb-5">Lifetime Deal</h3>
         
         {/* Pricing Display */}
-        <div className="mb-6">
-          <div className="flex items-baseline gap-3 mb-3">
-            <span className="text-5xl sm:text-6xl font-bold text-slate-900">€39</span>
-            <span className="text-lg sm:text-xl text-slate-500 font-medium">one-time</span>
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-baseline gap-2 sm:gap-3 mb-3">
+            <span className="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900">€39</span>
+            <span className="text-base sm:text-lg md:text-xl text-slate-500 font-medium">one-time</span>
           </div>
         </div>
         
         {/* Description */}
-        <p className="text-base sm:text-lg text-slate-700 leading-relaxed mb-8">
+        <p className="text-sm sm:text-base md:text-lg text-slate-700 leading-relaxed mb-6 sm:mb-8">
           Get lifetime access to all Pro features with a one-time payment. Perfect for long-term projects and teams.
         </p>
       </div>
@@ -911,7 +1015,7 @@ function LifetimeDealCard() {
       <button
         onClick={handleLifetimePurchase}
         disabled={isProcessing}
-        className="relative z-10 w-full text-center py-4 rounded-xl font-semibold text-base transition mb-8 bg-gradient-to-r from-[#111827] to-slate-800 text-white hover:from-slate-800 hover:to-[#111827] shadow-lg shadow-black/10 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
+        className="relative z-10 w-full text-center py-3.5 sm:py-4 rounded-xl font-semibold text-sm sm:text-base transition mb-6 sm:mb-8 bg-gradient-to-r from-[#111827] to-slate-800 text-white hover:from-slate-800 hover:to-[#111827] shadow-lg shadow-black/10 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
       >
         {isProcessing ? (
           <span className="flex items-center justify-center gap-2">
@@ -927,19 +1031,19 @@ function LifetimeDealCard() {
       </button>
       
       {/* Features Section */}
-      <div className="relative z-10 border-t border-gray-200 pt-6">
-        <h4 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">What's Included</h4>
-        <ul className="space-y-4">
+      <div className="relative z-10 border-t border-gray-200 pt-5 sm:pt-6">
+        <h4 className="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4 sm:mb-5">What's Included</h4>
+        <ul className="space-y-3 sm:space-y-4">
           {[
             'Unlimited feedback submissions',
             'All Pro features included',
             'Lifetime updates & support',
             'No account limitations',
           ].map((f, i) => (
-            <li key={i} className="flex items-start gap-3 text-base text-slate-800">
-              <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#2563EB]/10 flex items-center justify-center mt-0.5">
+            <li key={i} className="flex items-start gap-3 text-sm sm:text-base text-slate-800">
+              <div className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#2563EB]/10 flex items-center justify-center mt-0.5">
                 <svg
-                  className="w-4 h-4 text-[#2563EB]"
+                  className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#2563EB]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

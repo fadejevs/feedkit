@@ -62,14 +62,11 @@ export function Navbar() {
             <Link href="/#product" className="text-sm text-gray-700 hover:text-gray-900 transition">
               Product
             </Link>
-            <Link href="/#product" className="text-sm text-gray-700 hover:text-gray-900 transition">
-              Widget
-            </Link>
             <Link href="/#pricing" className="text-sm text-gray-700 hover:text-gray-900 transition">
               Pricing
             </Link>
-            <Link href="/#features" className="text-sm text-gray-700 hover:text-gray-900 transition">
-              Features
+            <Link href="/#implementation" className="text-sm text-gray-700 hover:text-gray-900 transition">
+              Implementation
             </Link>
           </div>
 
@@ -219,13 +216,6 @@ export function Navbar() {
               Product
             </Link>
             <Link 
-              href="/#product" 
-              className="block px-4 py-2.5 text-base text-gray-700 hover:bg-gray-50 rounded-lg" 
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Widget
-            </Link>
-            <Link 
               href="/#pricing" 
               className="block px-4 py-2.5 text-base text-gray-700 hover:bg-gray-50 rounded-lg" 
               onClick={() => setMobileMenuOpen(false)}
@@ -233,11 +223,11 @@ export function Navbar() {
               Pricing
             </Link>
             <Link 
-              href="/#features" 
+              href="/#implementation" 
               className="block px-4 py-2.5 text-base text-gray-700 hover:bg-gray-50 rounded-lg" 
               onClick={() => setMobileMenuOpen(false)}
             >
-              Features
+              Implementation
             </Link>
             {!user && (
               <div className="pt-2 border-t border-gray-100 mt-2">
