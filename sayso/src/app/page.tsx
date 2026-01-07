@@ -39,7 +39,7 @@ function LandingPageContent() {
         <div className="text-center max-w-4xl mx-auto">
           <h1 className="text-3xl xs:text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-4 sm:mb-6 text-gray-900 leading-[1.1]">
             Build more of what<br />
-            your users want
+            customers want
           </h1>
           <p className="text-base sm:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-2">
             Capture, organize, and announce product feedback in one place.
@@ -950,7 +950,7 @@ function FlavorCard({ title, subtitle, description, cta, href, gradient, type }:
         <div className={`bg-gradient-to-r ${gradient} p-3 sm:p-6`}>
           <div className="bg-white rounded-lg sm:rounded-xl shadow-lg overflow-hidden border border-gray-200">
             <Image
-              src="/Screenshot 2025-12-14 at 02.33.28.png"
+              src="/Screenshot 2025-12-15 at 14.06.08.png"
               alt="Feedkit dashboard preview"
               width={1600}
               height={900}
@@ -1108,37 +1108,41 @@ function LifetimeDealCard() {
   }
 
   return (
-    <div className="relative rounded-2xl p-6 sm:p-8 pt-10 sm:pt-12 border border-gray-200/80 bg-white/98 text-slate-900 shadow-lg shadow-black/5 transform hover:scale-[1.005] transition-all duration-300 overflow-visible">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#2563EB]/6 via-[#7C3AED]/6 to-[#F97316]/6 pointer-events-none" />
+    <div className="relative rounded-2xl sm:rounded-3xl p-8 sm:p-10 border-2 border-gray-200 bg-white text-slate-900 shadow-xl shadow-black/5 transform hover:scale-[1.01] transition-all duration-300 overflow-visible max-w-2xl w-full">
+      <div className="absolute inset-0 bg-gradient-to-br from-[#2563EB]/5 via-[#7C3AED]/5 to-[#F97316]/5 rounded-2xl sm:rounded-3xl pointer-events-none" />
+      
       {/* Ribbon Badge */}
-      <div className="absolute top-3 right-4 bg-[#F97316] text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg shadow-[#F97316]/40">
+      <div className="absolute -top-3 right-6 bg-[#F97316] text-white px-5 py-1.5 rounded-full text-xs font-bold shadow-lg shadow-[#F97316]/40 z-20">
         LIMITED TIME
       </div>
       
-      <div className="mb-4 relative z-10">
-        <div className="flex items-baseline gap-2 mb-2">
-          <span className="text-4xl sm:text-5xl font-bold text-slate-900">€39</span>
+      {/* Header Section */}
+      <div className="relative z-10 mb-8">
+        <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-4">Lifetime Deal</h3>
+        
+        {/* Pricing Display */}
+        <div className="mb-6">
+          <div className="flex items-baseline gap-3 mb-3">
+            <span className="text-5xl sm:text-6xl font-bold text-slate-900">€39</span>
+            <span className="text-lg sm:text-xl text-slate-500 font-medium">one-time</span>
+          </div>
         </div>
-        <div className="flex items-center gap-2 text-sm text-slate-600 mb-1">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span className="font-medium">Single payment</span>
-        </div>
+        
+        {/* Description */}
+        <p className="text-base sm:text-lg text-slate-700 leading-relaxed mb-8">
+          Get lifetime access to all Pro features with a one-time payment. Perfect for long-term projects and teams.
+        </p>
       </div>
       
-      <p className="text-sm sm:text-base mb-6 text-slate-700 relative z-10">
-        Get lifetime access to all Pro features with a one-time payment. Perfect for long-term projects.
-      </p>
-      
+      {/* CTA Button */}
       <button
         onClick={handleLifetimePurchase}
         disabled={isProcessing}
-        className="relative z-10 w-full text-center py-3 rounded-lg font-medium transition mb-6 bg-[#111827] text-white hover:bg-[#0f172a] shadow-sm shadow-black/10 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="relative z-10 w-full text-center py-4 rounded-xl font-semibold text-base transition mb-8 bg-gradient-to-r from-[#111827] to-slate-800 text-white hover:from-slate-800 hover:to-[#111827] shadow-lg shadow-black/10 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
       >
         {isProcessing ? (
           <span className="flex items-center justify-center gap-2">
-            <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+            <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
@@ -1149,29 +1153,35 @@ function LifetimeDealCard() {
         )}
       </button>
       
-      <ul className="space-y-3 relative z-10">
-        {[
-          'Unlimited feedback submissions',
-          'All Pro features included',
-          'Lifetime updates & support',
-          'No account limitations',
-        ].map((f, i) => (
-          <li key={i} className="flex items-start gap-2 text-sm text-slate-800">
-            <svg
-              className="w-5 h-5 flex-shrink-0 mt-0.5 text-[#2563EB]"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-            <span>{f}</span>
-          </li>
-        ))}
-      </ul>
+      {/* Features Section */}
+      <div className="relative z-10 border-t border-gray-200 pt-6">
+        <h4 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">What's Included</h4>
+        <ul className="space-y-4">
+          {[
+            'Unlimited feedback submissions',
+            'All Pro features included',
+            'Lifetime updates & support',
+            'No account limitations',
+          ].map((f, i) => (
+            <li key={i} className="flex items-start gap-3 text-base text-slate-800">
+              <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#2563EB]/10 flex items-center justify-center mt-0.5">
+                <svg
+                  className="w-4 h-4 text-[#2563EB]"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <span className="leading-relaxed">{f}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
       
       {/* Decorative accent */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#F97316] via-[#FB923C] to-[#F97316] rounded-b-xl"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#F97316] via-[#FB923C] to-[#F97316] rounded-b-2xl sm:rounded-b-3xl"></div>
     </div>
   )
 }
