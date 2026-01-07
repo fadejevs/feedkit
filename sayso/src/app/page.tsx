@@ -351,7 +351,7 @@ function LandingPageContent() {
 
       {/* CTA Section */}
       <section className="bg-white py-12 sm:py-16 md:py-20">
-        <div className="max-w-4xl mx-auto px-5 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-3xl mx-auto px-5 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold mb-8 sm:mb-10 md:mb-12 leading-tight text-gray-900 px-4 sm:px-0">
             Start managing customer feedback — today.
           </h2>

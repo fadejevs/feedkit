@@ -1,16 +1,15 @@
+"use client"
+import { Suspense } from 'react'
 import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 
-export const metadata = {
-  title: 'Terms of Service',
-  description: 'Terms of Service for Feedkit',
-}
-
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
+      <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200" />}>
+        <Navbar />
+      </Suspense>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
         <div className="prose prose-gray max-w-none">
           <h1 className="text-3xl sm:text-4xl font-bold mb-8 text-gray-900">Terms of Service</h1>
