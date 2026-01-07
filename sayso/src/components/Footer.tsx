@@ -14,11 +14,11 @@ export function Footer({ showProjectId = false, projectId }: FooterProps) {
         <div className="flex flex-col sm:hidden items-center gap-4 text-sm text-gray-600">
           <div className="flex items-center gap-3">
             <span className="font-medium">Feedkit</span>
-            <span className="text-gray-400">© 2025</span>
+            <span className="text-gray-400">© 2026</span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-            <Link href="#" className="hover:text-gray-900 transition">Terms</Link>
-            <Link href="#" className="hover:text-gray-900 transition">Privacy</Link>
+            <Link href="/terms" className="hover:text-gray-900 transition">Terms</Link>
+            <Link href="/privacy" className="hover:text-gray-900 transition">Privacy</Link>
             <span className="text-gray-500">Made with ❤️ in Riga</span>
           </div>
           <div>
@@ -31,13 +31,13 @@ export function Footer({ showProjectId = false, projectId }: FooterProps) {
           {/* Left side - Brand */}
           <div className="flex items-center gap-3 text-sm text-gray-600">
             <span className="font-medium">Feedkit</span>
-            <span className="text-gray-400">© 2025</span>
+            <span className="text-gray-400">© 2026</span>
           </div>
           
           {/* Center - Links centered (absolutely positioned) */}
           <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center gap-x-4 text-sm text-gray-600">
-            <Link href="#" className="hover:text-gray-900 transition">Terms</Link>
-            <Link href="#" className="hover:text-gray-900 transition">Privacy</Link>
+            <Link href="/terms" className="hover:text-gray-900 transition">Terms</Link>
+            <Link href="/privacy" className="hover:text-gray-900 transition">Privacy</Link>
             <span className="text-gray-500">Made with ❤️ in Riga</span>
           </div>
           

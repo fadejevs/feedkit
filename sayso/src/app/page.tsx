@@ -236,99 +236,6 @@ function LandingPageContent() {
         </div>
       </section>
 
-      {/* Feature Showcase Sections */}
-      <section className="bg-gray-50 py-12 sm:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Feature 1: Collect Feedback */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-20 items-center mb-16 sm:mb-24">
-            <div className="order-2 md:order-1">
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-gray-900">Collect feedback without friction</h3>
-              <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 leading-relaxed">
-                Drop a sleek widget on your site. Users report bugs, share ideas, or leave feedback in seconds — no forms, no friction.
-              </p>
-              <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base text-gray-600">
-                <li className="flex items-center gap-3">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                  Bug reports, ideas & general feedback
-                </li>
-                <li className="flex items-center gap-3">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                  Screenshot attachments
-                </li>
-                <li className="flex items-center gap-3">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                  Works on any website
-                </li>
-              </ul>
-        </div>
-            <div className="relative order-1 md:order-2">
-              <div className="bg-gradient-to-br from-orange-100/50 via-white to-orange-50/50 rounded-2xl sm:rounded-3xl p-4 sm:p-8 relative overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(249,115,22,0.1),transparent_50%)]" />
-                <WidgetMockup />
-              </div>
-            </div>
-          </div>
-
-          {/* Feature 2: Dashboard */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-20 items-center mb-16 sm:mb-24">
-            <div className="order-2">
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-gray-900">All feedback in one place</h3>
-              <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 leading-relaxed">
-                Every piece of feedback lands in your dashboard. Filter by type, search, archive, and never lose track of what users are saying.
-              </p>
-              <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base text-gray-600">
-                <li className="flex items-center gap-3">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                  Filter by bugs, ideas, or other
-                </li>
-                <li className="flex items-center gap-3">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                  Search and organize feedback
-                </li>
-                <li className="flex items-center gap-3">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                  Archive when done
-                </li>
-              </ul>
-        </div>
-            <div className="order-1 relative">
-              <div className="bg-gradient-to-br from-blue-100/50 via-white to-indigo-50/50 rounded-2xl sm:rounded-3xl p-3 sm:p-6 relative overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(37,99,235,0.1),transparent_50%)]" />
-                <DashboardMockup />
-        </div>
-            </div>
-          </div>
-
-          {/* Feature 3: Insights */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-20 items-center">
-            <div className="order-2 md:order-1">
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-gray-900">Build what users actually want</h3>
-              <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 leading-relaxed">
-                Stop guessing. See which features users request most, what bugs are causing pain, and prioritize your roadmap with confidence.
-              </p>
-              <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base text-gray-600">
-                <li className="flex items-center gap-3">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                  See feedback trends at a glance
-                </li>
-                <li className="flex items-center gap-3">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                  Know what to build next
-                </li>
-                <li className="flex items-center gap-3">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                  Data-driven product decisions
-                </li>
-              </ul>
-            </div>
-            <div className="relative order-1 md:order-2">
-              <div className="bg-gray-50/50 rounded-2xl sm:rounded-3xl p-3 sm:p-6 relative overflow-hidden">
-                <InsightsMockup />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Integrations Section */}
       <section id="integrations" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
@@ -394,143 +301,6 @@ function LandingPageContent() {
 }
 
 // Visual Mockup Components for Feature Sections
-function WidgetMockup() {
-  return (
-    <div className="relative mx-auto max-w-[280px] sm:max-w-[320px]">
-      {/* Widget Card */}
-      <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-        <div className="px-4 sm:px-5 pt-4 sm:pt-5 pb-3 sm:pb-4">
-          <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-            <span className="text-lg sm:text-xl">💡</span>
-            <div>
-              <h4 className="font-semibold text-gray-900 text-xs sm:text-sm">Share an idea</h4>
-              <p className="text-[10px] sm:text-xs text-gray-500">We love new ideas</p>
-            </div>
-          </div>
-          <div className="bg-gray-50 rounded-lg sm:rounded-xl p-2 sm:p-3 mb-3 sm:mb-4">
-            <p className="text-xs sm:text-sm text-gray-600">Add dark mode support for better UX at night...</p>
-          </div>
-          <div className="flex justify-between items-center">
-            <div className="flex gap-2">
-              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                <svg className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Z" /></svg>
-              </div>
-            </div>
-            <button className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-900 text-white text-xs sm:text-sm font-medium rounded-full">Send</button>
-          </div>
-        </div>
-        <div className="px-4 sm:px-5 py-2 border-t border-gray-100 text-center">
-          <p className="text-[9px] sm:text-[10px] text-gray-400">Powered by Feedkit</p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function DashboardMockup() {
-  return (
-    <div className="bg-white rounded-lg sm:rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-100 px-3 sm:px-4 py-2 sm:py-3 flex items-center gap-2 sm:gap-3">
-        <div className="flex-shrink-0">
-          <BrandLogo size={20} />
-        </div>
-        <span className="font-semibold text-xs sm:text-sm text-gray-900">Feedkit</span>
-        <div className="ml-auto flex gap-1 sm:gap-2">
-          <div className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-blue-50 text-blue-600 text-[10px] sm:text-xs rounded font-medium">All</div>
-          <div className="px-1.5 sm:px-2 py-0.5 sm:py-1 text-gray-500 text-[10px] sm:text-xs rounded hidden xs:block">Bugs</div>
-          <div className="px-1.5 sm:px-2 py-0.5 sm:py-1 text-gray-500 text-[10px] sm:text-xs rounded hidden xs:block">Ideas</div>
-        </div>
-      </div>
-      {/* Feedback Items */}
-      <div className="p-2 sm:p-3 space-y-1.5 sm:space-y-2">
-        <FeedbackItemMockup type="idea" title="Dark mode support" time="2m ago" />
-        <FeedbackItemMockup type="bug" title="Button not working on mobile" time="15m ago" />
-        <FeedbackItemMockup type="idea" title="Export to CSV feature" time="1h ago" />
-        <FeedbackItemMockup type="other" title="Love the new dashboard!" time="3h ago" />
-      </div>
-    </div>
-  )
-}
-
-function FeedbackItemMockup({ type, title, time }: { type: 'bug' | 'idea' | 'other'; title: string; time: string }) {
-  const colors = {
-    bug: 'bg-red-50 text-red-600',
-    idea: 'bg-amber-50 text-amber-600',
-    other: 'bg-gray-50 text-gray-600'
-  }
-  const emojis = { bug: '🐛', idea: '💡', other: '💬' }
-  return (
-    <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gray-50/50 rounded-lg hover:bg-gray-50 transition">
-      <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-md sm:rounded-lg flex items-center justify-center text-xs sm:text-sm flex-shrink-0 ${colors[type]}`}>
-        {emojis[type]}
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-xs sm:text-sm font-medium text-gray-900 truncate">{title}</p>
-        <p className="text-[10px] sm:text-xs text-gray-400">{time}</p>
-      </div>
-      <button className="text-[10px] sm:text-xs text-gray-400 hover:text-gray-600 hidden xs:block">Archive</button>
-    </div>
-  )
-}
-
-function InsightsMockup() {
-  return (
-    <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-      {/* Header */}
-      <div className="px-4 sm:px-5 py-3 sm:py-4 border-b border-gray-100">
-        <h4 className="text-sm sm:text-base font-semibold text-gray-900">Insights</h4>
-      </div>
-      
-      {/* Stats Row */}
-      <div className="px-4 sm:px-5 py-3 sm:py-4">
-        <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-4 sm:mb-5">
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-3 sm:p-4 border border-blue-200/50">
-            <p className="text-xl sm:text-2xl font-bold text-blue-600 mb-0.5">24</p>
-            <p className="text-[10px] sm:text-xs text-blue-600/70">This week</p>
-          </div>
-          <div className="bg-gradient-to-br from-orange-50 to-orange-100/50 rounded-xl p-3 sm:p-4 border border-orange-200/50">
-            <p className="text-xl sm:text-2xl font-bold text-orange-600 mb-0.5">12</p>
-            <p className="text-[10px] sm:text-xs text-orange-600/70">Ideas</p>
-          </div>
-          <div className="bg-gradient-to-br from-red-50 to-red-100/50 rounded-xl p-3 sm:p-4 border border-red-200/50">
-            <p className="text-xl sm:text-2xl font-bold text-red-600 mb-0.5">8</p>
-            <p className="text-[10px] sm:text-xs text-red-600/70">Bugs</p>
-          </div>
-        </div>
-        
-        {/* Chart */}
-        <div className="bg-gray-50 rounded-xl p-3 sm:p-4 mb-4 sm:mb-5">
-          <p className="text-[10px] sm:text-xs text-gray-500 mb-3 sm:mb-4 font-medium">Feedback Trends</p>
-          <div className="flex items-end gap-1.5 sm:gap-2 h-16 sm:h-24">
-            {[40, 65, 45, 80, 55, 90, 70].map((h, i) => (
-              <div 
-                key={i} 
-                className="flex-1 rounded-t transition-all duration-300 hover:opacity-80" 
-                style={{ 
-                  height: `${h}%`,
-                  background: `linear-gradient(to top, ${i % 2 === 0 ? '#2563EB' : '#F97316'}, ${i % 2 === 0 ? '#3B82F6' : '#FB923C'})`
-                }} 
-              />
-            ))}
-          </div>
-          <div className="flex justify-between mt-2 sm:mt-3 text-[9px] sm:text-[10px] text-gray-400">
-            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
-          </div>
-        </div>
-        
-        {/* Top Request */}
-        <div className="bg-gradient-to-br from-orange-50 to-orange-100/30 rounded-xl p-3 sm:p-4 border border-orange-200/50">
-          <p className="text-[10px] sm:text-xs text-orange-600 font-medium mb-1 sm:mb-1.5 uppercase tracking-wide">🔥 Most requested</p>
-          <p className="text-xs sm:text-sm font-semibold text-gray-900 mb-0.5">Dark mode support</p>
-          <p className="text-[10px] sm:text-xs text-gray-600">Requested 8 times</p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-
 function IdeaCard({ votes, title, description, author, date, tags, badges }: {
   votes: number
   title: string
@@ -768,7 +538,7 @@ function AnimatedWidgetDemo({ size = 'default' }: { size?: 'default' | 'large' }
           </button>
         </div>
       ) : (
-        <div className={`rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] overflow-hidden overflow-x-hidden border border-white/20 transition-all duration-700 ease-out flex flex-col ${
+        <div className={`rounded-3xl overflow-hidden overflow-x-hidden border border-white/20 transition-all duration-700 ease-out flex flex-col ${
           state === 'success' ? 'bg-white' : 'bg-white/95 backdrop-blur-xl'
         }`} style={{
           animation: 'fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
@@ -947,18 +717,21 @@ function FlavorCard({ title, subtitle, description, cta, href, gradient, type }:
   return (
     <div className="bg-white border border-gray-200 rounded-xl sm:rounded-2xl overflow-hidden hover:border-gray-300 hover:shadow-lg transition-all duration-300">
       {type === 'webapp' ? (
-        <div className={`bg-gradient-to-r ${gradient} p-3 sm:p-6`}>
-          <div className="bg-white rounded-lg sm:rounded-xl shadow-lg overflow-hidden border border-gray-200">
-            <Image
-              src="/Screenshot 2025-12-15 at 14.06.08.png"
-              alt="Feedkit dashboard preview"
-              width={1600}
-              height={900}
-              className="w-full h-auto"
-              priority={false}
-            />
+        <div className={`bg-gradient-to-r ${gradient} p-3 sm:p-6 relative overflow-hidden`} style={{ minHeight: '320px', maxHeight: '420px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="bg-white rounded-lg sm:rounded-xl shadow-lg overflow-hidden border border-gray-200 w-full" style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0' }}>
+            <div className="relative w-full" style={{ maxHeight: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Image
+                src="/Screenshot 2025-12-15 at 14.06.08.png"
+                alt="Feedkit dashboard preview"
+                width={1600}
+                height={900}
+                className="w-auto h-auto max-w-full max-h-full"
+                style={{ objectFit: 'contain' }}
+                priority={false}
+              />
+            </div>
           </div>
-          </div>
+        </div>
       ) : (
         <div className={`bg-gradient-to-br ${gradient} p-4 sm:p-8 relative overflow-hidden`} style={{ minHeight: '320px', maxHeight: '420px' }}>
           <AnimatedWidgetDemo />
