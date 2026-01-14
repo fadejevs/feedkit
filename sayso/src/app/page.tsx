@@ -9,6 +9,7 @@ import { FeedbackWidget } from '@/components/FeedbackWidget'
 import { Footer } from '@/components/Footer'
 import { BrandLogo } from '@/components/BrandLogo'
 import { useAuth } from '@/hooks/useAuth'
+import { Button } from '@/components/ui/button'
 import { 
   HiOutlineLightningBolt, 
   HiOutlineGlobeAlt, 
@@ -37,53 +38,43 @@ function LandingPageContent() {
       </div>
 
       {/* Hero Section */}
-      <section id="home" className="relative z-10 w-full pt-16 pb-8 sm:pt-24 sm:pb-12 md:pt-32 md:pb-16 overflow-hidden min-h-[500px] sm:min-h-[600px] md:min-h-[700px]">
+      <section id="home" className="relative z-10 w-full pt-20 pb-16 sm:pt-28 sm:pb-20 md:pt-36 md:pb-24 overflow-hidden">
         {/* Animated Background - covers entire hero section */}
         <div className="absolute inset-0 w-full h-full">
           <AnimatedBackground />
-          </div>
-        
-        {/* Background decorative circle */}
-        <div className="absolute top-0 left-0 w-[400px] sm:w-[600px] md:w-[900px] h-[400px] sm:h-[600px] md:h-[900px] bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-50 rounded-full -translate-x-[30%] -translate-y-[30%] opacity-30 blur-3xl z-0" />
-        
-        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
-        <div className="text-center max-w-4xl mx-auto">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-5 sm:mb-6 md:mb-8 text-gray-900 leading-[1.1] px-2">
-            Instant channel to your<br className="hidden sm:block" />
-            <span className="sm:hidden"> </span>customers needs
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-8 sm:mb-10 md:mb-12 max-w-2xl mx-auto leading-relaxed px-4 sm:px-2">
-            Capture, organize, and announce feedback in one place.
-          </p>
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 mb-6 sm:mb-8 px-4 sm:px-0 max-w-md sm:max-w-none mx-auto">
-            <Link 
-              href="/dashboard" 
-              className="w-full sm:w-auto px-8 py-3.5 sm:py-3 rounded-lg bg-[#2563EB] text-white font-medium hover:bg-[#1D4ED8] transition text-base sm:text-base inline-flex items-center justify-center gap-2 shadow-lg shadow-[#2563EB]/20 sm:shadow-md"
-            >
-              Start for free
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
-            <button
-              onClick={() => {
-                window.open('', '_blank')
-              }}
-              className="w-full sm:w-auto px-8 py-3.5 sm:py-3 rounded-lg border border-gray-300 bg-white text-gray-900 font-medium hover:bg-gray-50 transition text-base sm:text-base inline-flex items-center justify-center gap-3 shadow-sm"
-            >
-              <div className="w-6 h-6 rounded-full border-2 border-gray-900 flex items-center justify-center flex-shrink-0">
-                <svg className="w-3 h-3 text-gray-900 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </div>
-              <span>Watch the demo</span>
-              <span className="text-gray-500 text-sm hidden sm:inline">15s</span>
-            </button>
-          </div>
-          <p className="text-sm sm:text-base text-gray-500 px-4">
-            14-day free trial. No credit card required.
-          </p>
         </div>
+        
+        <div className="relative z-10 max-w-4xl mx-auto px-5 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight mb-6 text-gray-900 leading-tight">
+              A better home for your customers needs
+            </h1>
+            <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+              Capture, organize, and announce feedback in one place.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+              <Button asChild size="lg">
+                <Link href="/dashboard">
+                  Get started
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => {
+                  window.open('', '_blank')
+                }}
+              >
+                See how it works
+              </Button>
+            </div>
+            <p className="text-sm text-gray-500">
+              14-day free trial · No credit card required
+            </p>
+          </div>
         </div>
       </section>
 
@@ -134,8 +125,8 @@ function LandingPageContent() {
 
 
       {/* Two Flavors Section */}
-      <section id="product" className="relative max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 max-w-5xl mx-auto">
+      <section id="product" className="relative max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 py-16 sm:py-20 md:py-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           <FlavorCard
             title="Feedkit web app"
             description="Capture, plan and publish ideas on the web."
@@ -200,16 +191,13 @@ function LandingPageContent() {
       </section> */}
 
       {/* Features Grid Section */}
-      <section id="features" className="relative max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
-        {/* Background gradient with complementary colors */}
-        <div className="absolute top-0 right-0 w-[300px] sm:w-[500px] md:w-[600px] h-[300px] sm:h-[500px] md:h-[600px] bg-gradient-to-br from-blue-100 via-indigo-50 to-orange-50 rounded-full -translate-y-1/2 translate-x-1/2 opacity-20 blur-3xl" />
-        
-        <div className="relative text-center mb-10 sm:mb-12 md:mb-16 px-4 sm:px-2">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold mb-4 sm:mb-6 text-gray-900 leading-tight">
+      <section id="features" className="relative max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 py-16 sm:py-20 md:py-24">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-gray-900 leading-tight">
             Built for teams that want to ship better products, faster.
           </h2>
-            </div>
-        <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 max-w-5xl mx-auto">
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
           <FeatureItem 
             icon={<InlineAdminIcon />} 
             title="One Dashboard" 
@@ -250,13 +238,13 @@ function LandingPageContent() {
       </section>
 
       {/* Widget Integration Showcase */}
-      <section id="implementation" className="bg-gray-50 py-12 sm:py-16 md:py-20">
+      <section id="implementation" className="bg-gray-50 py-16 sm:py-20 md:py-24">
         <div className="max-w-5xl mx-auto px-5 sm:px-6 lg:px-8">
-          <div className="text-center mb-10 sm:mb-12 md:mb-16 px-2">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold mb-4 sm:mb-6 text-gray-900 leading-tight">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-gray-900 leading-tight">
               Integrate in seconds, not hours
             </h2>
-            <p className="text-base sm:text-lg md:text-lg text-gray-600 max-w-2xl mx-auto px-4 sm:px-0">
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Add our widget to any website with a single line of code. No complex setup, no dependencies.
             </p>
           </div>
@@ -294,41 +282,41 @@ function LandingPageContent() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6 md:gap-8">
-            <div className="bg-white rounded-lg p-6 sm:p-6 md:p-8 border border-gray-200 text-center">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4 sm:mb-5">
-                <HiOutlineLightningBolt className="w-6 h-6 sm:w-7 sm:h-7 text-blue-600" />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="bg-white rounded-lg p-6 border border-gray-200 text-center">
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <HiOutlineLightningBolt className="w-6 h-6 text-blue-600" />
               </div>
-              <h3 className="font-semibold text-base sm:text-lg text-gray-900 mb-2 sm:mb-3">One Line of Code</h3>
-              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">Copy and paste. No npm installs or build steps.</p>
+              <h3 className="font-semibold text-lg text-gray-900 mb-2">One Line of Code</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">Copy and paste. No npm installs or build steps.</p>
             </div>
-            <div className="bg-white rounded-lg p-6 sm:p-6 md:p-8 border border-gray-200 text-center">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-4 sm:mb-5">
-                <HiOutlineGlobeAlt className="w-6 h-6 sm:w-7 sm:h-7 text-orange-600" />
+            <div className="bg-white rounded-lg p-6 border border-gray-200 text-center">
+              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <HiOutlineGlobeAlt className="w-6 h-6 text-orange-600" />
               </div>
-              <h3 className="font-semibold text-base sm:text-lg text-gray-900 mb-2 sm:mb-3">Works Everywhere</h3>
-              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">React, Vue, WordPress, HTML—works on any platform.</p>
+              <h3 className="font-semibold text-lg text-gray-900 mb-2">Works Everywhere</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">React, Vue, WordPress, HTML—works on any platform.</p>
             </div>
-            <div className="bg-white rounded-lg p-6 sm:p-6 md:p-8 border border-gray-200 text-center">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4 sm:mb-5">
-                <HiOutlineShieldCheck className="w-6 h-6 sm:w-7 sm:h-7 text-green-600" />
+            <div className="bg-white rounded-lg p-6 border border-gray-200 text-center">
+              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <HiOutlineShieldCheck className="w-6 h-6 text-green-600" />
               </div>
-              <h3 className="font-semibold text-base sm:text-lg text-gray-900 mb-2 sm:mb-3">Zero Maintenance</h3>
-              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">Updates happen automatically. No version management needed.</p>
+              <h3 className="font-semibold text-lg text-gray-900 mb-2">Zero Maintenance</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">Updates happen automatically. No version management needed.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Integrations Section */}
-      <section id="integrations" className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
-        <div className="text-center mb-10 sm:mb-12 md:mb-16 px-2">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold mb-4 sm:mb-6 text-gray-900 leading-tight">Integrations</h2>
-          <p className="text-base sm:text-lg md:text-lg text-gray-600 px-4 sm:px-0">
+      <section id="integrations" className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 py-16 sm:py-20 md:py-24">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-gray-900 leading-tight">Integrations</h2>
+          <p className="text-lg text-gray-600">
             Connect Feedkit to the tools that you already use.
           </p>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-5 md:gap-6 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
           {integrations.slice(0, 12).map((integration) => (
             <IntegrationCard key={integration.name} name={integration.name} description={integration.description} />
           ))}
@@ -337,33 +325,31 @@ function LandingPageContent() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="bg-white py-12 sm:py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
-          <div className="text-center mb-10 sm:mb-12 md:mb-16 px-2">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold mb-4 sm:mb-6 text-gray-900 leading-tight">Pricing</h2>
-        </div>
-
-          <div className="flex justify-center max-w-4xl mx-auto px-4 sm:px-0">
+      <section id="pricing" className="bg-white py-16 sm:py-20 md:py-24">
+        <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-gray-900 leading-tight">Pricing</h2>
+          </div>
+          <div className="flex justify-center max-w-2xl mx-auto">
             <LifetimeDealCard />
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="bg-white py-12 sm:py-16 md:py-20">
+      <section className="bg-white py-16 sm:py-20 md:py-24">
         <div className="max-w-3xl mx-auto px-5 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold mb-8 sm:mb-10 md:mb-12 leading-tight text-gray-900 px-4 sm:px-0">
+          <h2 className="text-4xl sm:text-5xl font-bold mb-8 leading-tight text-gray-900">
             Start managing customer feedback — today.
           </h2>
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 sm:gap-4 max-w-sm sm:max-w-none mx-auto">
-            <Link 
-              href="/dashboard" 
-              className="w-full sm:w-auto px-8 py-3.5 sm:py-3 rounded-lg bg-[#F97316] text-white font-medium hover:bg-[#EA580C] shadow-lg shadow-[#F97316]/30 sm:shadow-md transition text-base"
-            >
-              Get Started
-            </Link>
-      
+          <div className="flex items-center justify-center">
+            <Button asChild size="lg">
+              <Link href="/dashboard">
+                Get started free
+              </Link>
+            </Button>
           </div>
+          <p className="text-sm text-gray-500 mt-4">No credit card required</p>
         </div>
       </section>
 
@@ -789,28 +775,30 @@ function FlavorCard({ title, subtitle, description, cta, href, gradient, type }:
   type: 'webapp' | 'widget'
 }) {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl sm:rounded-2xl overflow-hidden hover:border-gray-300 hover:shadow-lg transition-all duration-300">
+    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-gray-300 hover:shadow-lg transition-all">
       {type === 'webapp' ? (
-        <div className={`bg-gradient-to-r ${gradient} p-3 sm:p-4 md:p-5 relative overflow-hidden min-h-[280px] sm:min-h-[300px] md:min-h-[320px] max-h-[320px] flex items-center justify-center`}>
-          <div className="bg-white rounded-lg sm:rounded-xl shadow-lg overflow-hidden border border-gray-200 w-full h-full flex flex-col max-h-full">
+        <div className={`bg-gradient-to-r ${gradient} p-4 relative overflow-hidden min-h-[300px] max-h-[320px] flex items-center justify-center`}>
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 w-full h-full flex flex-col max-h-full">
             <DashboardShowcase />
           </div>
         </div>
       ) : (
-        <div className={`bg-gradient-to-br ${gradient} p-4 sm:p-6 md:p-8 relative overflow-hidden`} style={{ minHeight: '280px', maxHeight: '420px' }}>
+        <div className={`bg-gradient-to-br ${gradient} p-6 relative overflow-hidden`} style={{ minHeight: '300px', maxHeight: '400px' }}>
           <AnimatedWidgetDemo />
         </div>
       )}
-      <div className="p-5 sm:p-6 md:p-7">
-        <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3 text-gray-900">{title}</h3>
-        {subtitle && <p className="text-xs sm:text-sm md:text-base text-gray-600 mb-2 font-medium">{subtitle}</p>}
-        <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-5 leading-relaxed">{description}</p>
-        <Link href={href} className="text-[#2563EB] font-medium hover:text-[#1D4ED8] text-sm sm:text-base inline-flex items-center gap-1.5 group">
-          {cta}
-          <svg className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </Link>
+      <div className="p-6">
+        <h3 className="text-xl font-bold mb-2 text-gray-900">{title}</h3>
+        {subtitle && <p className="text-sm text-gray-600 mb-2 font-medium">{subtitle}</p>}
+        <p className="text-sm text-gray-600 mb-4 leading-relaxed">{description}</p>
+        <Button variant="link" asChild className="p-0 h-auto">
+          <Link href={href}>
+            {cta}
+            <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
+        </Button>
       </div>
     </div>
   )
@@ -909,14 +897,12 @@ function DashboardShowcase() {
 
 function FeatureItem({ icon, title, description, color }: { icon: React.ReactNode; title: string; description: string; color?: string }) {
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-5 sm:p-6 md:p-7 hover:border-opacity-60 hover:shadow-md transition" style={{
-      borderColor: color ? `${color}30` : undefined
-    }}>
-      <div className="mb-4 sm:mb-5" style={{ color: color || '#10B981' }}>
+    <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition">
+      <div className="mb-4" style={{ color: color || '#2563EB' }}>
         {icon}
       </div>
-      <h3 className="font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3 text-gray-900">{title}</h3>
-      <p className="text-gray-600 leading-relaxed text-sm sm:text-base">{description}</p>
+      <h3 className="font-semibold text-lg mb-2 text-gray-900">{title}</h3>
+      <p className="text-gray-600 leading-relaxed text-sm">{description}</p>
     </div>
   )
 }
@@ -985,72 +971,68 @@ function LifetimeDealCard() {
   }
 
   return (
-    <div className="relative rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border-2 border-gray-200 bg-white text-slate-900 shadow-xl shadow-black/5 transform hover:scale-[1.01] transition-all duration-300 overflow-visible max-w-2xl w-full mx-4 sm:mx-0">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#2563EB]/5 via-[#7C3AED]/5 to-[#F97316]/5 rounded-2xl sm:rounded-3xl pointer-events-none" />
-      
+    <div className="relative rounded-2xl p-8 border border-gray-200 bg-white text-slate-900 shadow-lg overflow-visible max-w-lg w-full">
       {/* Ribbon Badge */}
-      <div className="absolute -top-2 sm:-top-3 right-4 sm:right-6 bg-[#F97316] text-white px-4 sm:px-5 py-1 sm:py-1.5 rounded-full text-xs font-bold shadow-lg shadow-[#F97316]/40 z-20">
+      <div className="absolute -top-3 right-6 bg-[#F97316] text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg z-20">
         LIMITED TIME
       </div>
       
       {/* Header Section */}
-      <div className="relative z-10 mb-6 sm:mb-8">
-        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 mb-4 sm:mb-5">Lifetime Deal</h3>
+      <div className="mb-6">
+        <h3 className="text-2xl font-bold text-slate-900 mb-4">Lifetime Deal</h3>
         
         {/* Pricing Display */}
-        <div className="mb-6 sm:mb-8">
-          <div className="flex items-baseline gap-2 sm:gap-3 mb-3">
-            <span className="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900">€39</span>
-            <span className="text-base sm:text-lg md:text-xl text-slate-500 font-medium">one-time</span>
+        <div className="mb-6">
+          <div className="flex items-baseline gap-2 mb-3">
+            <span className="text-5xl font-bold text-slate-900">€39</span>
+            <span className="text-lg text-slate-500 font-medium">one-time</span>
           </div>
         </div>
         
         {/* Description */}
-        <p className="text-sm sm:text-base md:text-lg text-slate-700 leading-relaxed mb-6 sm:mb-8">
+        <p className="text-base text-slate-700 leading-relaxed mb-6">
           Get lifetime access to all Pro features with a one-time payment. Perfect for long-term projects and teams.
         </p>
       </div>
       
       {/* CTA Button */}
-      <button
+      <Button
         onClick={handleLifetimePurchase}
         disabled={isProcessing}
-        className="relative z-10 w-full text-center py-3.5 sm:py-4 rounded-xl font-semibold text-sm sm:text-base transition mb-6 sm:mb-8 bg-gradient-to-r from-[#111827] to-slate-800 text-white hover:from-slate-800 hover:to-[#111827] shadow-lg shadow-black/10 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
+        className="w-full mb-6"
+        size="lg"
       >
         {isProcessing ? (
-          <span className="flex items-center justify-center gap-2">
+          <>
             <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
             Processing...
-          </span>
+          </>
         ) : (
           'Claim Lifetime Deal'
         )}
-      </button>
+      </Button>
       
       {/* Features Section */}
-      <div className="relative z-10 border-t border-gray-200 pt-5 sm:pt-6">
-        <h4 className="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4 sm:mb-5">What's Included</h4>
-        <ul className="space-y-3 sm:space-y-4">
+      <div className="border-t border-gray-200 pt-6">
+        <ul className="space-y-3">
           {[
             'Unlimited feedback submissions',
             'All Pro features included',
             'Lifetime updates & support',
             'No account limitations',
           ].map((f, i) => (
-            <li key={i} className="flex items-start gap-3 text-sm sm:text-base text-slate-800">
-              <div className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#2563EB]/10 flex items-center justify-center mt-0.5">
-                <svg
-                  className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#2563EB]"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
+            <li key={i} className="flex items-start gap-3 text-sm text-slate-800">
+              <svg
+                className="w-5 h-5 flex-shrink-0 mt-0.5 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
               <span className="leading-relaxed">{f}</span>
             </li>
           ))}
@@ -1058,7 +1040,7 @@ function LifetimeDealCard() {
       </div>
       
       {/* Decorative accent */}
-      <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#F97316] via-[#FB923C] to-[#F97316] rounded-b-2xl sm:rounded-b-3xl"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#F97316] rounded-b-2xl"></div>
     </div>
   )
 }

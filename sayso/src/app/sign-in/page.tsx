@@ -66,13 +66,13 @@ function SignInContent() {
         <Link href="/" className="inline-block mb-6">
           <BrandLogo size={28} showText={true} />
         </Link>
-        <h1 className="text-2xl font-semibold mb-2">Sign in to Feedkit</h1>
+        <h1 className="text-2xl font-semibold mb-2 text-gray-900">Sign in to Feedkit</h1>
         <p className="text-sm text-neutral-600 mb-6">Continue with your Google account for instant access.</p>
         
         <button
           onClick={handleGoogleSignIn}
           disabled={loading}
-          className="w-full px-4 py-3 rounded-lg bg-white border-2 border-neutral-300 hover:border-neutral-400 hover:bg-neutral-50 transition text-sm font-medium disabled:opacity-50 flex items-center justify-center gap-3"
+          className="w-full px-4 py-3 rounded-lg bg-white border-2 border-neutral-300 hover:border-neutral-400 hover:bg-neutral-50 transition text-sm font-medium text-gray-900 disabled:opacity-50 flex items-center justify-center gap-3"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
