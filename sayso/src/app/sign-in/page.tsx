@@ -36,13 +36,23 @@ function SignInContent() {
 
       // Get intent from query params (e.g., 'pro' for Pro plan checkout, 'free' for Free plan)
       const intent = searchParams?.get('intent')
-      const callbackUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000') + '/auth/callback' + (intent ? `?intent=${intent}` : '')
+      
+      // Store intent in localStorage to preserve it through OAuth redirect
+      if (intent) {
+        localStorage.setItem('signup_intent', intent)
+      }
+      
+      const callbackUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000') + '/auth/callback'
 
       // Real Google OAuth flow - this will redirect to Google
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: callbackUrl,
+          queryParams: {
+            // Pass intent through OAuth flow if possible
+            ...(intent && { intent }),
+          },
         },
       })
       

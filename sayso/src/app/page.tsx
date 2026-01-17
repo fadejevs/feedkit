@@ -30,6 +30,22 @@ function LandingPageContent() {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }
+
+  // Check if user just signed in and needs to be redirected to checkout
+  useEffect(() => {
+    if (user && typeof window !== 'undefined') {
+      const intent = localStorage.getItem('signup_intent')
+      if (intent === 'pro') {
+        // User signed up for Pro plan, redirect to checkout
+        localStorage.removeItem('signup_intent')
+        window.location.href = '/auth/callback?intent=pro'
+      } else if (intent === 'free') {
+        // User signed up for Free plan, clean up and let them stay
+        localStorage.removeItem('signup_intent')
+      }
+    }
+  }, [user])
+
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
       {/* Navigation */}

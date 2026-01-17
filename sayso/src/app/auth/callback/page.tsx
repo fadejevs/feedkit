@@ -22,7 +22,14 @@ function AuthCallbackContent() {
           const upgraded = searchParams?.get('upgraded') === '1'
           
           // Check if user signed in with intent to purchase Pro plan
-          const intent = searchParams?.get('intent')
+          // Try to get from URL params first, then localStorage (for OAuth redirect preservation)
+          let intent = searchParams?.get('intent')
+          if (!intent && typeof window !== 'undefined') {
+            intent = localStorage.getItem('signup_intent')
+            if (intent) {
+              localStorage.removeItem('signup_intent') // Clean up after use
+            }
+          }
           
           if (upgraded) {
             // User just completed checkout, redirect to dashboard
