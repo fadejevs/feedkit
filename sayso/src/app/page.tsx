@@ -325,13 +325,40 @@ function LandingPageContent() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="bg-white py-16 sm:py-20 md:py-24">
+      <section id="pricing" className="bg-white py-12 sm:py-16 md:py-20">
         <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-gray-900 leading-tight">Pricing</h2>
+          <div className="text-center mb-10 sm:mb-12">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-gray-900 leading-tight">Pricing</h2>
           </div>
-          <div className="flex justify-center max-w-2xl mx-auto">
-            <LifetimeDealCard />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto">
+            <PricingTier
+              name="Free"
+              price="$0"
+              description="Perfect to start collecting feedback for your app"
+              features={["25 total feedback submissions"]}
+              cta="Get started"
+              plan="free"
+              variant="default"
+            />
+            <PricingTier
+              name="Pro"
+              price="$19"
+              period="/month"
+              description="Suitable for production applications and websites of all sizes"
+              features={["Unlimited feedback submissions"]}
+              cta="Get started"
+              plan="pro"
+              variant="featured"
+            />
+            <PricingTier
+              name="Enterprise"
+              price="Custom"
+              description="Talk to us about your custom needs"
+              features={["Whitelabeling", "Service-level agreements", "Live chat support"]}
+              cta="Contact us"
+              plan="enterprise"
+              variant="default"
+            />
           </div>
         </div>
       </section>
@@ -933,114 +960,103 @@ function StatusIcon() {
 
 
 
-function LifetimeDealCard() {
-  const { user } = useAuth()
-  const [isProcessing, setIsProcessing] = useState(false)
-
-  const handleLifetimePurchase = async () => {
-    // If user is not signed in, redirect to sign in with intent to purchase
-    if (!user) {
-      window.location.href = '/sign-in?intent=lifetime'
-      return
-    }
-
-    setIsProcessing(true)
-    try {
-      const response = await fetch('/api/stripe/checkout-lifetime', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: user.email }), // Use signed-in user's email
-      })
-      
-      const data = await response.json()
-      
-      if (data.error) {
-        alert(data.error)
-        setIsProcessing(false)
-        return
-      }
-      
-      if (data.url) {
-        window.location.href = data.url
-      }
-    } catch (error) {
-      console.error('Failed to create checkout session:', error)
-      alert('Failed to start checkout. Please try again.')
-      setIsProcessing(false)
+function PricingTier({
+  name,
+  price,
+  period,
+  description,
+  features,
+  cta,
+  plan,
+  variant = 'default'
+}: {
+  name: string
+  price: string
+  period?: string
+  description: string
+  features: string[]
+  cta: string
+  plan: 'free' | 'pro' | 'enterprise'
+  variant?: 'default' | 'featured'
+}) {
+  const isFeatured = variant === 'featured'
+  
+  const handleClick = () => {
+    // Track which plan was clicked
+    if (plan === 'free') {
+      // Free plan - go directly to dashboard (or sign-in if not authenticated)
+      window.location.href = '/sign-in?intent=free'
+    } else if (plan === 'pro') {
+      // Pro plan - go to sign-in with intent to checkout
+      window.location.href = '/sign-in?intent=pro'
+    } else {
+      // Enterprise - go to sign-in (or contact page)
+      window.location.href = '/sign-in?intent=enterprise'
     }
   }
-
+  
   return (
-    <div className="relative rounded-2xl p-8 border border-gray-200 bg-white text-slate-900 shadow-lg overflow-visible max-w-lg w-full">
-      {/* Ribbon Badge */}
-      <div className="absolute -top-3 right-6 bg-[#F97316] text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg z-20">
-        LIMITED TIME
-      </div>
+    <div className={`relative rounded-xl border bg-white transition-all hover:shadow-lg ${
+      isFeatured 
+        ? 'border-[#2563EB] shadow-md ring-2 ring-[#2563EB]/20' 
+        : 'border-gray-200 hover:border-gray-300'
+    }`}>
+      {isFeatured && (
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#2563EB] text-white px-3 py-1 rounded-full text-xs font-semibold">
+          Most Popular
+        </div>
+      )}
       
-      {/* Header Section */}
-      <div className="mb-6">
-        <h3 className="text-2xl font-bold text-slate-900 mb-4">Lifetime Deal</h3>
-        
-        {/* Pricing Display */}
+      <div className="p-6 sm:p-7">
+        {/* Header */}
         <div className="mb-6">
-          <div className="flex items-baseline gap-2 mb-3">
-            <span className="text-5xl font-bold text-slate-900">€39</span>
-            <span className="text-lg text-slate-500 font-medium">one-time</span>
+          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">{name}</h3>
+          <div className="flex items-baseline gap-1 mb-3">
+            <span className={`text-3xl sm:text-4xl font-bold ${isFeatured ? 'text-[#2563EB]' : 'text-gray-900'}`}>
+              {price}
+            </span>
+            {period && (
+              <span className="text-sm text-gray-500 font-medium">{period}</span>
+            )}
           </div>
+          <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
         </div>
         
-        {/* Description */}
-        <p className="text-base text-slate-700 leading-relaxed mb-6">
-          Get lifetime access to all Pro features with a one-time payment. Perfect for long-term projects and teams.
-        </p>
-      </div>
-      
-      {/* CTA Button */}
-      <Button
-        onClick={handleLifetimePurchase}
-        disabled={isProcessing}
-        className="w-full mb-6"
-        size="lg"
-      >
-        {isProcessing ? (
-          <>
-            <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            Processing...
-          </>
-        ) : (
-          'Claim Lifetime Deal'
-        )}
-      </Button>
-      
-      {/* Features Section */}
-      <div className="border-t border-gray-200 pt-6">
-        <ul className="space-y-3">
-          {[
-            'Unlimited feedback submissions',
-            'All Pro features included',
-            'Lifetime updates & support',
-            'No account limitations',
-          ].map((f, i) => (
-            <li key={i} className="flex items-start gap-3 text-sm text-slate-800">
+        {/* Features */}
+        <ul className="space-y-3 mb-6">
+          {features.map((feature, i) => (
+            <li key={i} className="flex items-start gap-2.5 text-sm text-gray-700">
               <svg
-                className="w-5 h-5 flex-shrink-0 mt-0.5 text-blue-600"
+                className={`w-5 h-5 flex-shrink-0 mt-0.5 ${isFeatured ? 'text-[#2563EB]' : 'text-gray-400'}`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
-              <span className="leading-relaxed">{f}</span>
+              <span>{feature}</span>
             </li>
           ))}
         </ul>
+        
+        {/* CTA Button */}
+        <Button
+          onClick={handleClick}
+          className={`w-full ${
+            isFeatured 
+              ? 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white' 
+              : 'bg-gray-900 hover:bg-gray-800 text-white'
+          }`}
+          size="lg"
+        >
+          {cta}
+        </Button>
       </div>
       
-      {/* Decorative accent */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#F97316] rounded-b-2xl"></div>
+      {/* Decorative accent for featured */}
+      {isFeatured && (
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#2563EB] to-[#818CF8] rounded-b-xl"></div>
+      )}
     </div>
   )
 }

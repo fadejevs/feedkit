@@ -34,7 +34,7 @@ function SignInContent() {
         return
       }
 
-      // Get intent from query params (e.g., 'lifetime' for lifetime deal purchase)
+      // Get intent from query params (e.g., 'pro' for Pro plan checkout, 'free' for Free plan)
       const intent = searchParams?.get('intent')
       const callbackUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000') + '/auth/callback' + (intent ? `?intent=${intent}` : '')
 

@@ -18,30 +18,26 @@ function AuthCallbackContent() {
           const email = session.user.email || ''
           const projectId = getOrCreateProjectId(session.user.id, email)
           
-          // Check if user just upgraded or purchased lifetime deal
+          // Check if user just upgraded (came back from Stripe checkout)
           const upgraded = searchParams?.get('upgraded') === '1'
-          const lifetime = searchParams?.get('lifetime') === '1'
           
-          // Check if user signed in with intent to purchase lifetime deal
+          // Check if user signed in with intent to purchase Pro plan
           const intent = searchParams?.get('intent')
           
-          if (upgraded || lifetime) {
+          if (upgraded) {
+            // User just completed checkout, redirect to dashboard
             setStatus('success')
-            if (lifetime) {
-              setMessage('🎉 Welcome! Your lifetime deal is being activated...')
-            } else {
-              setMessage('🎉 Welcome! Your subscription is being activated...')
-            }
+            setMessage('🎉 Welcome! Your subscription is being activated...')
             // Give user a moment to see success message
             setTimeout(() => {
               router.replace(`/app/${projectId}`)
             }, 2000)
-          } else if (intent === 'lifetime') {
-            // User signed in with intent to purchase lifetime deal
-            // Redirect to checkout
+          } else if (intent === 'pro') {
+            // User signed in with intent to purchase Pro plan
+            // Redirect to checkout immediately
             setMessage('Redirecting to checkout...')
             try {
-              const response = await fetch('/api/stripe/checkout-lifetime', {
+              const response = await fetch('/api/stripe/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email }),
@@ -66,15 +62,14 @@ function AuthCallbackContent() {
               router.replace(`/app/${projectId}`)
             }
           } else {
-            // Regular auth callback, just redirect
+            // Free plan or regular auth callback, just redirect to dashboard
             router.replace(`/app/${projectId}`)
           }
         } else {
           // No session - check if this is after a payment
-          const lifetime = searchParams?.get('lifetime') === '1'
           const upgraded = searchParams?.get('upgraded') === '1'
           
-          if (lifetime || upgraded) {
+          if (upgraded) {
             // User just paid but isn't signed in yet
             // Redirect to sign-in with a message
             router.replace('/sign-in?payment=success&email=' + encodeURIComponent(searchParams?.get('email') || ''))
