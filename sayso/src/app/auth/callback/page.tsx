@@ -53,7 +53,8 @@ function AuthCallbackContent() {
               const data = await response.json()
               
               if (data.error) {
-                alert(data.error)
+                console.error('Checkout API error:', data)
+                alert(`Checkout error: ${data.error}${data.details ? `\n\nDetails: ${data.details}` : ''}`)
                 router.replace(`/app/${projectId}`)
                 return
               }
@@ -65,7 +66,7 @@ function AuthCallbackContent() {
               }
             } catch (error) {
               console.error('Failed to create checkout session:', error)
-              alert('Failed to start checkout. Please try again.')
+              alert('Failed to start checkout. Please check the console for details.')
               router.replace(`/app/${projectId}`)
             }
           } else {

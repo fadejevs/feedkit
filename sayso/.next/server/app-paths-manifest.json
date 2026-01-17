@@ -1,5 +1,10 @@
 {
-  "/dashboard/page": "app/dashboard/page.js",
   "/page": "app/page.js",
-  "/sign-in/page": "app/sign-in/page.js"
+  "/api/stripe/checkout/route": "app/api/stripe/checkout/route.js",
+  "/auth/callback/page": "app/auth/callback/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/sign-in/page": "app/sign-in/page.js",
+  "/app/[projectId]/page": "app/app/[projectId]/page.js",
+  "/api/widget-settings/[projectId]/route": "app/api/widget-settings/[projectId]/route.js",
+  "/api/feedback/[projectId]/route": "app/api/feedback/[projectId]/route.js"
 }
